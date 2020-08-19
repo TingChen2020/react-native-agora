@@ -91,6 +91,18 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance. To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance, and after [`destroy`]{@link destroy} returns `0`,
      * call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      */
+    /** @zh-cn
+     * 创建 [`RtcEngine`]{@link RtcEngine} 实例。
+     *
+     * [`RtcEngine`]{@link RtcEngine} 类的所有接口函数，如无特殊说明，都是异步调用，对接口的调用建议在同一个线程进行。
+     *
+     * **Note**
+     * - 请确保在调用其他 API 前先调用该方法创建并初始化 [`RtcEngine`]{@link RtcEngine}。
+     * - 调用该方法和 [`createWithAreaCode`]{@link createWithAreaCode} 均能创建 [`RtcEngine`]{@link RtcEngine} 实例。该方法与 [`createWithAreaCode`]{@link createWithAreaCode} 的区别在于，[`createWithAreaCode`]{@link createWithAreaCode} 支持在创建 {@link RtcEngine} 实例时指定访问区域。
+     * - 目前 Agora React Native SDK 只支持每个 app 创建一个 [`RtcEngine`]{@link RtcEngine} 实例。
+     *
+     * @param appId Agora 为 app 开发者签发的 App ID，详见[获取 App ID](https://docs.agora.io/cn/Agora%20Platform/token#get-an-app-id)。使用同一个 App ID 的 app 才能进入同一个频道进行通话或直播。一个 App ID 只能用于创建一个 {@link RtcEngine}。如需更换 App ID，必须先调用 {@link RtcEngine#destroy() destroy} 销毁当前 {@link RtcEngine}，再调用 `create` 重新创建 {@link RtcEngine}。
+     */
     static async create(appId: string): Promise<RtcEngine> {
         return RtcEngine.createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL)
     }
