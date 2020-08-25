@@ -17,7 +17,7 @@ export interface RtcUidProps {
     uid: number;
 }
 
-export interface RtcSurfaceViewProps extends ViewProps {
+export interface RtcSurfaceViewProps {
     /**
      * Controls whether the surface view's surface is placed on top of another regular surface
      * view in the window (but still behind the window itself).
@@ -83,7 +83,7 @@ export interface RtcSurfaceViewProps extends ViewProps {
 /** @zh-cn
  * TextureView 的属性。
  */
-export interface RtcTextureViewProps extends ViewProps {
+export interface RtcTextureViewProps {
     /**
      * The unique channel name for the AgoraRTC session in the string format.
      * The string length must be less than 64 bytes. Supported character scopes are:
@@ -125,7 +125,7 @@ const RCTRtcSurfaceView = requireNativeComponent('RCTAgoraRtcSurfaceView');
 /**
  * @ignore
  */
-export class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
+export class RtcSurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
         const {channelId = null, uid, ...others} = this.props
         return (
@@ -145,7 +145,7 @@ const RCTRtcTextureView = requireNativeComponent('RCTAgoraRtcTextureView');
 /**
  * @ignore
  */
-export class RtcTextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
+export class RtcTextureView extends Component<ViewProps & RtcTextureViewProps & RtcUidProps, {}> {
     render() {
         const {channelId = null, uid, ...others} = this.props
         return (
