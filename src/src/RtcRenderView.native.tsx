@@ -17,14 +17,45 @@ export interface RtcUidProps {
     uid: number;
 }
 
+<<<<<<< HEAD
 export interface RtcSurfaceViewProps {
+=======
+<<<<<<< HEAD
+export interface RtcSurfaceViewProps extends ViewProps {
+>>>>>>> jira/MS-16519
     /**
      * Controls whether the surface view's surface is placed on top of another regular surface
      * view in the window (but still behind the window itself).
      */
+<<<<<<< HEAD
     /** @zh-cn
      * 是否将 Surface 视图的表面置于窗口中另一个常规视图的上层 (但依然位于窗口本身的下层)。//TODO 待确认
      */
+=======
+=======
+/**
+ * Properties of the SurfaceView.
+ * @property zOrderMediaOverlay: boolean | Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
+ * @property zOrderOnTop: boolean | Control whether the surface view's surface is placed on top of its window.
+ * @property renderMode: number | The rendering mode of the video view.
+ * @see VideoRenderMode
+ * @property channelId: string | The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
+ * - All lowercase English letters: a to z.
+ * - All uppercase English letters: A to Z.
+ * - All numeric characters: 0 to 9.
+ * - The space character.
+ * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+ * Note
+ * - The default value is the empty string "". Use the default value if the user joins the channel using the joinChannel method in the RtcEngine class.
+ * @see RtcEngine.joinChannel
+ * - If the user joins the channel using the joinChannel method in the RtcChannel class, set this parameter as the channelId of the RtcChannel object.
+ * @see RtcChannel.joinChannel
+ * @property mirrorMode: number | The video mirror mode.
+ * @see VideoMirrorMode
+ */
+export interface RtcSurfaceViewProps {
+>>>>>>> rc/3.0.1
+>>>>>>> jira/MS-16519
     zOrderMediaOverlay?: boolean;
     /**
      * Controls whether the surface view's surface is placed on top of its window.
@@ -80,10 +111,15 @@ export interface RtcSurfaceViewProps {
 /**
  * Properties of the TextureView.
  */
+<<<<<<< HEAD
 /** @zh-cn
  * TextureView 的属性。
  */
 export interface RtcTextureViewProps {
+=======
+<<<<<<< HEAD
+export interface RtcTextureViewProps extends ViewProps {
+>>>>>>> jira/MS-16519
     /**
      * The unique channel name for the AgoraRTC session in the string format.
      * The string length must be less than 64 bytes. Supported character scopes are:
@@ -97,6 +133,7 @@ export interface RtcTextureViewProps {
      * - The default value is the empty string "". Use the default value if the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the RtcEngine class.
      * - If the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the `RtcChannel` class, set this parameter as the `channelId` of the `RtcChannel object.
      */
+<<<<<<< HEAD
     /** @zh-cn
      * 标识通话的频道名称，长度在 64 字节以内的字符串。以下为支持的字符集范围（共 89 个字符）：
      *                    - 26 个小写英文字母 a-z
@@ -109,6 +146,11 @@ export interface RtcTextureViewProps {
      *  - 该参数的默认值为空字符 ""。如果调用 `RtcChannel` 类的 [`joinChannel`]{@link RtcChannel.joinChannel} 方法加入频道，则使用默认值。
      *  - // TODO 待确认。
      */
+=======
+=======
+export interface RtcTextureViewProps {
+>>>>>>> rc/3.0.1
+>>>>>>> jira/MS-16519
     channelId?: string;
     /** The video mirror. */
     /** @zh-cn
