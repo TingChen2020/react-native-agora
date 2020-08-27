@@ -421,8 +421,8 @@ export class LiveTranscoding {
     videoFramerate?: VideoFrameRate
     /**
      * **Deprecated**
-     * - true: Low latency with unassured quality.
-     * - false: (Default) High latency with assured quality.
+     * - `true`: Low latency with unassured quality.
+     * - `false`: (Default) High latency with assured quality.
      */
     /** @zh-cn
      * **Deprecated**
@@ -694,8 +694,8 @@ export class Rectangle {
 export class WatermarkOptions {
     /**
      * Sets whether or not the watermark image is visible in the local video preview:
-     * - true: (Default) The watermark image is visible in preview.
-     * - false: The watermark image is not visible in preview.
+     * - `true`: (Default) The watermark image is visible in preview.
+     * - `false`: The watermark image is not visible in preview.
      */
     /** @zh-cn
      * 是否将水印设为预览时本地可见：
@@ -863,7 +863,7 @@ export class ChannelMediaOptions {
 }
 
 /**
- * Statistics of RTCEngine.
+ * Statistics of the call.
  *
  */
 /** @zh-cn
@@ -1078,7 +1078,7 @@ export interface AudioVolumeInfo {
 }
 
 /**
- * Rect.
+ * The rectangular area.
  *
  */
 /** @zh-cn
@@ -1088,28 +1088,28 @@ export interface AudioVolumeInfo {
 // TODO 是否已经废弃？
 export interface Rect {
     /**
-     * Left.
+     * The x coordinate of the left side of the rectangular area.
      */
     /** @zh-cn
      * Left.
      */
     left: number
     /**
-     * Top.
+     * The y coordinate of the upper side of the rectangular area.
      */
     /** @zh-cn
      * Top.
      */
     top: number
     /**
-     * Right.
+     * The x coordinate of the right side of the rectangular area.
      */
     /** @zh-cn
      * Right.
      */
     right: number
     /**
-     * Bottom.
+     * The y coordinate of the bottom side of the rectangular area.
      */
     /** @zh-cn
      * Bottom.
@@ -1419,14 +1419,18 @@ export interface RemoteVideoStats {
     /**
      * User ID of the user sending the video streams.
      */
+<<<<<<< HEAD
     /** @zh-cn
      * 用户 ID，指定是哪个用户的视频流。
      */
+=======
+>>>>>>> jira/MS-16519
     uid: number
     /**
      * **Deprecated**
-     * Time delay (ms). In scenarios where audio and video is synchronized, you can use the value of networkTransportDelay and jitterBufferDelay
-     * in RemoteAudioStats to know the delay statistics of the remote video.
+     * Time delay (ms). In scenarios where audio and video is synchronized, you can use the value
+     * of `networkTransportDelay` and `jitterBufferDelay`
+     * in [`RemoteAudioStats`]{@link RemoteAudioStats} to know the delay statistics of the remote video.
      */
     /** @zh-cn
      * 延迟，单位为毫秒

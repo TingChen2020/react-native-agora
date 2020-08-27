@@ -758,6 +758,7 @@ export enum AudioReverbPreset {
     FX_PHONOGRAPH = 0x00100008,
     /**
      * The reverberation of the virtual stereo. The virtual stereo is an effect that renders
+<<<<<<< HEAD
      * the monophonic audio as the stereo audio, so that all users in the channel can hear
      * the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends
      * setting the profile parameter in setAudioProfile as MusicHighQualityStereo(5).
@@ -770,6 +771,12 @@ export enum AudioReverbPreset {
      * 使频道内所有用户听到有空间感的声音效果。为达到更好的虚拟立体声效果，
      * Agora 推荐在调用该方法前将 [`setAudioProfile`]{@link RtcEngine#setAudioProfile} 的 `profile` 参数设置
      * 为 [`MusicHighQualityStereo`]{@link AudioProfile.MusicHighQualityStereo}。
+=======
+     * the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect.
+     * To achieve better virtual stereo reverberation, Agora recommends setting the profile
+     * parameter in [`RtcEngine#setAudioProfile`]{@link RtcEngine#setAudioProfile} as [`MusicHighQualityStereo(5)`]{@link AudioProfile.MusicHighQualityStereo}.
+     *
+>>>>>>> jira/MS-16519
      */
     VIRTUAL_STEREO = 0x00200001,
 }
@@ -1279,7 +1286,7 @@ export enum ChannelMediaRelayEvent {
      */
     Disconnect = 0,
     /**
-     * 1: The network reconnects.
+     * 1: The network reconnects.//TODO 为什么是 reconnects?
      */
     /** @zh-cn
      * 1: 用户与服务器建立连接。
@@ -1358,7 +1365,7 @@ export enum ChannelMediaRelayEvent {
 }
 
 /**
- * The state code in AgoraChannelMediaRelayState.
+ * The state code in [`ChannelMediaRelayState`]{@link ChannelMediaRelayState}.
  * @enum {number}
  */
 /** @zh-cn
@@ -1659,11 +1666,10 @@ export enum ConnectionStateType {
     Reconnecting = 4,
     /**
      * 5: The SDK fails to connect to Agora's edge server or join the channel.
-     * You must call leaveChannel to leave this state, and call joinChannel again to rejoin the channel.
-     * @see RtcEngine.leaveChannel
-     * @see RtcEngine.joinChannel
-     * If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the onConnectionStateChanged callbacks.
-     * @see RtcEngineEvents.onConnectionStateChanged
+     * You must call [`leaveChannel`]{@link RtcEngine.leaveChannel} to leave this state, and call [`joinChannel`]{@link RtcEngine.joinChannel} again to rejoin the channel.
+     *
+     * If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callbacks.
+     *
      */
     /** @zh-cn
      * 5: 网络连接失败。
@@ -1930,7 +1936,7 @@ export enum ErrorCode {
     InvalidChannelId = 102,
     /**
      * 109: The token expired.
-     * **DEPRECATED** as of v2.4.1. Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * **DEPRECATED** Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
      *
      * Possible reasons are:
      * - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
@@ -1955,7 +1961,7 @@ export enum ErrorCode {
     TokenExpired = 109,
     /**
      * 110: The token is invalid.
-     * **DEPRECATED** as of v2.4.1. Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * **DEPRECATED**  Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
      *
      * Possible reasons are:
      * - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
@@ -1995,8 +2001,8 @@ export enum ErrorCode {
      */
     NotInChannel = 113,
     /**
-     * 114: The size of the sent data is over 1024 bytes when the user calls the sendStreamMessage method.
-     * @see [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage}
+     * 114: The size of the sent data is over 1024 bytes when the user calls the [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} method.
+     *
      */
     /** @zh-cn
      * 114: 在调用 [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} 时，当发送的数据长度大于 1024 个字节时，会发生该错误。
@@ -2146,7 +2152,7 @@ export enum ErrorCode {
     /**
      * 1003: Fails to start the camera.
      *
-     * **DEPRECATED** as of v2.4.1. Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
+     * **DEPRECATED** Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
      *
      */
     /** @zh-cn
@@ -2278,7 +2284,7 @@ export enum ErrorCode {
      */
     AdmStartLoopback = 1023,
     /**
-     * 1027: Audio Device Module: An error occurs in no recording Permission.
+     * 1027: Audio Device Module: No recording permission.
      */
     /** @zh-cn
      * 1027: 音频设备模块：没有录音权限。
@@ -2393,7 +2399,7 @@ export enum InjectStreamStatus {
      */
     StartFailed = 4,
     /**
-     * 5: The external video stream imports successfully.
+     * 5: The external video stream stops importing successfully.
      */
     /** @zh-cn
      * 5: 外部视频流停止输入成功。 // TODO 英文注释改成 The external video stream stops importing successfully.
@@ -2407,7 +2413,7 @@ export enum InjectStreamStatus {
      */
     StopNotFound = 6,
     /**
-     * 7: The external video stream is stopped from being unauthorized.
+     * 7: The external video stream to be stopped importing is unauthorized.
      */
     /** @zh-cn
      * 7: 要停止输入的外部视频流未经授权。
@@ -2415,7 +2421,7 @@ export enum InjectStreamStatus {
      */
     StopUnauthorized = 7,
     /**
-     * 8: Importing the external video stream timeout.
+     * 8: Stopping importing the external video stream timed out.
      */
     /** @zh-cn
      * 8: 停止输入外部视频流超时。
@@ -2423,7 +2429,7 @@ export enum InjectStreamStatus {
      */
     StopTimedout = 8,
     /**
-     * 9: Importing the external video stream failed.
+     * 9: Stopping Importing the external video stream failed.
      */
     /** @zh-cn
      * 9: 停止输入外部视频流失败。
@@ -2431,7 +2437,7 @@ export enum InjectStreamStatus {
      */
     StopFailed = 9,
     /**
-     * 10: The external video stream import is interrupted.
+     * 10: The external video stream import is corrupted.
      */
     /** @zh-cn
      * 10: 输入的外部视频流被中断。
@@ -2464,7 +2470,7 @@ export enum LastmileProbeResultState {
      */
     IncompleteNoBwe = 2,
     /**
-     * 3: the last-mile network probe test is not carried out, probably due to poor network conditions.
+     * 3: The last-mile network probe test is not carried out, probably due to poor network conditions.
      */
     /** @zh-cn
      * 3: 未进行 Last-mile 质量探测。一个可能的原因是网络连接中断。
@@ -2751,14 +2757,14 @@ export enum MediaType {
  */
 export enum MetadataType {
     /**
-     * -1: the metadata type is unknown.
+     * -1: The metadata type is unknown.
      */
     /** @zh-cn
      * -1: Metadata 类型未知。
      */
     Unknown = -1,
     /**
-     * 0: the metadata type is video.
+     * 0: The metadata type is video.
      */
     /** @zh-cn
      * 0: Metadata 类型为视频。
@@ -3217,7 +3223,6 @@ export enum UserPriority {
  * Video buffer type
  * @enum {number}
  * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
- * //TODO ?
  */
 /** @zh-cn
  * 视频 buffer 类型。
@@ -3278,7 +3283,7 @@ export enum VideoCodecProfileType {
  * The content hint for screen sharing.
  * @enum {number}
  * TODO MacOS setScreenCaptureContentHint
- * //TODO ?
+ *
  */
 /** @zh-cn
  * 屏幕共享的内容类型。
@@ -3320,17 +3325,24 @@ export enum VideoContentHint {
  */
 export enum VideoFrameRate {
     /**
+<<<<<<< HEAD
      * -1: The minimum frame rate of the video. // TODO ?
      */
     /** @zh-cn
      * -1: 最低视频编码帧率（fps）。 // TODO ?
+=======
+     * -1: The minimum frame rate of the video.
+>>>>>>> jira/MS-16519
      */
     Min = -1,
     /**
      * 1: 1 fps.
+<<<<<<< HEAD
      */
     /** @zh-cn
      * 1: 每秒钟 1 帧。
+=======
+>>>>>>> jira/MS-16519
      */
     Fps1 = 1,
     /**
@@ -3378,7 +3390,172 @@ export enum VideoFrameRate {
 }
 
 /**
- * Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
+ * Bitrate of the video (Kbps). Refer to the table below and set your bitrate.
+ * If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
+ *
+ * **Video Bitrate Table**
+ * <table>
+ *     <tr>
+ *         <th>Resolution</th>
+ *         <th>Frame rate<p>(fps)</th>
+ *         <th>Base Bitrate<p>(Kbps, for Communication)</th>
+ *         <th>Live Bitrate<p>(Kbps, for Live Broadcasting)</th>
+ *     </tr>
+ *     <tr>
+ *         <td>160*120</td>
+ *         <td>15</td>
+ *         <td>65</td>
+ *         <td>130</td>
+ *     </tr>
+ *     <tr>
+ *         <td>120*120</td>
+ *         <td>15</td>
+ *         <td>50</td>
+ *         <td>100</td>
+ *     </tr>
+ *     <tr>
+ *         <td>320*180</td>
+ *         <td>15</td>
+ *         <td>140</td>
+ *         <td>280</td>
+ *     </tr>
+ *     <tr>
+ *         <td>180*180</td>
+ *         <td>15</td>
+ *         <td>100</td>
+ *         <td>200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>240*180</td>
+ *         <td>15</td>
+ *         <td>120</td>
+ *         <td>240</td>
+ *     </tr>
+ *     <tr>
+ *         <td>320*240</td>
+ *         <td>15</td>
+ *         <td>200</td>
+ *         <td>400</td>
+ *     </tr>
+ *     <tr>
+ *         <td>240*240</td>
+ *         <td>15</td>
+ *         <td>140</td>
+ *         <td>280</td>
+ *     </tr>
+ *     <tr>
+ *         <td>424*240</td>
+ *         <td>15</td>
+ *         <td>220</td>
+ *         <td>440</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*360</td>
+ *         <td>15</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>360*360</td>
+ *         <td>15</td>
+ *         <td>260</td>
+ *         <td>520</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*360</td>
+ *         <td>30</td>
+ *         <td>600</td>
+ *         <td>1200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>360*360</td>
+ *         <td>30</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*360</td>
+ *         <td>15</td>
+ *         <td>320</td>
+ *         <td>640</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*360</td>
+ *         <td>30</td>
+ *         <td>490</td>
+ *         <td>980</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>15</td>
+ *         <td>500</td>
+ *         <td>1000</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*480</td>
+ *         <td>15</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>30</td>
+ *         <td>750</td>
+ *         <td>1500</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*480</td>
+ *         <td>30</td>
+ *         <td>600</td>
+ *         <td>1200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>848*480</td>
+ *         <td>15</td>
+ *         <td>610</td>
+ *         <td>1220</td>
+ *     </tr>
+ *     <tr>
+ *         <td>848*480</td>
+ *         <td>30</td>
+ *         <td>930</td>
+ *         <td>1860</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>10</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>1280*720</td>
+ *         <td>15</td>
+ *         <td>1130</td>
+ *         <td>2260</td>
+ *     </tr>
+ *     <tr>
+ *         <td>1280*720</td>
+ *         <td>30</td>
+ *         <td>1710</td>
+ *         <td>3420</td>
+ *     </tr>
+ *     <tr>
+ *         <td>960*720</td>
+ *         <td>15</td>
+ *         <td>910</td>
+ *         <td>1820</td>
+ *     </tr>
+ *     <tr>
+ *         <td>960*720</td>
+ *         <td>30</td>
+ *         <td>1380</td>
+ *         <td>2760</td>
+ *     </tr>
+ * </table>
+ *
+ * Agora uses different video codecs for different profiles to optimize the user experience. For example,
+ * the Communication profile prioritizes the smoothness while the LIVE_BROADCASTING profile prioritizes the
+ * video quality (a higher bitrate). Therefore, We recommend setting this parameter as STANDARD_BITRATE = 0.
  * @enum {number}
  */
 /** @zh-cn
@@ -3399,7 +3576,8 @@ export enum BitRate {
      */
     Standard = 0,
     /**
-     * -1: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the Live-broadcast profile, if you choose this mode, the video frame rate may be lower than the set value.
+     * -1: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the Live-broadcast profile,
+     * if you choose this mode, the video frame rate may be lower than the set value.
      */
     /** @zh-cn
      * -1: 适配码率模式。该模式下，视频在通信和直播场景下的码率均与基准码率一致。直播下如果选择该模式，
@@ -3495,7 +3673,7 @@ export enum VideoOutputOrientationMode {
  * Video pixel format.
  * @enum {number}
  * TODO iOS AgoraVideoSinkProtocol
- * //TODO ?
+ *
  */
 /**
  * 视频像素格式。
@@ -3661,7 +3839,7 @@ export enum VideoRemoteStateReason {
      */
     LocalMuted = 3,
     /**
-     * 4: The local user stops receiving the remote video stream or disables the video module.
+     * 4: The local user resumes receiving the remote video stream or disables the video module.
      */
     /** @zh-cn
      * 4: 本地用户恢复接收远端视频流或本地用户启动视频模块。// TODO 英文注释有误。
@@ -3864,7 +4042,7 @@ export enum WarningCode {
     /**
      * 105: The server rejects the request to look up the channel.
      * The server cannot process this request or the request is illegal.
-     * **DEPRECATED** as of v2.4.1. Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
+     * **DEPRECATED** Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
      * of [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
      *
      */
@@ -3876,7 +4054,8 @@ export enum WarningCode {
      */
     LookupChannelRejected = 105,
     /**
-     * 106: The server rejects the request to look up the channel. The server cannot process this request or the request is illegal.
+     * 106: The server rejects the request to look up the channel. The server cannot process this request
+     * or the request is illegal.
      */
     /** @zh-cn
      * 106: 打开频道超时。查找到指定频道后，SDK 接着打开该频道，超时一般是因为网络太差，连接不到服务器。
