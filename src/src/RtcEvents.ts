@@ -59,10 +59,17 @@ export type WarningCallback =
  * @param warn Warning code.
  *
  */
+/** @zh-cn
+ * @param warn 警告码。
+ *
+ */
 (warn: WarningCode) => void
 export type ErrorCallback =
 /**
  * @param err Error code.
+ */
+/** @zh-cn
+ * @param err 错误码。
  */
 (err: ErrorCode) => void
 export type ApiCallCallback =
@@ -70,6 +77,12 @@ export type ApiCallCallback =
  * @param error [Error Code]{@link ErrorCode} that the SDK returns when the method call fails.
  * @param api The method executed by the SDK.
  * @param result The result of the method call.
+ *
+ */
+/** @zh-cn
+ * @param error 错误码。如果方法调用失败，会返回错误码 [Error Code]{@link ErrorCode}。
+ * @param api SDK 所调用的 API。
+ * @param result  SDK 调用 API 的调用结果。
  *
  */
 (error: ErrorCode, api: string, result: string) => void
@@ -80,10 +93,18 @@ export type UidWithElapsedAndChannelCallback =
  * @param elapsed Time elapsed (ms) from the user calling [`joinChannel`]{@link RtcEngine.joinChannel} until
  * this callback is triggered.
  */
+/** @zh-cn
+ * @param channel 频道名。
+ * @param uid 用户 ID.
+ * @param elapsed 从 [`joinChannel`]{@link RtcEngine.joinChannel} 开始到发生此事件过去的时间（毫秒)。
+ */
 (channel: string, uid: number, elapsed: number) => void
 export type RtcStatsCallback =
 /**
  * @param stats Statistics of the call.
+ */
+/** @zh-cn
+ * @param stats 通话相关的统计信息。
  */
 (stats: RtcStats) => void
 export type UserAccountCallback =
@@ -92,17 +113,30 @@ export type UserAccountCallback =
  * @param userAccount The user account of the local user.
  *
  */
+/** @zh-cn
+ * @param uid 本地用户的 ID。
+ * @param userAccount  本地用户的 User Account。
+ *
+ */
 (uid: number, userAccount: string) => void
 export type UserInfoCallback =
 /**
  * @param uid The ID of the remote user.
  * @param userInfo The `UserInfo` object that contains the user ID and user account of the remote user.
  */
+/** @zh-cn
+ * @param uid 远端用户 ID。
+ * @param userInfo 标识用户信息的 UserInfo 对象，包含用户 UID 和 User Account。
+ */
 (uid: number, userInfo: UserInfo) => void
 export type ClientRoleCallback =
 /**
  * @param oldRole Role that the user switches from.
  * @param newRole Role that the user switches to.
+ */
+/** @zh-cn
+ * @param oldRole 切换前的角色。
+ * @param newRole 切换后的角色。
  */
 (oldRole: ClientRole, newRole: ClientRole) => void
 export type UidWithElapsedCallback =
@@ -111,11 +145,20 @@ export type UidWithElapsedCallback =
  * @param elapsed Time delay (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} or [`setClientRole`]{@link RtcEngine.setClientRole}
  * until this callback is triggered.
  */
+/** @zh-cn
+ * @param uid 新加入频道的远端用户/主播 ID。
+ * @param elapsed 从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 或 [`setClientRole`]{@link RtcEngine.setClientRole} 到触发该回调的延迟（毫秒）。
+ *
+ */
 (uid: number, elapsed: number) => void
 export type UserOfflineCallback =
 /**
  * @param uid ID of the user or host who leaves the channel or goes offline.
  * @param reason Reason why the user goes offline.
+ */
+/** @zh-cn
+ * @param uid 主播 ID。
+ * @param reason 离线原因。
  */
 (uid: number, reason: UserOfflineReason) => void
 export type ConnectionStateCallback =
@@ -123,15 +166,25 @@ export type ConnectionStateCallback =
  * @param state The current network connection state.
  * @param reason The reason causing the change of the connection state.
  */
+/** @zh-cn
+ * @param state 当前的网络连接状态。
+ * @param reason 引起当前网络连接状态发生改变的原因。
+ */
 (state: ConnectionStateType, reason: ConnectionChangedReason) => void
 export type NetworkTypeCallback =
 /**
  * @param type The network type.
  */
+/** @zh-cn
+ * @param type 网络连接类型。
+ */
 (type: NetworkType) => void
 export type TokenCallback =
 /**
  * @param token The token that will expire in 30 seconds.
+ */
+/** @zh-cn
+ * @param token 即将服务失效的 Token。
  */
 (token: string) => void
 export type AudioVolumeCallback =
@@ -155,16 +208,44 @@ export type AudioVolumeCallback =
  *  - In the remote speakers' callback, `totalVolume` is the sum of the voice volume and audio-mixing
  * volume of all remote speakers.
  */
+/** @zh-cn
+ * @param speakers 每个说话者的用户 ID 和音量信息的数组。
+ *
+ * - 在本地用户的回调中，此数组中包含以下成员:
+ *          - `uid` = 0;
+ *          - `volume` 等于 `totalVolume`，报告本地用户混音后的音量;
+ *          - `vad`，报告本地用户人声状态。
+ *
+ * - 在远端用户的回调中，此数组中包含以下成员：
+ *          - `uid`，表示每位说话者的用户 ID；
+ *          - `volume`，表示各说话者混音后的音量；
+ *          - `vad` = 0，人声检测对远端用户无效。
+ *
+ * 如果报告的 `speakers` 数组为空，则表示远端此时没有人说话。
+ *
+ * @param totalVolume （混音后的）总音量（0~255）。
+ *       - 在本地用户的回调中，`totalVolume` 为本地用户混音后的音量。
+ *       - 在远端用户的回调中，`totalVolume` 为所有说话者混音后的总音量。
+ *
+ */
 (speakers: AudioVolumeInfo[], totalVolume: number) => void
 export type UidCallback =
 /**
  * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+ */
+/** @zh-cn
+ * @param uid 当前时间段声音最大的用户的 `uid`。
+ * 如果返回的 `uid` 为 0，则默认为本地用户。
  */
 ( uid: number) => void
 export type ElapsedCallback =
 /**
  * @param elapsed Time elapsed (ms) from the local user calling the [`joinChannel`]{@link RtcEngine.joinChannel} until
  * this callback is triggered.
+ */
+/** @zh-cn
+ * @param elapsed 从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 方法
+ * 直至该回调被触发的延迟（毫秒）。
  */
 (elapsed: number) => void
 export type VideoFrameCallback =
@@ -176,14 +257,27 @@ export type VideoFrameCallback =
  * If [`startPreview`]{@link RtcEngine.startPreview} is called before [`joinChannel`]{@link RtcEngine.joinChannel}, elapsed is the
  * time elapsed (ms) from the local user calling [`startPreview`]{@link RtcEngine.startPreview} until this callback is triggered.
  */
+/** @zh-cn
+ * @param width 本地渲染视频的宽（px）。
+ * @param height 本地渲染视频的高（px）。
+ * @param elapsed 从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 方法直至该回调被触发的延迟（毫秒）。
+ *      如果在 [`joinChannel`]{@link RtcEngine.joinChannel} 之前
+ *      调用了 [`startPreview`]{@link RtcEngine.startPreview}，则返回的是从调用 [`startPreview`]{@link RtcEngine.startPreview} 直至该回调被触发的延迟（毫秒）。
+ *
+ */
 (width: number, height: number, elapsed: number) => void
 export type UidWithMutedCallback =
 /**
  * @param uid ID of the remote user.
  * @param muted Whether the remote user's video stream playback pauses/resumes:
- *
  *  - `true`: Pause.
  *  - `false`: Resume.
+ */
+/** @zh-cn
+ * @param uid 用户 ID，提示是哪个用户的视频流。
+ * @param muted 该用户是否暂停发送其视频流：
+ *    - `true`: 该用户已暂停发送视频流。
+ *    - `false`: 该用户已恢复发送视频流。
  */
 (uid: number, muted: boolean) => void
 export type VideoSizeCallback =
@@ -192,6 +286,13 @@ export type VideoSizeCallback =
  * @param width New width (pixels) of the video.
  * @param height New height (pixels) of the video.
  * @param rotation New rotation of the video [0 to 360).
+ */
+/** @zh-cn
+ * @param uid 图像尺寸和旋转信息发生变化的用户 ID。
+ * 如果返回的 uid 为 0，则表示本地用户。
+ * @param width 视频流的宽度（像素）。
+ * @param height 视频流的高度（像素）。
+ * @param rotation  旋转信息 [0,360)。
  */
 (uid: number, width: number, height: number, rotation: number) => void
 export type RemoteVideoStateCallback =
@@ -203,11 +304,21 @@ export type RemoteVideoStateCallback =
  * triggers this callback.
  *
  */
+/** @zh-cn
+ * @param uid 视频状态发生改变的远端用户 ID。
+ * @param state 远端视频流状态。
+ * @param reason 远端视频流状态改变的具体原因。
+ * @param elapsed 从本地用户调用 [`joinChannel`]{@ink RtcEngine.joinChannel} 方法到发生本事件经历的时间，单位为 ms。
+ */
 (uid: number, state: VideoRemoteState, reason: VideoRemoteStateReason, elapsed: number) => void
 export type LocalVideoStateCallback =
 /**
  * @param localVideoState The local video state.
  * @param error The detailed error information of the local video.
+ */
+/** @zh-cn
+ * @param localVideoState 当前的本地视频状态。
+ * @param error 本地视频出错原因。
  */
 (localVideoState: LocalVideoStreamState, error: LocalVideoStreamError) => void
 export type RemoteAudioStateCallback =
@@ -219,11 +330,22 @@ export type RemoteAudioStateCallback =
  * SDK triggers this callback.
  *
  */
+/** @zh-cn
+ * @param uid 发生音频状态改变的远端用户 ID。
+ * @param state 远端音频流状态。
+ * @param reason 远端音频流状态改变的具体原因。
+ * @param elapsed 从本地用户调用 [`joinChannel`]{@ink RtcEngine.joinChannel} 方法到发生本事件经历的时间，单位为 ms。
+ *
+ */
 (uid: number, state: AudioRemoteState, reason: AudioRemoteStateReason, elapsed: number) => void
 export type LocalAudioStateCallback =
 /**
  * @param state State of the local audio.
  * @param error The error information of the local audio.
+ */
+/** @zh-cn
+ * @param state 当前的本地音频状态。
+ * @param error  本地音频出错原因。
  */
 (state: AudioLocalState, error: AudioLocalError) => void
 export type FallbackCallback =
@@ -232,6 +354,12 @@ export type FallbackCallback =
  *
  *  - `true`: The published stream fell back to audio-only due to poor network conditions.
  *  - `false`: The published stream switched back to the video after the network conditions improved.
+ */
+/** @zh-cn
+ * @param isFallbackOrRecover 本地推流已回退或恢复：
+ *  - `true`: 由于网络环境不理想，本地发布的媒体流已回退为音频流。
+ *  - `false`: 由于网络环境改善，发布的音频流已恢复为音视频流。
+ *
  */
 (isFallbackOrRecover: boolean) => void
 export type FallbackWithUidCallback =
@@ -243,21 +371,36 @@ export type FallbackWithUidCallback =
  *  - `true`: The remote media stream fell back to audio-only due to poor network conditions.
  *  - `false`: The remote media stream switched back to the video stream after the network conditions improved.
  */
+/** @zh-cn
+ * @param uid 远端用户的 ID。
+ * @param isFallbackOrRecover 远端订阅流已回退或恢复：
+ *  - `true`: 由于网络环境不理想，远端订阅流已回退为音频流。
+ *  - `false`: 由于网络环境改善，订阅的音频流已恢复为音视频流。
+ */
 (uid: number, isFallbackOrRecover: boolean) => void
 export type AudioRouteCallback =
 /**
  * @param routing Audio output routing.
+ */
+/** @zh-cn
+ * @param routing 音频输出路由。
  */
 (routing: AudioOutputRouting) => void
 export type RectCallback =
 /**
  * @param rect Rectangular area in the camera zoom specifying the focus area.
  */
-
+/** @zh-cn
+ * @param rect 镜头内表示对焦的区域。
+ */
 (rect: Rect) => void
 export type NetworkQualityCallback =
 /**
  * @param quality The last mile network quality based on the uplink and downlink packet loss rate and jitter.
+ */
+/** @zh-cn
+ * @param quality 网络上下行质量，基于上下行网络的丢包率和抖动
+ * 计算，探测结果主要反映上行网络的状态。
  */
 (quality: NetworkQuality) => void
 export type NetworkQualityWithUidCallback =
@@ -272,30 +415,55 @@ export type NetworkQualityWithUidCallback =
  * jitter of the downlink network.
  *
  */
+/** @zh-cn
+ * @param uid 用户 ID。表示该回调报告的是持有该 ID 的
+ * 用户的网络质量。当 uid 为 0 时，返回的是本地用户
+ * 的网络质量。
+ * @param txQuality 该用户的上行网络质量，基于上行视频的发送码率、上行丢包率、平均往返时延和网络抖动计算。
+ * 该值代表当前的上行网络质量，帮助判断是否可以支持当前设置的视频编码属性。假设上行码率是 1000 Kbps，
+ * 那么支持 640 &times; 480 的分辨率、30 fps 的帧率没有问题，但是支持 1280 x 720 的分辨率就会有困难。
+ * @param rxQuality 该用户的下行网络质量，基于下行网络的丢包率、平均往返延时和网络抖动计算。
+ *
+ */
 (uid: number, txQuality: NetworkQuality, rxQuality: NetworkQuality) => void
 export type LastmileProbeCallback =
 /**
  * @param result The uplink and downlink last-mile network probe test result.
+ */
+/** @zh-cn
+ * @param result 上下行 Last mile 质量探测结果。
  */
 (result: LastmileProbeResult) => void
 export type LocalVideoStatsCallback =
 /**
  * @param stats The statistics of the local video stream.
  */
+/** @zh-cn
+ * @param stats 本地视频统计数据。
+ */
 (stats: LocalVideoStats) => void
 export type LocalAudioStatsCallback =
 /**
  * @param stats The statistics of the local audio stream.
+ */
+/** @zh-cn
+ * @param stats 本地音频统计数据。
  */
 (stats: LocalAudioStats) => void
 export type RemoteVideoStatsCallback =
 /**
  * @param stats Statistics of the received remote video streams.
  */
+/** @zh-cn
+ * @param stats 远端视频统计数据。
+ */
 (stats: RemoteVideoStats) => void
 export type RemoteAudioStatsCallback =
 /**
  * @param stats Statistics of the received remote audio streams.
+ */
+/** @zh-cn
+ * @param stats 接收到的远端音频统计数据。
  */
 (stats: RemoteAudioStats) => void
 export type AudioMixingStateCallback =
@@ -303,10 +471,17 @@ export type AudioMixingStateCallback =
  * @param state The state code.
  * @param errorCode The error code.
  */
+/** @zh-cn
+ * @param state 状态码。
+ * @param errorCode 错误码。
+ */
 (state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void
 export type SoundIdCallback =
 /**
  * @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
+ */
+/** @zh-cn
+ * @param soundId 指定音效的 ID。每个音效均有唯一的 ID
  */
 (soundId: number) => void
 export type RtmpStreamingStateCallback =
@@ -316,12 +491,23 @@ export type RtmpStreamingStateCallback =
  * @param errCode The detailed error information for streaming.
  *
  */
+/** @zh-cn
+ * @param url 推流状态发生改变的 URL 地址。
+ * @param state 当前的推流状态。
+ * @param errCode 详细的推流错误信息。
+ *
+ */
 (url: string, state: RtmpStreamingState, errCode: RtmpStreamingErrorCode) => void
 export type StreamInjectedStatusCallback =
 /**
  * @param url The URL address of the externally injected stream.
  * @param uid User ID.
  * @param status State of the externally injected stream.
+ */
+/** @zh-cn
+ * @param url 输入进直播的外部视频源的 URL 地址。
+ * @param uid 用户 ID。
+ * @param status 输入的外部视频源状态
  *
  */
 (url: string, uid: number, status: InjectStreamStatus) => void
@@ -330,6 +516,12 @@ export type StreamMessageCallback =
  * @param uid User ID of the remote user sending the data stream.
  * @param streamId Stream ID.
  * @param data Data received by the local user.
+ *
+ */
+/** @zh-cn
+ * @param uid 用户 ID。
+ * @param streamId 数据流。
+ * @param data 接收到的数据
  *
  */
 (uid: number, streamId: number, data: string) => void
@@ -341,16 +533,31 @@ export type StreamMessageErrorCallback =
  * @param missed The number of lost messages.
  * @param cached The number of incoming cached messages when the data stream is interrupted.
  */
+/** @zh-cn
+ * @param uid 用户 ID。
+ * @param streamId  数据流 ID。
+ * @param error 错误码。
+ * @param missed 丢失的消息数量。
+ * @param cached 数据流中断时，后面缓存的消息数量。
+ */
 (uid: number, streamId: number, error: ErrorCode, missed: number, cached: number) => void
 export type MediaRelayStateCallback =
 /**
  * @param state The state code.
  * @param code The error code.
  */
+/** @zh-cn
+ * @param state 跨频道媒体流转发状态。
+ * @param code 跨频道媒体流转发出错的错误码。
+ */
 (state: ChannelMediaRelayState, code: ChannelMediaRelayError) => void
 export type MediaRelayEventCallback =
 /**
  * @param code The event code for media stream relay.
+ *
+ */
+/** @zh-cn
+ * @param code 跨频道媒体流转发事件码。
  *
  */
 (code: ChannelMediaRelayEvent) => void
@@ -363,6 +570,13 @@ export type VideoFrameWithUidCallback =
  * callback is triggered.
  *
  */
+/** @zh-cn
+ * @param uid 用户 ID，指定是哪个用户的视频流。
+ * @param width 视频流宽（像素）。
+ * @param height  视频流高（像素）。
+ * @param elapsed 从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 加入频道开始到发生此事件过去的时间（毫秒）。
+ *
+ */
 (uid: number, width: number, height: number, elapsed: number) => void
 export type UrlWithErrorCallback =
 /**
@@ -370,10 +584,18 @@ export type UrlWithErrorCallback =
  * @param error The detailed error information.
  *
  */
+/** @zh-cn
+ * @param url 新增的推流地址。
+ * @param error 详细的错误信息。
+ *
+ */
 (url: string, error: ErrorCode) => void
 export type UrlCallback =
 /**
  * @param url The RTMP URL address.
+ */
+/** @zh-cn
+ * @param url 主播停止推流的 RTMP 地址。
  */
 (url: string) => void
 export type TransportStatsCallback =
@@ -382,6 +604,13 @@ export type TransportStatsCallback =
  * @param delay Network time delay (ms) from the remote user sending the audio packet to the local user.
  * @param lost Packet loss rate (%) of the audio packet sent from the remote user.
  * @param rxKBitRate Received bitrate (Kbps) of the audio packet sent from the remote user.
+ *
+ */
+/** @zh-cn
+ * @param uid 用户 ID，指定是哪个用户/主播的音频包。
+ * @param delay 音频包从发送端到接收端的延时（毫秒）。
+ * @param lost 音频包从发送端到接收端的丢包率 (%)。
+ * @param rxKBitRate 远端音频包的接收码率（Kbps）。
  *
  */
 (uid: number, delay: number, lost: number, rxKBitRate: number) => void
@@ -394,12 +623,25 @@ export type UidWithEnabledCallback =
  *  - `false`: Disabled. The remote user can only enter a voice session, and cannot send or receive
  * any video stream.
  */
+/** @zh-cn
+ * @param uid 用户 ID，提示是哪个用户的视频流。
+ * @param enabled 是否启用视频功能：
+ *  - `true`: 该用户已启用视频功能。启用后，该用户可以进行视频通话或直播。
+ *  - `false`: 该用户已关闭视频功能。关闭后，该用户只能进行语音通话或直播，
+ * 不能显示、发送自己的视频，也不能接收、显示别人的视频。
+ */
 (uid: number, enabled: boolean) => void
 export type EnabledCallback =
 /**
  * @param enabled Whether the microphone is enabled/disabled:
  *  - `true`：Enabled.
  *  - `false`：Disabled.
+ *
+ */
+/** @zh-cn
+ * @param enabled 是否启用麦克风：
+ *      - `true`：麦克风已启用。
+ *      - `false`：麦克风已禁用
  *
  */
 (enabled: boolean) => void
@@ -412,12 +654,24 @@ export type AudioQualityCallback =
  * @param lost Packet loss rate (%) of the audio packet sent from the sender to the receiver.
  *
  */
+/** @zh-cn
+ * @param uid 用户 ID，指定是谁发的音频流。
+ * @param quality 语音质量。
+ * @param delay 音频包从发送端到接收端的延迟（毫秒）。包括声音采样前处理、网络传输、网络抖动缓冲引起的延迟。
+ * @param lost 音频包从发送端到接收端的丢包率 (%)。
+ */
 (uid: number, quality: number, delay: number, lost: number) => void
 export type MetadataCallback =
 /**
  * @param buffer The received metadata.
  * @param uid The ID of the user who sent the metadata.
  * @param timeStampMs The timestamp (ms) of the received metadata.
+ *
+ */
+/** @zh-cn
+ * @param buffer T接收到的 Metadata 数据 Buffer 。
+ * @param uid 发送该 Metadata 的远端用户的 ID 。
+ * @param timeStampMs 接收到的 Metadata 的时间戳，单位为毫秒 。
  *
  */
 (buffer: string, uid: number, timeStampMs: number) => void
@@ -429,8 +683,21 @@ export type FacePositionCallback =
  * The number of the `FacePositionInfo` array depends on the number of human faces detected.
  * If the array length is 0, it means that no human face is detected.
  */
+/** @zh-cn
+ * @param imageWidth 摄像头采集画面的宽度 (px)。
+ * @param imageHeight 摄像头采集画面的高度 (px)。
+ * @param faces 检测到的人脸信息，详见 [`FacePositionInfo`]{@link FacePositionInfo}。
+ * 检测到几张人脸，就会报告几个 `AgoraFacePositionInfo` 数组。数组长度可以为 0，表示没有检测到摄像头前出现人脸。
+ */
 (imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
 
+/**
+ * The SDK uses the [`RtcEngineEvents`]{@link RtcEngineEvents} interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
+ *
+ * All methods in this interface class have their (empty) default implementations, and the application can inherit only some of the required events instead of all of them.
+ *
+ * In the callbacks, the application should avoid time-consuming tasks or call blocking APIs (such as SendMessage), otherwise, the SDK may not work properly.
+ */
 /**
  * The SDK uses the [`RtcEngineEvents`]{@link RtcEngineEvents} interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
  *
@@ -446,9 +713,6 @@ export interface RtcEngineEvents {
      *
      * For instance, the SDK may report a [`LookupChannelTimeout`]{@link WarningCode.LookupChannelTimeout} warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see [`WarningCode`]{@link WarningCode}.
      *
-     * [`WarningCallback`]{@link WarningCallback} has the following parameters:
-     * - `warn`: [`WarningCode`]{@link WarningCode}
-     *  Warning code. See [`WarningCode`]{@link WarningCode}.
      *
      * @event Warning
      */
@@ -459,10 +723,6 @@ export interface RtcEngineEvents {
      * SDK 上报的警告信息 App 可以忽略，SDK 会自动恢复。 例如和服务器失去连接时，SDK 可能会
      * 上报 [`LookupChannelTimeout`]{@link WarningCode.LookupChannelTimeout} 警告，同时自动尝试重连。
      *
-     * [`WarningCallback`]{@link WarningCallback} 包含如下参数：
-     * - `warn`: [`WarningCode`]{@link WarningCode}
-     *
-     *      警告代码，详见 [`WarningCode`]{@link WarningCode}。
      * @event Warning
      */
     Warning: WarningCallback
@@ -482,13 +742,7 @@ export interface RtcEngineEvents {
      *
      * 表示 SDK 运行时出现了（网络或媒体相关的）错误。通常情况下，SDK 上报的错误意味着 SDK 无法自动恢复，
      * 需要 App 干预或提示用户。例如启动通话失败时，SDK 会上报 [`StartCall`]{@link ErrorCode.StartCall} 错误。
-     * App 可以提示用户启动通话失败，并调用 [`leaveChannel`]{@link RtcEngine.leaveChannel} 退出频道。、
-     *
-     * [`ErrorCallback`]{@link ErrorCallback} 包含如下参数：
-     * - `err`: [`ErrorCode`]{@link ErrorCode}
-     *
-     *  错误代码，详见 [`ErrorCode`]{@link ErrorCode}。
-     *
+     * App 可以提示用户启动通话失败，并调用 [`leaveChannel`]{@link RtcEngine.leaveChannel} 退出频道。
      * @event Error
      */
     Error: ErrorCallback
@@ -501,16 +755,6 @@ export interface RtcEngineEvents {
     /** @zh-cn
      * API 方法已执行回调。
      *
-     * [`ApiCallCallback`]{@link ApiCallCallback} 包含如下参数：
-     * - `error`: [`ErrorCode`]{@link ErrorCode}
-     *
-     *      错误码。如果方法调用失败，会返回错误码 [Error Code]{@link ErrorCode}。如果返回 0，则表示方法调用成功。
-     * - `api`: *string*
-     *
-     *      SDK 所调用的 API。
-     * - `result`: *string*
-     *
-     *      SDK 调用 API 的调用结果。
      * @event ApiCallExecuted
      */
     ApiCallExecuted: ApiCallCallback
@@ -531,16 +775,6 @@ export interface RtcEngineEvents {
      * 根据 [`joinChannel`]{@link RtcEngine.joinChannel} 方法中指定的频道名称。如果调用 [`joinChannel`]{@link RtcEngine.joinChannel} 时
      * 并未指定用户 ID，服务器就会分配一个。
      *
-     * [`UidWithElapsedAndChannelCallback`]{@link UidWithElapsedAndChannelCallback} 包含如下参数：
-     * - `channel`: *string*
-     *
-     *      频道名。
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `elapsed`: *number*
-     *
-     *      从 [`joinChannel`]{@link RtcEngine.joinChannel} 开始到发生此事件过去的时间（毫秒)。
      *
      * @event JoinChannelSuccess
      */
@@ -558,16 +792,6 @@ export interface RtcEngineEvents {
      *
      * 有时候由于网络原因，客户端可能会和服务器失去连接，SDK 会进行自动重连，自动重连成功后触发此回调方法。
      *
-     * [`UidWithElapsedAndChannelCallback`]{@link UidWithElapsedAndChannelCallback} 包含如下参数：
-     * - `channel`: *string*
-     *
-     *      频道名。
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `elapsed`: *number*
-     *
-     *      从开始重连到重连成功的时间（毫秒）
      * @event RejoinChannelSuccess
      */
     RejoinChannelSuccess: UidWithElapsedAndChannelCallback
@@ -587,11 +811,6 @@ export interface RtcEngineEvents {
      * App 调用 [`leaveChannel`]{@link RtcEngine.leaveChannel} 方法时，SDK 提示 App 离开频道成功
      * 。
      * 在该回调方法中，App 可以得到此次通话的总通话时长、SDK 收发数据的流量等信息。
-     *
-     * [`RtcStatsCallback`]{@link RtcStatsCallback} 包含如下参数：
-     * - `RtcStats`：[`RtcStats`]{@link RtcStats}
-     *
-     *      通话相关的统计信息。
      * @event LeaveChannel
      */
     LeaveChannel: RtcStatsCallback
@@ -603,15 +822,6 @@ export interface RtcEngineEvents {
      * calling [`registerLocalUserAccount`]{@link RtcEngine.registerLocalUserAccount}, or joins a channel
      * by calling [`joinChannelWithUserAccount`]{@link RtcEngine.joinChannelWithUserAccount}.
      * This callback reports the user ID and user account of the local user.
-<<<<<<< HEAD
-     *
-     * [`UserAccountCallback`]{@link UserAccountCallback} has the following parameters:
-     * - `uid`: *number*
-     *
-     *  The ID of the local user.
-     * - `userAccount`: *string*
-=======
->>>>>>> jira/MS-16519
      *
      * @event LocalUserRegistered
      */
@@ -622,13 +832,6 @@ export interface RtcEngineEvents {
      * 调用 [`joinChannelWithUserAccount`]{@link RtcEngine.joinChannelWithUserAccount} 加入频道后，SDK 会触发该回调，
      * 并告知本地用户的 UID 和 User Account。
      *
-     * [`UserAccountCallback`]{@link UserAccountCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      本地用户的 ID。
-     * - `userAccount`: *string*
-     *
-     *      本地用户的 User Account。
      * @event LocalUserRegistered
      */
     LocalUserRegistered: UserAccountCallback
@@ -646,13 +849,6 @@ export interface RtcEngineEvents {
      * 远端用户加入频道后， SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，
      * 并在本地触发该回调。
      *
-     * [`UserInfoCallback`]{@link UserInfoCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      远端用户 ID。
-     * - `userInfo`: [`UserInfo`]{@link UserInfo}
-     *
-     *      标识用户信息的 UserInfo 对象，包含用户 UID 和 User Account。
      * @event UserInfoUpdated
      */
     UserInfoUpdated: UserInfoCallback
@@ -669,13 +865,6 @@ export interface RtcEngineEvents {
      *
      * 该回调由本地用户在加入频道后调用 [`setClientRole`]{@link RtcEngine.setClientRole} 改变用户角色触发的。
      *
-     * [`ClientRoleCallback`]{@link ClientRoleCallback} 包含如下参数：
-     * - `oldRole`: [`ClientRole`]{@link ClientRole}
-     *
-     *      切换前的角色。
-     * - `newRole`: [`ClientRole`]{@link ClientRole}
-     *
-     *      切换后的角色。
      * @event ClientRoleChanged
      */
     ClientRoleChanged: ClientRoleCallback
@@ -718,13 +907,6 @@ export interface RtcEngineEvents {
      *     - 观众也能收到新主播加入频道的回调，并能获得该主播的用户 ID。
      *     - 当 Web 端加入直播频道时，只要 Web 端有推流，SDK 会默认该 Web 端为主播，并触发该回调。
      *
-     * [`UidWithElapsedCallback`]{@link UidWithElapsedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      新加入频道的远端用户/主播 ID。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel}/[`setClientRole`]{@link RtcEngine.setClientRole} 到触发该回调的延迟（毫秒）。
      * @event UserJoined
      */
     UserJoined: UidWithElapsedCallback
@@ -736,33 +918,6 @@ export interface RtcEngineEvents {
      * - Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
      * - Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the [`Communication`]{@link ChannelProfile.Communication} profile, and more for the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
      *
-<<<<<<< HEAD
-     * [`UserOfflineCallback`]{@link UserOfflineCallback} has the following parameters:
-     * - `uid`: *number*
-     *
-     *  ID of the user or host who leaves the channel or goes offline.
-     * - `reason`: [`UserOfflineReason`]{@link UserOfflineReason}
-     *
-     *  Reason why the user goes offline.
-     * @event UserOffline
-     */
-    /** @zh-cn
-     * 远端用户（通信场景）/主播（直播场景）离开当前频道回调。
-     *
-     * 提示有远端用户/主播离开了频道（或掉线）。用户离开频道有两个原因，即正常离开和超时掉线：
-     *     - 正常离开的时候，远端用户/主播会收到类似“再见”的消息，接收此消息后，判断用户离开频道。
-     *     - 超时掉线的依据是，在一定时间内（约 20 秒），用户没有收到对方的任何数据包，则判定为对方掉线。
-     * 在网络较差的情况下，有可能会误报。Agora 建议使用 Agora 实时消息 SDK 来做可靠的掉线检测。
-     *
-     * [`UserOfflineCallback`]{@link UserOfflineCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      主播 ID。
-     * - `reason`: [`UserOfflineReason`]{@link UserOfflineReason}
-     *
-     *      离线原因。
-=======
->>>>>>> jira/MS-16519
      * @event UserOffline
      */
     UserOffline: UserOfflineCallback
@@ -779,13 +934,6 @@ export interface RtcEngineEvents {
      *
      * 该回调在网络连接状态发生改变的时候触发，并告知用户当前的网络连接状态，和引起网络状态改变的原因。
      *
-     * [`ConnectionStateCallback`]{@link ConnectionStateCallback} 包含如下参数：
-     * - `state`: [`ConnectionStateType`][@link ConnectionStateType]
-     *
-     *      当前的网络连接状态。
-     * - `reason`: [`ConnectionChangedReason`]{@link ConnectionChangedReason}
-     *
-     *      引起当前网络连接状态发生改变的原因。
      * @event ConnectionStateChanged
      */
     ConnectionStateChanged: ConnectionStateCallback
@@ -803,10 +951,6 @@ export interface RtcEngineEvents {
      * 本地网络连接类型发生改变时，SDK 会触发该回调，并在回调中明确当前的网络连接类型。
      * 你可以通过该回调获取正在使用的网络类型；当连接中断时，该回调能辨别引起中断的原因是网络切换还是网络条件不好。
      *
-     * [`NetworkTypeCallback`]{@link NetworkTypeCallback} 包含如下参数：
-     * - `type`: [`NetworkType`]{@link NetworkType}
-     *
-     *      网络连接类型。
      * @event NetworkTypeChanged
      */
     NetworkTypeChanged: NetworkTypeCallback
@@ -849,10 +993,6 @@ export interface RtcEngineEvents {
      * 由于 Token 具有一定的时效，在通话过程中如果 Token 即将失效，SDK 会提前 30 秒触发该回调，提醒 App 更新 Token。
      * 当收到该回调时，你需要重新在服务端生成新的 Token，然后调用 [`renewToken`]{@link RtcEngine.renewToken} 将新生成的 Token 传给 SDK。
      *
-     * [`TokenCallback`]{@link TokenCallback} 包含如下参数：
-     * - `token`: *string*
-     *
-     *      即将服务失效的 Token。
      * @event TokenPrivilegeWillExpire
      */
     TokenPrivilegeWillExpire: TokenCallback
@@ -911,27 +1051,6 @@ export interface RtcEngineEvents {
      *   - 远端用户调用该方法后 20 秒，远端说话者的音量提示回调将不再包含该用户；如果所有远端用户调用该方法后 20 秒，
      * SDK 即不再返回远端说话者的音量提示回调。
      *
-     * [`AudioVolumeCallback`]{@link AudioVolumeCallback} 包含如下参数：
-     * - `speakers`: [`AudioVolumeInfo`]{@link AudioVolumeInfo}[]
-     *
-     *      每个说话者的用户 ID 和音量信息的数组。
-     *
-     *      - 在本地用户的回调中，此数组中包含以下成员:
-     *          - `uid` = 0;
-     *          - `volume` 等于 `totalVolume`，报告本地用户混音后的音量;
-     *          - `vad`，报告本地用户人声状态。
-     *
-     *      - 在远端用户的回调中，此数组中包含以下成员：
-     *          - `uid`，表示每位说话者的用户 ID；
-     *          - `volume`，表示各说话者混音后的音量；
-     *          - `vad` = 0，人声检测对远端用户无效。
-     *    如果报告的 `speakers` 数组为空，则表示远端此时没有人说话。
-     *
-     * - `totalVolume`: *number*
-     *
-     *      （混音后的）总音量（0~255）。
-     *       - 在本地用户的回调中，`totalVolume` 为本地用户混音后的音量。
-     *       - 在远端用户的回调中，`totalVolume` 为所有说话者混音后的总音量。
      * @event AudioVolumeIndication
      *
      */
@@ -960,10 +1079,6 @@ export interface RtcEngineEvents {
      * - 你需要开启 [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} 方法才能收到该回调。
      * - `uid` 返回的是当前时间段内声音最大的用户 ID，而不是瞬时声音最大的用户 ID。
      *
-     * [`UidCallback`]{@link UidCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      当前时间段声音最大的用户的 `uid`。如果返回的 `uid` 为 0，则默认为本地用户。
      * @event ActiveSpeaker
      */
     ActiveSpeaker: UidCallback
@@ -976,10 +1091,6 @@ export interface RtcEngineEvents {
     /** @zh-cn
      * 已发送本地音频首帧回调。
      *
-     * [`ElapsedCallback`]{@link ElapsedCallback} 包含如下参数：
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 方法直至该回调被触发的延迟（毫秒）。
      * @event FirstLocalAudioFrame
      */
     FirstLocalAudioFrame: ElapsedCallback
@@ -995,19 +1106,6 @@ export interface RtcEngineEvents {
      * 已显示本地视频首帧回调。
      *
      * 第一帧本地视频显示在本地视图上时，触发此回调。
-     *
-     * [`VideoFrameCallback`]{@link VideoFrameCallback} 包含如下参数：
-     * - `width`: *number*
-     *
-     *      本地渲染视频的宽（px）。
-     * - `height`: *number*
-     *
-     *      本地渲染视频的高（px）。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 方法直至该回调被触发的延迟（毫秒）。
-     *      如果在 [`joinChannel`]{@link RtcEngine.joinChannel} 之前
-     *      调用了 [`startPreview`]{@link RtcEngine.startPreview}，则返回的是从调用 [`startPreview`]{@link RtcEngine.startPreview} 直至该回调被触发的延迟（毫秒）。
      *
      * @event FirstLocalVideoFrame
      *
@@ -1041,17 +1139,8 @@ export interface RtcEngineEvents {
      *
      * **Note**
      *
-     * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 20 时，该回调可能不准确。
+     * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 17 时，Agora 建议你不要使用该回调。
      *
-     * [`UidWithMutedCallback`]{@link UidWithMutedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID，提示是哪个用户的视频流。
-     * - `muted`: *boolean*
-     *
-     *      该用户是否暂停发送其视频流：
-     *          - true: 该用户已暂停发送视频流。
-     *          - false: 该用户已恢复发送视频流。
      * @event UserMuteVideo
      */
     UserMuteVideo: UidWithMutedCallback
@@ -1064,19 +1153,6 @@ export interface RtcEngineEvents {
     /** @zh-cn
      * 本地或远端视频大小或旋转信息发生改变回调。
      *
-     * [`VideoSizeCallback`]{@link VideoSizeCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      图像尺寸和旋转信息发生变化的用户 ID。如果返回的 uid 为 0，则表示本地用户。
-     * - `width`: *number*
-     *
-     *      视频流的宽度（像素）。
-     * - `height`: *number*
-     *
-     *      视频流的高度（像素）。
-     * - `rotation`: *number*
-     *
-     *      旋转信息 [0,360]。
      * @event VideoSizeChanged
      */
     VideoSizeChanged: VideoSizeCallback
@@ -1089,22 +1165,8 @@ export interface RtcEngineEvents {
     /** @zh-cn
      * 远端用户视频状态发生已变化回调。
      *
-     * [`RemoteVideoStateCallback`]{@link RemoteVideoStateCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      发生视频状态改变的远端用户 ID。
-     * - `state`: [`VideoRemoteState`]{@link VideoRemoteState}
-     *
-     *      远端视频流状态。
-     * - `reason`: [`VideoRemoteStateReason`]{@link VideoRemoteStateReason}
-     *
-     *      远端视频流状态改变的具体原因。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@ink RtcEngine.joinChannel} 方法到发生本事件经历的时间，单位为 ms。
      * @event RemoteVideoStateChanged
      */
-    //TODO 是否要加直播场景超过 17 人，回调不准确？
     RemoteVideoStateChanged: RemoteVideoStateCallback
 
     /**
@@ -1123,14 +1185,6 @@ export interface RtcEngineEvents {
      * 本地视频的状态发生改变时，SDK 会触发该回调返回当前的本地视频状态；
      * 当状态为 [`Failed`]{@link LocalVideoStreamState.Failed} 时，你可以在 error 参数中查看返回的错误信息。
      * 该接口在本地视频出现故障时，方便你了解当前视频的状态以及出现故障的原因，方便排查问题。
-     *
-     * [`LocalVideoStateCallback`]{@link LocalVideoStateCallback} 包含如下参数：
-     * - localVideoState: [`LocalVideoStreamState`]{@link LocalVideoStreamState}
-     *
-     *      当前的本地视频状态。
-     * - error: [`LocalVideoStreamError`]{@link LocalVideoStreamError}
-     *
-     *      本地视频出错原因。
      *
      * @event LocalVideoStateChanged
      */
@@ -1152,19 +1206,6 @@ export interface RtcEngineEvents {
      *
      * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 17 时，该回调可能不准确。
      *
-     * [`RemoteAudioStateCallback`]{@link RemoteAudioStateCallback } 包含如下参数：
-     * - `uid`: *number*
-     *
-     *  发生音频状态改变的远端用户 ID。
-     * - `state`: [`AudioRemoteState`]{@link AudioRemoteState}
-     *
-     *  远端音频流状态。
-     * - `reason`: [`AudioRemoteStateReason`]{@link AudioRemoteStateReason}
-     *
-     *  远端音频流状态改变的具体原因。
-     * - `elapsed`: number
-     *
-     * 从本地用户调用 [`joinChannel`]{@ink RtcEngine.joinChannel} 方法到发生本事件经历的时间，单位为 ms。
      * @event RemoteAudioStateChanged
      */
     RemoteAudioStateChanged: RemoteAudioStateCallback
@@ -1190,13 +1231,6 @@ export interface RtcEngineEvents {
      *
      *  当状态为 [`Failed`]{@link AudioLocalState.Failed} 时，你可以在 `error` 参数中查看返回的错误信息。
      *
-     * [`LocalAudioStateCallback`]{@link LocalAudioStateCallback} 包含如下参数：
-     * - state: [`AudioLocalState`]{@link AudioLocalState}
-     *
-     *      当前的本地音频状态。
-     * - error: [`AudioLocalError`]{@link AudioLocalError}
-     *
-     *      本地音频出错原因。
      * @event LocalAudioStateChanged
      */
     LocalAudioStateChanged: LocalAudioStateCallback
@@ -1219,12 +1253,6 @@ export interface RtcEngineEvents {
      * 将 `option` 设置为 [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly} 时，当上行网络环境不理想、本地发布的媒体流回退为音频流时，
      * 或当上行网络改善、媒体流恢复为音视频流时，会触发该回调。
      *
-     * [`FallbackCallback`]{@link FallbackCallback} 包含如下参数：
-     * - `isFallbackOrRecover`: *boolean*
-     *
-     *  本地推流已回退或恢复：
-     *  - true: 由于网络环境不理想，本地发布的媒体流已回退为音频流。
-     *  - false: 由于网络环境改善，发布的音频流已恢复为音视频流。
      * @event LocalPublishFallbackToAudioOnly
      */
     LocalPublishFallbackToAudioOnly: FallbackCallback
@@ -1254,8 +1282,8 @@ export interface RtcEngineEvents {
      * - `isFallbackOrRecover`: *boolean*
      *
      *      远端订阅流已回退或恢复：
-     *      - true: 由于网络环境不理想，远端订阅流已回退为音频流。
-     *      - false: 由于网络环境改善，订阅的音频流已恢复为音视频流。
+     *      - `true`: 由于网络环境不理想，远端订阅流已回退为音频流。
+     *      - `false`: 由于网络环境改善，订阅的音频流已恢复为音视频流。
      * @event RemoteSubscribeFallbackToAudioOnly
      */
     RemoteSubscribeFallbackToAudioOnly: FallbackWithUidCallback
@@ -1274,10 +1302,6 @@ export interface RtcEngineEvents {
      *
      * 该回调返回当前的音频路由已切换至听筒、扬声器、耳机或蓝牙。
      *
-     * [`AudioRouteCallback`]{@link AudioRouteCallback} 包含如下参数：
-     * - `routing`: [`AudioOutputRouting`]{@link AudioOutputRouting}.
-     *
-     *      语音路由。
      * @event AudioRouteChanged
      */
     AudioRouteChanged: AudioRouteCallback
@@ -1295,10 +1319,6 @@ export interface RtcEngineEvents {
      *
      * 该回调是由本地用户调用 [`setCameraFocusPositionInPreview`]{@link RtcEngine.setCameraFocusPositionInPreview} 方法改变对焦位置触发的。
      *
-     * [`RectCallback`]{@link RectCallback} 包含如下参数：
-     * - rect: [`Rect`]{@link rect: Rect}
-     *
-     *      镜头内表示对焦的区域。
      * @event CameraFocusAreaChanged
      */
     CameraFocusAreaChanged: RectCallback
@@ -1315,10 +1335,6 @@ export interface RtcEngineEvents {
      *
      * 该回调是由本地用户调用 [`setCameraExposurePosition`]{@link RtcEngine.setCameraExposurePosition} 方法改变曝光位置触发的。
      *
-     * [`RectCallback`]{@link RectCallback} 包含如下参数：
-     * - rect: [`Rect`]{@link rect: Rect}
-     *
-     *      镜头内表示曝光的区域。
      * @event CameraExposureAreaChanged
      */
     CameraExposureAreaChanged: RectCallback
@@ -1353,17 +1369,6 @@ export interface RtcEngineEvents {
      * - 当人脸距离设备屏幕过近时，SDK 不会触发该回调。
      * - Android 平台上，人脸距设备屏幕的距离（`distance`）值有一定误差，请不要用它进行精确计算。
      *
-     * [`FacePositionCallback`]{@link FacePositionCallback} 包含如下参数：
-     * - `imageWidth`: *number*
-     *
-     *  摄像头采集画面的宽度 (px)。
-     * - `imageHeight`: *number*
-     *
-     *  摄像头采集画面的高度 (px)。
-     * - `faces`: [`FacePositionInfo`]{@link FacePositionInfo}[]
-     *
-     * 检测到的人脸信息，详见 [`FacePositionInfo`]{@link FacePositionInfo}。
-     * 检测到几张人脸，就会报告几个 `AgoraFacePositionInfo` 数组。数组长度可以为 0，表示没有检测到摄像头前出现人脸。
      * @event FacePositionChanged
      */
     FacePositionChanged: FacePositionCallback
@@ -1378,10 +1383,6 @@ export interface RtcEngineEvents {
      * 当前通话统计回调。
      * 该回调在通话中每两秒触发一次。
      *
-     * [`RtcStatsCallback`]{@link RtcStatsCallback} 包含如下参数：
-     * - `stats`: [`RtcStats`]{@link RtcStats}
-     *
-     *      RtcEngine 数据。
      * @event RtcStats
      */
     RtcStats: RtcStatsCallback
@@ -1400,10 +1401,6 @@ export interface RtcEngineEvents {
      * 该回调描述本地用户在加入频道前的 last mile 网络探测的结果，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。
      * 在 [`enableLastmileTest`]{@link RtcEngine.enableLastmileTest} 之后，该回调函数每 2 秒触发一次。
      *
-     * [`NetworkQualityCallback`]{@link NetworkQualityCallback} 包含如下参数：
-     * - `quality`: [`NetworkQuality`]{@link NetworkQuality}
-     *
-     *      网络上下行质量，基于上下行网络的丢包率和抖动计算，探测结果主要反映上行网络的状态。
      * @event LastmileQuality
      */
     LastmileQuality: NetworkQualityCallback
@@ -1421,18 +1418,6 @@ export interface RtcEngineEvents {
      * 该回调描述每个用户在通话中的 last mile 网络状态，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。
      * 该回调每 2 秒触发一次。如果远端有多个用户/主播，该回调每 2 秒会被触发多次。
      *
-     * [`NetworkQualityWithUidCallback`]{@link NetworkQualityWithUidCallback} has the following parameters:
-     * - `uid`: *number*
-     *
-     *      用户 ID。表示该回调报告的是持有该 ID 的用户的网络质量。当 uid 为 0 时，返回的是本地用户的网络质量。
-     * - `txQuality`: [`NetworkQuality`]{@link NetworkQuality}
-     *
-     *      该用户的上行网络质量，基于上行视频的发送码率、上行丢包率、平均往返时延和网络抖动计算。
-     * 该值代表当前的上行网络质量，帮助判断是否可以支持当前设置的视频编码属性。假设上行码率是 1000 Kbps，
-     * 那么支持 640 &times; 480 的分辨率、30 fps 的帧率没有问题，但是支持 1280 x 720 的分辨率就会有困难。
-     * - `rxQuality`: [`NetworkQuality`]{@link NetworkQuality}
-     *
-     *      该用户的下行网络质量，基于下行网络的丢包率、平均往返延时和网络抖动计算。
      * @event NetworkQuality
      */
     NetworkQuality: NetworkQualityWithUidCallback
@@ -1449,10 +1434,6 @@ export interface RtcEngineEvents {
      *
      * 在调用 [`startLastmileProbeTest`]{@link RtcEngine.startLastmileProbeTest} 之后，SDK 会在约 30 秒内返回该回调。
      *
-     * [`LastmileProbeCallback`]{@link LastmileProbeCallback} 包含如下参数：
-     * - `result`: [`LastmileProbeResult`]{@link LastmileProbeResult}
-     *
-     *  上下行 Last mile 质量探测结果。
      * @event LastmileProbeResult
      */
     LastmileProbeResult: LastmileProbeCallback
@@ -1469,10 +1450,6 @@ export interface RtcEngineEvents {
      *
      * 该回调描述本地设备发送视频流的统计信息，每 2 秒触发一次。
      *
-     * [`LocalVideoStatsCallback`]{@link LocalVideoStatsCallback} has the following parameters:包含如下参数：
-     * - `stats`: [`LocalVideoStats`]{@link LocalVideoStats}
-     *
-     *      本地视频统计数据。
      * @event LocalVideoStats
      */
     LocalVideoStats: LocalVideoStatsCallback
@@ -1496,27 +1473,9 @@ export interface RtcEngineEvents {
     LocalAudioStats: LocalAudioStatsCallback
 
     /**
-     * Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
+     * Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds
+     * for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
      *
-<<<<<<< HEAD
-     * [`RemoteVideoStatsCallback`]{@link RemoteVideoStatsCallback} has the following parameters:
-     * - `stats`: [`RemoteVideoStats`]{@link RemoteVideoStats}
-     *
-     *  Statistics of the received remote video streams.
-     * @event RemoteVideoStats
-     */
-    /** @zh-cn
-     * 通话中远端视频流的统计信息回调。
-     *
-     * 该回调描述远端用户在通话中端到端的视频流状态，针对每个远端用户/主播每 2 秒触发一次。
-     * 如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
-     *
-     * [`RemoteVideoStatsCallback`]{@link RemoteVideoStatsCallback} 包含如下参数：
-     * - `stats`: [`RemoteVideoStats`]{@link RemoteVideoStats}
-     *
-     *      远端视频统计数据。
-=======
->>>>>>> jira/MS-16519
      * @event RemoteVideoStats
      */
     RemoteVideoStats: RemoteVideoStatsCallback
@@ -1536,10 +1495,6 @@ export interface RtcEngineEvents {
      * 该回调描述远端用户在通话中端到端的音频流统计信息，针对每个远端用户/主播每 2 秒触发一次。
      * 如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
      *
-     * [`RemoteAudioStatsCallback`]{@link RemoteAudioStatsCallback} 包含如下参数:
-     * - `stats`: [`RemoteAudioStats`]{@link RemoteAudioStats}
-     *
-     *      接收到的远端音频统计数据。
      * @event RemoteAudioStats
      */
     RemoteAudioStats: RemoteAudioStatsCallback
@@ -1566,7 +1521,8 @@ export interface RtcEngineEvents {
      *
      * 当调用 [`startAudioMixing`]{@link RtcEngine.startAudioMixing} 播放伴奏音乐结束后，会触发该回调。
      *
-     * 如果该方法调用失败，会在 [`Warning`]{@link Warning} 回调里，返回警告码 [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}。
+     * 如果该方法调用失败，会在 [`Warning`]{@link Warning} 回调里，返回
+     * 警告码 [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}。
      *
      * @event AudioMixingFinished
      */
@@ -1591,13 +1547,6 @@ export interface RtcEngineEvents {
      *    - 如果播放出错，则返回状态码 `714`，`errorCode` 返回相应的出错原因。
      *    - 如果本地音乐文件不存在、文件格式不支持、无法访问在线音乐文件 URL 都会返回警告码 [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}。
      *
-     * [`AudioMixingStateCallback`]{@link AudioMixingStateCallback} 包含如下参数：
-     * - `state`: [`AudioMixingStateCode`]{@link AudioMixingStateCode}
-     *
-     *      状态码。
-     * - `errorCode`: [`AudioMixingErrorCode`]{@link AudioMixingErrorCode}
-     *
-     *      错误码。
      * @event AudioMixingStateChanged
      */
     AudioMixingStateChanged: AudioMixingStateCallback
@@ -1615,10 +1564,6 @@ export interface RtcEngineEvents {
      *
      * 当调用 [`playEffect`]{@link RtcEngine.playEffect} 播放音效结束后，会触发该回调。
      *
-     * [`SoundIdCallback`]{@link SoundIdCallback} 包含如下参数：
-     * - `soundId`: *number*
-     *
-     *  指定音效的 ID。每个音效均有唯一的 ID。
      * @event AudioEffectFinished
      */
     AudioEffectFinished: SoundIdCallback
@@ -1641,16 +1586,6 @@ export interface RtcEngineEvents {
      * RTMP 推流状态发生改变时，SDK 会触发该回调，并在回调中明确状态发生改变的 URL 地址及当前推流状态；当推流状态为 [`Failure`]{@link RtmpStreamingState.Failure} 时，你可以在 `errCode` 参数中查看返回的错误信息。
      * 该回调方便推流用户了解当前的推流状态；推流出错时，你可以通过返回的错误码了解出错的原因，方便排查问题。
      *
-     * [`RtmpStreamingStateCallback`]{@link RtmpStreamingStateCallback} 包含如下参数：
-     * - `url`: *string*
-     *
-     *      推流状态发生改变的 URL 地址。
-     * - `state`: *RtmpStreamingState*
-     *
-     *      当前的推流状态。
-     * - `errCode`: *RtmpStreamingErrorCode*
-     *
-     *      详细的推流错误信息。
      * @event RtmpStreamingStateChanged
      */
     RtmpStreamingStateChanged: RtmpStreamingStateCallback
@@ -1688,16 +1623,6 @@ export interface RtcEngineEvents {
      *
      * 该回调表明向直播输入的外部视频流的状态。
      *
-     * [`StreamInjectedStatusCallback`]{@link StreamInjectedStatusCallback} 包含如下参数：
-     * - `url`: *string*
-     *
-     *  输入进直播的外部视频源的 URL 地址。
-     * - `uid`: *number*
-     *
-     *  用户 ID。
-     * - `status`: [`InjectStreamStatus`]{@link InjectStreamStatus}
-     *
-     *  输入的外部视频源状态。
      * @event StreamInjectedStatus
      */
     StreamInjectedStatus: StreamInjectedStatusCallback
@@ -1715,16 +1640,6 @@ export interface RtcEngineEvents {
      *
      * 该回调表示本地用户收到了远端用户调用 [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} 方法发送的流消息。
      *
-     * [`StreamMessageCallback`]{@link StreamMessageCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `streamId`: *number*
-     *
-     *      数据流。
-     * - `data`: *string*
-     *
-     *      接收到的数据。
      * @event StreamMessage
      */
     StreamMessage: StreamMessageCallback
@@ -1742,22 +1657,6 @@ export interface RtcEngineEvents {
      *
      * 该回调表示本地用户未收到远端用户调用 [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} 方法发送的流消息。
      *
-     * [`StreamMessageErrorCallback`]{@link StreamMessageErrorCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `streamId`: *number*
-     *
-     *      数据流 ID。
-     * - `error`: [`ErrorCode`]{@link ErrorCode}
-     *
-     *      错误代码。
-     * - `missed`: *number*
-     *
-     *      丢失的消息数量。
-     * - `cached`: *number*
-     *
-     *      数据流中断时，后面缓存的消息数量。
      * @event StreamMessageError
      */
     StreamMessageError: StreamMessageErrorCallback
@@ -1799,13 +1698,6 @@ export interface RtcEngineEvents {
      *
      * 当跨频道媒体流转发状态发生改变时，SDK 会触发该回调，并报告当前的转发状态以及相关的错误信息。
      *
-     * [`MediaRelayStateCallback`]{@link MediaRelayStateCallback} 包含如下参数：
-     * - `state`: [`ChannelMediaRelayState`]{@link ChannelMediaRelayState}
-     *
-     *      跨频道媒体流转发状态。
-     * - `code`: [`ChannelMediaRelayError`]{@link ChannelMediaRelayError}
-     *
-     *      跨频道媒体流转发出错的错误码。
      * @event ChannelMediaRelayStateChanged
      */
     ChannelMediaRelayStateChanged: MediaRelayStateCallback
@@ -1820,10 +1712,6 @@ export interface RtcEngineEvents {
      *
      * 该回调报告跨频道媒体流转发过程中发生的事件。
      *
-     * [`MediaRelayEventCallback`]{@link MediaRelayEventCallback} 包含如下参数：
-     * - `code`: [`ChannelMediaRelayEvent`]{@link ChannelMediaRelayEvent}
-     *
-     *      跨频道媒体流转发事件码。
      * @event ChannelMediaRelayEvent
      */
     ChannelMediaRelayEvent: MediaRelayEventCallback
@@ -1848,19 +1736,6 @@ export interface RtcEngineEvents {
      *
      * 第一帧远端视频显示在视图上时，触发此调用。App 可在此调用中获知出图时间（elapsed）。
      *
-     * [`VideoFrameWithUidCallback`]{@link VideoFrameWithUidCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID，指定是哪个用户的视频流。
-     * - `width`: *number*
-     *
-     *      视频流宽（像素）。
-     * - `height`: *number*
-     *
-     *      视频流高（像素）。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 加入频道开始到发生此事件过去的时间（毫秒）。
      * @event FirstRemoteVideoFrame
      */
     FirstRemoteVideoFrame: VideoFrameWithUidCallback
@@ -1880,13 +1755,6 @@ export interface RtcEngineEvents {
      * @deprecated 该回调已废弃。请改用 [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged}
      * 中的 [`Starting`]{@link AudioRemoteState.Starting}。
      *
-     * [`UidWithElapsedCallback`]{@link UidWithElapsedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *  发送音频帧的远端用户的 ID。
-     * - `elapsed`: *number*
-     *
-     *  从调用 [`joinChannel`]{@link RtcEngine.joinChannel} 方法直至该回调被触发的延迟（毫秒）。
      * @event FirstRemoteAudioFrame
      */
     FirstRemoteAudioFrame: UidWithElapsedCallback
@@ -1920,13 +1788,6 @@ export interface RtcEngineEvents {
      *   - 远端用户停止发送音频流（调用了 [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} 方法）。
      *   - 远端用户关闭音频（调用了 [`disableAudio`]{@link RtcEngine.disableAudio} 方法）。
      *
-     * [`UidWithElapsedCallback`]{@link UidWithElapsedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID，指定是哪个用户的音频流。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel} 方法加入频道直至该回调触发的延迟，单位为毫秒。
      * @event FirstRemoteAudioDecoded
      */
     FirstRemoteAudioDecoded: UidWithElapsedCallback
@@ -1960,17 +1821,8 @@ export interface RtcEngineEvents {
      *
      * **Note**
      *
-     * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 20 时，该回调可能不准确。
+     * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 17 时，Agora 建议你不要使用该回调。
      *
-     * [`UidWithMutedCallback`]{@link UidWithMutedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `muted`: *boolean*
-     *
-     *      该用户是否静音：
-     *      - true: 该用户已静音音频
-     *      - false: 该用户已取消音频静音
      * @event UserMuteAudio
      */
     UserMuteAudio: UidWithMutedCallback
@@ -1994,13 +1846,6 @@ export interface RtcEngineEvents {
      * 该回调返回 [`addPublishStreamUrl`]{@link addPublishStreamUrl} 方法的调用结果。
      * 用于通知主播是否推流成功。如果不成功，你可以在 `error` 参数中查看详细的错误信息。
      *
-     * [`UrlWithErrorCallback`]{@link UrlWithErrorCallback} 包含如下参数：
-     * - `url`: *string*
-     *
-     *      新增的推流地址。
-     * - `error`: *ErrorCode*
-     *
-     *      详细的错误信息。
      * @event StreamPublished
      */
     StreamPublished: UrlWithErrorCallback
@@ -2023,10 +1868,6 @@ export interface RtcEngineEvents {
      *
      * 该回调返回 [`removePublishStreamUrl`]{@link removePublishStreamUrl} 方法的调用结果。用于通知主播是否停止推流成功。
      *
-     * [`UrlCallback`]{@link UrlCallback} 包含如下参数：
-     * - `url`: *string*
-     *
-     *  主播停止推流的 RTMP 地址。
      * @event StreamUnpublished
      */
     StreamUnpublished: UrlCallback
@@ -2052,19 +1893,6 @@ export interface RtcEngineEvents {
      *
      * 通话中，当用户收到远端用户/主播发送的音频数据包后，会每 2 秒触发一次该回调。
      *
-     * [`TransportStatsCallback`]{@link TransportStatsCallback} 包含如下函数：
-     * - `uid`: *number*
-     *
-     *  用户 ID，指定是哪个用户/主播的音频包。
-     * - `delay`: *number*
-     *
-     *  音频包从发送端到接收端的延时（毫秒）。
-     * - `lost`: *number*
-     *
-     *  音频包从发送端到接收端的丢包率 (%)。
-     * - `rxKBitRate`: *number*
-     *
-     *  远端音频包的接收码率（Kbps）。
      * @event RemoteAudioTransportStats
      */
     RemoteAudioTransportStats: TransportStatsCallback
@@ -2089,19 +1917,6 @@ export interface RtcEngineEvents {
      *
      * 通话中，当用户收到远端用户/主播发送的视频数据包后，会每 2 秒触发一次该回调。
      *
-     * [`TransportStatsCallback`]{@link TransportStatsCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID，指定是哪个用户/主播的视频包。
-     * - `delay`: *number*
-     *
-     *      视频包从发送端到接收端的延时（毫秒）。
-     * - `lost`: *number*
-     *
-     *      视频包从发送端到接收端的丢包率 (%)。
-     * - `rxKBitRate`: *number*
-     *
-     *      远端视频包的接收码率（Kbps）。
      * @event RemoteVideoTransportStats
      */
     RemoteVideoTransportStats: TransportStatsCallback
@@ -2138,17 +1953,8 @@ export interface RtcEngineEvents {
      *
      * **Note**
      *
-     * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 20 时，该回调可能不准确。
+     * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 17 时，Agora 建议你不要使用该回调。
      *
-     * [`UidWithEnabledCallback`]{@link UidWithEnabledCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *  用户 ID，提示是哪个用户的视频流。
-     * - `enabled`: *boolean*
-     *
-     *  是否启用视频功能：
-     *  - true: 该用户已启用视频功能。启用后，该用户可以进行视频通话或直播。
-     *  - false: 该用户已关闭视频功能。关闭后，该用户只能进行语音通话或直播，不能显示、发送自己的视频，也不能接收、显示别人的视频。
      * @event UserEnableVideo
      */
     UserEnableVideo: UidWithEnabledCallback
@@ -2165,7 +1971,8 @@ export interface RtcEngineEvents {
      * The SDK triggers this callback when the remote user resumes or stops capturing the video stream by
      * calling [`enableLocalVideo`]{@link RtcEngine.enableLocalVideo}.
      *
-     * This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.
+     * This callback is only applicable to the scenario when the remote user only wants to watch the remote video
+     * without sending any video stream to the other user.
      *
      * @event UserEnableLocalVideo
      */
@@ -2180,15 +1987,6 @@ export interface RtcEngineEvents {
      *
      * 该回调是由远端用户调用 [`enableLocalVideo`]{@link RtcEngine.enableLocalVideo} 方法开启或关闭视频采集触发的。
      *
-     * [`UidWithEnabledCallback`]{@link UidWithEnabledCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *  用户 ID，提示是哪个用户的视频流。
-     * - `enabled`: *boolean*
-     *
-     *  是否启用本地视频功能：
-     *  - true: 该用户已启用本地视频功能。启用后，其他用户可以接收到该用户的视频流。
-     *  - false: 该用户已关闭视频功能。关闭后，该用户仍然可以接收其他用户的视频流，但其他用户接收不到该用户的视频流。
      * @event UserEnableLocalVideo
      */
     UserEnableLocalVideo: UidWithEnabledCallback
@@ -2226,19 +2024,6 @@ export interface RtcEngineEvents {
      *     - 远端用户停止发送本地视频流（调用了 [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream}）。
      *     - 远端用户关闭本地视频模块（调用了 [`disableVideo`]{@link RtcEngine.disableVideo}）。
      *
-     * [`VideoFrameWithUidCallback`]{@link VideoFrameWithUidCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID，指定是哪个用户的视频流。
-     * - `width`: *number*
-     *
-     *      视频流宽（像素）。
-     * - `height`: *number*
-     *
-     *      视频流高（像素）。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link joinChannel} 方法直至该回调被触发的延迟（毫秒）。
      * @event FirstRemoteVideoDecoded
      */
     FirstRemoteVideoDecoded: VideoFrameWithUidCallback
@@ -2256,8 +2041,8 @@ export interface RtcEngineEvents {
      * - `enabled`: *boolean*
      *
      *      Whether the microphone is enabled/disabled:
-     *      - true：Enabled.
-     *      - false：Disabled.
+     *      - `true`：Enabled.
+     *      - `false`：Disabled.
      * @event MicrophoneEnabled
      */
     /** @zh-cn
@@ -2267,12 +2052,6 @@ export interface RtcEngineEvents {
      *
      * 该回调由本地用户调用 [`enableLocalAudio`]{@link RtcEngine.enableLocalAudio} 方法开启或关闭本地音频采集触发的。
      *
-     * [`EnabledCallback`]{@link EnabledCallback} 包含如下参数：
-     * - `enabled`: *boolean*
-     *
-     *      是否启用麦克风：
-     *      - true：麦克风已启用。
-     *      - false：麦克风已禁用
      * @event MicrophoneEnabled
      */
     MicrophoneEnabled: EnabledCallback
@@ -2347,19 +2126,6 @@ export interface RtcEngineEvents {
      *
      * 该回调描述远端用户在通话中的音频质量，针对每个远端用户/主播每 2 秒触发一次。如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
      *
-     * [`AudioQualityCallback`]{@link AudioQualityCallback} 包含以下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID，指定是谁发的音频流。
-     * - `quality`: *number*
-     *
-     *      语音质量。
-     * - `delay`: *number*
-     *
-     *      音频包从发送端到接收端的延迟（毫秒）。包括声音采样前处理、网络传输、网络抖动缓冲引起的延迟。
-     * - `lost`: *number*
-     *
-     *      音频包从发送端到接收端的丢包率 (%)。
      * @event AudioQuality
      */
     AudioQuality: AudioQualityCallback
@@ -2407,16 +2173,6 @@ export interface RtcEngineEvents {
     /** @zh-cn
      * 接收端已接收 Metadata。
      *
-     * [`MetadataCallback`]{@link MetadataCallback} 包含如下参数：
-     * - `buffer`: *string*
-     *
-     *  接收到的 Metadata 数据 Buffer 。
-     * - `uid`: *number*
-     *
-     *  发送该 Metadata 的远端用户的 ID 。
-     * - `timeStampMs`: *number*
-     *
-     *  接收到的 Metadata 的时间戳，单位为毫秒 。
      * @event MetadataReceived
      */
     MetadataReceived: MetadataCallback
@@ -2434,10 +2190,6 @@ export interface RtcChannelEvents {
     /** @zh-cn
      * 报告 {@link RtcChannel} 对象发生的警告码。
      *
-     * [`WarningCallback`]{@link WarningCallback} 包含如下参数：
-     * - `warn`: [`WarningCode`]{@link WarningCode}
-     *
-     *      警告代码，详见 [`WarningCode`]{@link WarningCode}。
      * @event Warning
      */
     Warning: WarningCallback
@@ -2450,10 +2202,6 @@ export interface RtcChannelEvents {
     /** @zh-cn
      * 报告 {@link RtcChannel} 对象发生的错误码。
      *
-     * [`ErrorCallback`]{@link ErrorCallback} 包含如下参数：
-     * - `err`: [`ErrorCode`]{@link ErrorCode}
-     *
-     *      错误码。
      * @event Error
      */
     Error: ErrorCallback
@@ -2473,13 +2221,6 @@ export interface RtcChannelEvents {
      * 根据 [`joinChannel`]{@link RtcEngine.joinChannel} 方法中指定的频道名称。如果调用 [`joinChannel`]{@link RtcEngine.joinChannel} 时
      * 并未指定用户 ID，服务器就会分配一个。
      *
-     * [`UidWithElapsedCallback`]{@link UidWithElapsedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `elapsed`: *number*
-     *
-     *      从 [`joinChannel`]{@link RtcEngine.joinChannel} 开始到发生此事件过去的时间（毫秒)。
      *
      * @event JoinChannelSuccess
      */
@@ -2499,13 +2240,6 @@ export interface RtcChannelEvents {
      *
      * 有时候由于网络原因，客户端可能会和服务器失去连接，SDK 会进行自动重连，自动重连成功后触发此回调方法。
      *
-     * [`UidWithElapsedCallback`]{@link UidWithElapsedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `elapsed`: *number*
-     *
-     *      从开始重连到重连成功的时间（毫秒）。
      * @event RejoinChannelSuccess
      */
     RejoinChannelSuccess: UidWithElapsedCallback
@@ -2526,10 +2260,6 @@ export interface RtcChannelEvents {
      * 。
      * 在该回调方法中，App 可以得到此次通话的总通话时长、SDK 收发数据的流量等信息。
      *
-     * [`RtcStatsCallback`]{@link RtcStatsCallback} 包含如下参数：
-     * - `RtcStats`：[`RtcStats`]{@link RtcStats}
-     *
-     *      通话相关的统计信息。
      * @event LeaveChannel
      */
     LeaveChannel: RtcStatsCallback
@@ -2546,13 +2276,6 @@ export interface RtcChannelEvents {
      *
      * 该回调由本地用户在加入频道后调用 [`setClientRole`]{@link RtcEngine.setClientRole} 改变用户角色触发的。
      *
-     * [`ClientRoleCallback`]{@link ClientRoleCallback} 包含如下参数：
-     * - `oldRole`: [`ClientRole`]{@link ClientRole}
-     *
-     *      切换前的角色。
-     * - `newRole`: [`ClientRole`]{@link ClientRole}
-     *
-     *      切换后的角色。
      * @event ClientRoleChanged
      */
     ClientRoleChanged: ClientRoleCallback
@@ -2589,13 +2312,6 @@ export interface RtcChannelEvents {
      *     - 观众也能收到新主播加入频道的回调，并能获得该主播的用户 ID。
      *     - 当 Web 端加入直播频道时，只要 Web 端有推流，SDK 会默认该 Web 端为主播，并触发该回调。
      *
-     * [`UidWithElapsedCallback`]{@link UidWithElapsedCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      新加入频道的远端用户/主播 ID。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@link RtcEngine.joinChannel}/[`setClientRole`]{@link RtcEngine.setClientRole} 到触发该回调的延迟（毫秒）。
      * @event UserJoined
      */
     UserJoined: UidWithElapsedCallback
@@ -2607,33 +2323,6 @@ export interface RtcChannelEvents {
      * - Leave the channel: When the user/broadcaster leaves the channel, the user/broadcaster sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
      * - Go offline: When no data packet of the user or broadcaster is received for a certain period of time (around 20 seconds), the SDK assumes that the user/broadcaster drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
      *
-<<<<<<< HEAD
-     * [`UserOfflineCallback`]{@link UserOfflineCallback} has the following parameters:
-     * - `uid`: *number*
-     *
-     *  ID of the user or host who leaves the channel or goes offline.
-     * - `reason`: [`UserOfflineReason`]{@link UserOfflineReason}
-     *
-     *  Reason why the user goes offline.
-     * @event UserOffline
-     */
-    /** @zh-cn
-     * 远端用户（通信场景）/主播（直播场景）离开当前频道回调。
-     *
-     * 提示有远端用户/主播离开了频道（或掉线）。用户离开频道有两个原因，即正常离开和超时掉线：
-     *     - 正常离开的时候，远端用户/主播会收到类似“再见”的消息，接收此消息后，判断用户离开频道。
-     *     - 超时掉线的依据是，在一定时间内（约 20 秒），用户没有收到对方的任何数据包，则判定为对方掉线。
-     * 在网络较差的情况下，有可能会误报。Agora 建议使用 Agora 实时消息 SDK 来做可靠的掉线检测。
-     *
-     * [`UserOfflineCallback`]{@link UserOfflineCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      主播 ID。
-     * - `reason`: [`UserOfflineReason`]{@link UserOfflineReason}
-     *
-     *      离线原因。
-=======
->>>>>>> jira/MS-16519
      * @event UserOffline
      */
     UserOffline: UserOfflineCallback
@@ -2651,13 +2340,6 @@ export interface RtcChannelEvents {
      *
      * 该回调在网络连接状态发生改变的时候触发，并告知用户当前的网络连接状态，和引起网络状态改变的原因。
      *
-     * [`ConnectionStateCallback`]{@link ConnectionStateCallback} 包含如下参数：
-     * - `state`: [`ConnectionStateType`][@link ConnectionStateType]
-     *
-     *      当前的网络连接状态。
-     * - `reason`: [`ConnectionChangedReason`]{@link ConnectionChangedReason}
-     *
-     *      引起当前网络连接状态发生改变的原因。
      * @event ConnectionStateChanged
      */
     ConnectionStateChanged: ConnectionStateCallback
@@ -2698,10 +2380,6 @@ export interface RtcChannelEvents {
      * 由于 Token 具有一定的时效，在通话过程中如果 Token 即将失效，SDK 会提前 30 秒触发该回调，提醒 App 更新 Token。
      * 当收到该回调时，你需要重新在服务端生成新的 Token，然后调用 [`renewToken`]{@link RtcEngine.renewToken} 将新生成的 Token 传给 SDK。
      *
-     * [`TokenCallback`]{@link TokenCallback} 包含如下参数：
-     * - `token`: *string*
-     *
-     *      即将服务失效的 Token。
      * @event TokenPrivilegeWillExpire
      */
     TokenPrivilegeWillExpire: TokenCallback
@@ -2748,10 +2426,6 @@ export interface RtcChannelEvents {
      * - 你需要开启 [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} 方法才能收到该回调。
      * - `uid` 返回的是当前时间段内声音最大的用户 ID，而不是瞬时声音最大的用户 ID。
      *
-     * [`UidCallback`]{@link UidCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      当前时间段声音最大的用户的 `uid`。如果返回的 `uid` 为 0，则默认为本地用户。
      * @event ActiveSpeaker
      */
     ActiveSpeaker: UidCallback
@@ -2764,19 +2438,6 @@ export interface RtcChannelEvents {
     /** @zh-cn
      * 本地或远端视频大小或旋转信息发生改变回调。
      *
-     * [`VideoSizeCallback`]{@link VideoSizeCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      图像尺寸和旋转信息发生变化的用户 ID。如果返回的 uid 为 0，则表示本地用户。
-     * - `width`: *number*
-     *
-     *      视频流的宽度（像素）。
-     * - `height`: *number*
-     *
-     *      视频流的高度（像素）。
-     * - `rotation`: *number*
-     *
-     *      旋转信息 [0,360]。
      * @event VideoSizeChanged
      */
     VideoSizeChanged: VideoSizeCallback
@@ -2790,19 +2451,6 @@ export interface RtcChannelEvents {
     /** @zh-cn
      * 远端用户视频状态发生已变化回调。
      *
-     * [`RemoteVideoStateCallback`]{@link RemoteVideoStateCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      发生视频状态改变的远端用户 ID。
-     * - `state`: [`VideoRemoteState`]{@link VideoRemoteState}
-     *
-     *      远端视频流状态。
-     * - `reason`: [`VideoRemoteStateReason`]{@link VideoRemoteStateReason}
-     *
-     *      远端视频流状态改变的具体原因。
-     * - `elapsed`: *number*
-     *
-     *      从本地用户调用 [`joinChannel`]{@ink RtcEngine.joinChannel} 方法到发生本事件经历的时间，单位为 ms。
      * @event RemoteVideoStateChanged
      */
     RemoteVideoStateChanged: RemoteVideoStateCallback
@@ -2823,19 +2471,6 @@ export interface RtcChannelEvents {
      *
      * 当频道内的用户（通信场景）或主播（直播场景）的人数超过 17 时，该回调可能不准确。
      *
-     * [`RemoteAudioStateCallback`]{@link RemoteAudioStateCallback } 包含如下参数：
-     * - `uid`: *number*
-     *
-     *  发生音频状态改变的远端用户 ID。
-     * - `state`: [`AudioRemoteState`]{@link AudioRemoteState}
-     *
-     *  远端音频流状态。
-     * - `reason`: [`AudioRemoteStateReason`]{@link AudioRemoteStateReason}
-     *
-     *  远端音频流状态改变的具体原因。
-     * - `elapsed`: number
-     *
-     * 从本地用户调用 [`joinChannel`]{@ink RtcEngine.joinChannel} 方法到发生本事件经历的时间，单位为 ms。
      * @event RemoteAudioStateChanged
      */
     RemoteAudioStateChanged: RemoteAudioStateCallback
@@ -2854,12 +2489,6 @@ export interface RtcChannelEvents {
      * 将 `option` 设置为 [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly} 时，当上行网络环境不理想、本地发布的媒体流回退为音频流时，
      * 或当上行网络改善、媒体流恢复为音视频流时，会触发该回调。
      *
-     * [`FallbackCallback`]{@link FallbackCallback} 包含如下参数：
-     * - `isFallbackOrRecover`: *boolean*
-     *
-     *  本地推流已回退或恢复：
-     *  - true: 由于网络环境不理想，本地发布的媒体流已回退为音频流。
-     *  - false: 由于网络环境改善，发布的音频流已恢复为音视频流。
      * @event LocalPublishFallbackToAudioOnly
      */
     LocalPublishFallbackToAudioOnly: FallbackCallback
@@ -2884,15 +2513,6 @@ export interface RtcChannelEvents {
      * 将 `option` 设置为 [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly} 时，当下行网络环境不理想、仅接收远端音频流时，
      * 或当下行网络改善、恢复订阅音视频流时，会触发该回调。
      *
-     * [`FallbackWithUidCallback`]{@link FallbackWithUidCallback} has the following parameters:
-     * - `uid`: *number*
-     *
-     *      远端用户的 ID。
-     * - `isFallbackOrRecover`: *boolean*
-     *
-     *      远端订阅流已回退或恢复：
-     *      - true: 由于网络环境不理想，远端订阅流已回退为音频流。
-     *      - false: 由于网络环境改善，订阅的音频流已恢复为音视频流。
      * @event RemoteSubscribeFallbackToAudioOnly
      */
     RemoteSubscribeFallbackToAudioOnly: FallbackWithUidCallback
@@ -2906,10 +2526,6 @@ export interface RtcChannelEvents {
      * 当前通话统计回调。
      * 该回调在通话中每两秒触发一次。
      *
-     * [`RtcStatsCallback`]{@link RtcStatsCallback} 包含如下参数：
-     * - `stats`: [`RtcStats`]{@link RtcStats}
-     *
-     *      RtcEngine 数据。
      * @event RtcStats
      */
     RtcStats: RtcStatsCallback
@@ -2927,18 +2543,6 @@ export interface RtcChannelEvents {
      * 该回调描述每个用户在通话中的 last mile 网络状态，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。
      * 该回调每 2 秒触发一次。如果远端有多个用户/主播，该回调每 2 秒会被触发多次。
      *
-     * [`NetworkQualityWithUidCallback`]{@link NetworkQualityWithUidCallback} has the following parameters:
-     * - `uid`: *number*
-     *
-     *      用户 ID。表示该回调报告的是持有该 ID 的用户的网络质量。当 uid 为 0 时，返回的是本地用户的网络质量。
-     * - `txQuality`: [`NetworkQuality`]{@link NetworkQuality}
-     *
-     *      该用户的上行网络质量，基于上行视频的发送码率、上行丢包率、平均往返时延和网络抖动计算。
-     * 该值代表当前的上行网络质量，帮助判断是否可以支持当前设置的视频编码属性。假设上行码率是 1000 Kbps，
-     * 那么支持 640 &times; 480 的分辨率、30 fps 的帧率没有问题，但是支持 1280 x 720 的分辨率就会有困难。
-     * - `rxQuality`: [`NetworkQuality`]{@link NetworkQuality}
-     *
-     *      该用户的下行网络质量，基于下行网络的丢包率、平均往返延时和网络抖动计算。
      * @event NetworkQuality
      */
     NetworkQuality: NetworkQualityWithUidCallback
@@ -2954,10 +2558,6 @@ export interface RtcChannelEvents {
      * 该回调描述远端用户在通话中端到端的视频流状态，针对每个远端用户/主播每 2 秒触发一次。
      * 如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
      *
-     * [`RemoteVideoStatsCallback`]{@link RemoteVideoStatsCallback} 包含如下参数：
-     * - `stats`: [`RemoteVideoStats`]{@link RemoteVideoStats}
-     *
-     *      远端视频统计数据。
      * @event RemoteVideoStats
      */
     RemoteVideoStats: RemoteVideoStatsCallback
@@ -2977,10 +2577,6 @@ export interface RtcChannelEvents {
      * 该回调描述远端用户在通话中端到端的音频流统计信息，针对每个远端用户/主播每 2 秒触发一次。
      * 如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
      *
-     * [`RemoteAudioStatsCallback`]{@link RemoteAudioStatsCallback} 包含如下参数:
-     * - `stats`: [`RemoteAudioStats`]{@link RemoteAudioStats}
-     *
-     *      接收到的远端音频统计数据。
      * @event RemoteAudioStats
      */
     RemoteAudioStats: RemoteAudioStatsCallback
@@ -3002,16 +2598,6 @@ export interface RtcChannelEvents {
      * RTMP 推流状态发生改变时，SDK 会触发该回调，并在回调中明确状态发生改变的 URL 地址及当前推流状态；当推流状态为 [`Failure`]{@link RtmpStreamingState.Failure} 时，你可以在 `errCode` 参数中查看返回的错误信息。
      * 该回调方便推流用户了解当前的推流状态；推流出错时，你可以通过返回的错误码了解出错的原因，方便排查问题。
      *
-     * [`RtmpStreamingStateCallback`]{@link RtmpStreamingStateCallback} 包含如下参数：
-     * - `url`: *string*
-     *
-     *      推流状态发生改变的 URL 地址。
-     * - `state`: *RtmpStreamingState*
-     *
-     *      当前的推流状态。
-     * - `errCode`: *RtmpStreamingErrorCode*
-     *
-     *      详细的推流错误信息。
      * @event RtmpStreamingStateChanged
      */
     RtmpStreamingStateChanged: RtmpStreamingStateCallback
@@ -3050,16 +2636,6 @@ export interface RtcChannelEvents {
      *
      * 该回调表明向直播输入的外部视频流的状态。
      *
-     * [`StreamInjectedStatusCallback`]{@link StreamInjectedStatusCallback} 包含如下参数：
-     * - `url`: *string*
-     *
-     *  输入进直播的外部视频源的 URL 地址。
-     * - `uid`: *number*
-     *
-     *  用户 ID。
-     * - `status`: [`InjectStreamStatus`]{@link InjectStreamStatus}
-     *
-     *  输入的外部视频源状态。
      * @event StreamInjectedStatus
      */
     StreamInjectedStatus: StreamInjectedStatusCallback
@@ -3076,16 +2652,6 @@ export interface RtcChannelEvents {
      *
      * 该回调表示本地用户收到了远端用户调用 [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} 方法发送的流消息。
      *
-     * [`StreamMessageCallback`]{@link StreamMessageCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `streamId`: *number*
-     *
-     *      数据流。
-     * - `data`: *string*
-     *
-     *      接收到的数据。
      * @event StreamMessage
      */
     StreamMessage: StreamMessageCallback
@@ -3102,22 +2668,6 @@ export interface RtcChannelEvents {
      *
      * 该回调表示本地用户未收到远端用户调用 [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} 方法发送的流消息。
      *
-     * [`StreamMessageErrorCallback`]{@link StreamMessageErrorCallback} 包含如下参数：
-     * - `uid`: *number*
-     *
-     *      用户 ID。
-     * - `streamId`: *number*
-     *
-     *      数据流 ID。
-     * - `error`: [`ErrorCode`]{@link ErrorCode}
-     *
-     *      错误代码。
-     * - `missed`: *number*
-     *
-     *      丢失的消息数量。
-     * - `cached`: *number*
-     *
-     *      数据流中断时，后面缓存的消息数量。
      * @event StreamMessageError
      */
     StreamMessageError: StreamMessageErrorCallback
@@ -3134,13 +2684,6 @@ export interface RtcChannelEvents {
      *
      * 当跨频道媒体流转发状态发生改变时，SDK 会触发该回调，并报告当前的转发状态以及相关的错误信息。
      *
-     * [`MediaRelayStateCallback`]{@link MediaRelayStateCallback} 包含如下参数：
-     * - `state`: [`ChannelMediaRelayState`]{@link ChannelMediaRelayState}
-     *
-     *      跨频道媒体流转发状态。
-     * - `code`: [`ChannelMediaRelayError`]{@link ChannelMediaRelayError}
-     *
-     *      跨频道媒体流转发出错的错误码。
      * @event ChannelMediaRelayStateChanged
      */
     ChannelMediaRelayStateChanged: MediaRelayStateCallback
@@ -3155,10 +2698,6 @@ export interface RtcChannelEvents {
      *
      * 该回调报告跨频道媒体流转发过程中发生的事件。
      *
-     * [`MediaRelayEventCallback`]{@link MediaRelayEventCallback} 包含如下参数：
-     * - `code`: [`ChannelMediaRelayEvent`]{@link ChannelMediaRelayEvent}
-     *
-     *      跨频道媒体流转发事件码。
      * @event ChannelMediaRelayEvent
      */
     ChannelMediaRelayEvent: MediaRelayEventCallback
@@ -3171,16 +2710,6 @@ export interface RtcChannelEvents {
     /** @zh-cn
      * 接收端已接收 Metadata。
      *
-     * [`MetadataCallback`]{@link MetadataCallback} 包含如下参数：
-     * - `buffer`: *string*
-     *
-     *  接收到的 Metadata 数据 Buffer 。
-     * - `uid`: *number*
-     *
-     *  发送该 Metadata 的远端用户的 ID 。
-     * - `timeStampMs`: *number*
-     *
-     *  接收到的 Metadata 的时间戳，单位为毫秒 。
      * @event MetadataReceived
      */
     MetadataReceived: MetadataCallback

@@ -135,14 +135,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      * - 请确保在调用其他 API 前先调用该方法创建并初始化 [`RtcEngine`]{@link RtcEngine}。
      * - 调用该方法和 [`createWithAreaCode`]{@link createWithAreaCode} 均能创建 [`RtcEngine`]{@link RtcEngine} 实例。
-     * 该方法与 [`createWithAreaCode`]{@link createWithAreaCode} 的区别在于，[`createWithAreaCode`]{@link createWithAreaCode} 支持在创建 {@link RtcEngine} 实例时指定访问区域。
+     * 该方法与 [`createWithAreaCode`]{@link createWithAreaCode} 的区别在于，[`createWithAreaCode`]{@link createWithAreaCode} 支持在创建 {@link RtcEngine} 实例
+     * 时指定访问区域。
      * - 目前 Agora React Native SDK 只支持每个 app 创建一个 [`RtcEngine`]{@link RtcEngine} 实例。
      *
      * @param appId Agora 为 app 开发者签发的 App ID，详见[获取 App ID](https://docs.agora.io/cn/Agora%20Platform/token#get-an-app-id)。
      * 使用同一个 App ID 的 app 才能进入同一个频道进行通话或直播。一个 App ID 只能用于创建一个 [`RtcEngine`]{@link RtcEngine}。
      * 如需更换 App ID，必须先调用 [`destroy`]{@link destroy} 销毁当前 [`RtcEngine`]{@link RtcEngine}，再调用 [`create`]{@link create} 重新创建 [`RtcEngine`]{@link RtcEngine}。
      * @param areaCode 服务器的访问区域。该功能为高级设置，适用于有访问安全限制的场景。
-     * 支持的区域详见 [`IPAreaCode`]{@link IPAreaCode}。指定访问区域后，集成了 Agora SDK 的 app 会连接指定区域内的 Agora 服务器。
+     * 支持的区域详见 [`IPAreaCode`]{@link IPAreaCode}。
+     * 指定访问区域后，集成了 Agora SDK 的 app 会连接指定区域内的 Agora 服务器。
      */
     static async createWithAreaCode(appId: string, areaCode: IPAreaCode): Promise<RtcEngine> {
         if (engine) return engine;
@@ -190,15 +192,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Adds the [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
      *
-<<<<<<< HEAD
-     * After setting the engine event handler, you can listen for engine events and receive the statistics of the corresponding RtcEngine instance.
-     * @param event Adds the engine event handler.
-     * @param listener The event handler.
-=======
      * After setting the [`RtcEngineEvents`]{@link RtcEngineEvents} handler, you can listen for `RtcEngine` events and receive the statistics of the corresponding RtcEngine instance.
      * @param event The event type.
      * @param listener The [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
->>>>>>> jira/MS-16519
      */
     /** @zh-cn
      * 设置 `RtcEngine` 对象的事件句柄。
@@ -1139,8 +1135,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 停止/恢复接收所有音频流。
      *
      * @param muted 是否停止接收所有音频流：
-     * - true: 停止接收所有远端音频流。
-     * - false: 继续接收所有远端音频流（默认）。
+     * - `true`: 停止接收所有远端音频流。
+     * - `false`: 继续接收所有远端音频流（默认）。
      */
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
         return AgoraRtcEngineModule.muteAllRemoteAudioStreams(muted);
@@ -1207,8 +1203,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * @param uid 指定的用户 ID。
      * @param muted 是否停止接收指定用户的音频流：
-     * - true：停止接收指定用户的音频流。
-     * - false：继续接收指定用户的音频流（默认）。
+     * - `true`：停止接收指定用户的音频流。
+     * - `false`：继续接收指定用户的音频流（默认）。
      *
      */
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
@@ -1274,8 +1270,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * `setDefaultMuteAllRemoteAudioStreams`(false) 只能恢复接收设置后加入频道的用户的音频流。
      *
      * @param muted 是否默认不接收所有远端音频：
-     * - true：默认不接收所有远端音频流。
-     * - false：默认接收所有远端音频流（默认）。
+     * - `true`：默认不接收所有远端音频流。
+     * - `false`：默认接收所有远端音频流（默认）。
      *
      */
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
@@ -1529,8 +1525,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - 该方法仅适用于 Android 4.4 及以上版本。
      *
      * @param enabled 是否开启美颜功能：
-     * - true: 开启。
-     * - false: （默认）关闭。
+     * - `true`: 开启。
+     * - `false`: （默认）关闭。
      * @param options 美颜选项。
      *
      */
@@ -2281,8 +2277,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 请确保在调用 {@link RtcEngine#joinChannel joinChannel} 方法前调用该方法。
      *
      * @param enabled 是否开启远端用户语音立体声：
-     * - true: 开启。
-     * - false: （默认）关闭。
+     * - `true`: 开启。
+     * - `false`: （默认）关闭。
      */
     enableSoundPositionIndication(enabled: boolean): Promise<void> {
         return AgoraRtcEngineModule.enableSoundPositionIndication(enabled);
@@ -2366,9 +2362,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * @param url CDN 推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。url 不支持中文等特殊字符。
      * @param transcodingEnabled 是否转码。如果设为 `true`，则需要在该方法前先调用 {@link RtcEngine#setLiveTranscoding(LiveTranscoding) setLiveTranscoding} 方法。
-     * - true：转码。[转码](https://docs.agora.io/cn/Agora%20Platform/terms?platform=All%20Platforms#转码)是指在旁路推流时对
+     * - `true`：转码。[转码](https://docs.agora.io/cn/Agora%20Platform/terms?platform=All%20Platforms#转码)是指在旁路推流时对
      * 音视频流进行转码处理后，再推送到其他 RTMP 服务器。多适用于频道内有多个主播，需要进行混流、合图的场景。
-     * - false：不转码。
+     * - `false`：不转码。
      */
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
         return AgoraRtcEngineModule.addPublishStreamUrl(url, transcodingEnabled);
@@ -3562,8 +3558,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 设置是否打开闪光灯。
      *
      * @param isOn 是否打开闪光灯：
-     * - true：打开。
-     * - false：关闭。
+     * - `true`：打开。
+     * - `false`：关闭。
      */
     setCameraTorchOn(isOn: boolean): Promise<void> {
         return AgoraRtcEngineModule.setCameraTorchOn(isOn);
