@@ -52,7 +52,6 @@ export enum IPAreaCode {
  * 用于旁路直播的输出音频的编码规格。
  * @enum {number}
  */
-//TODO 仅用于旁路直播吗？
 export enum AudioCodecProfileType {
     /**
      * 0: (Default) LC-AAC, which is the low-complexity audio codec profile.
@@ -440,16 +439,15 @@ export enum AudioProfile {
 }
 
 /**
- * Use mode of the onRecordAudioFrame callback.
+ * Use mode of the `RecordAudioFrame` callback.
  * @enum {number}
  * TODO setPlaybackAudioFrameParameters
  */
 /** @zh-cn
- * `onRecordAudioFrame` 的使用模式。
+ * `RecordAudioFrame` 的使用模式。
  * @enum {number}
  * TODO setPlaybackAudioFrameParameters
  */
-// TODO Where is onRecordAudioFrame?
 export enum AudioRawFrameOperationMode {
     /**
      * 0: Users only read the AudioFrame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
@@ -758,12 +756,9 @@ export enum AudioReverbPreset {
     FX_PHONOGRAPH = 0x00100008,
     /**
      * The reverberation of the virtual stereo. The virtual stereo is an effect that renders
-<<<<<<< HEAD
-     * the monophonic audio as the stereo audio, so that all users in the channel can hear
-     * the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends
-     * setting the profile parameter in setAudioProfile as MusicHighQualityStereo(5).
-     * @see [`setAudioProfile`]{@link RtcEngine#setAudioProfile}
-     * @see [`MusicHighQualityStereo`]{@link AudioProfile.MusicHighQualityStereo}
+     * the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect.
+     * To achieve better virtual stereo reverberation, Agora recommends setting the profile
+     * parameter in [`RtcEngine#setAudioProfile`]{@link RtcEngine#setAudioProfile} as [`MusicHighQualityStereo(5)`]{@link AudioProfile.MusicHighQualityStereo}.
      *
      */
     /** @zh-cn
@@ -771,12 +766,6 @@ export enum AudioReverbPreset {
      * 使频道内所有用户听到有空间感的声音效果。为达到更好的虚拟立体声效果，
      * Agora 推荐在调用该方法前将 [`setAudioProfile`]{@link RtcEngine#setAudioProfile} 的 `profile` 参数设置
      * 为 [`MusicHighQualityStereo`]{@link AudioProfile.MusicHighQualityStereo}。
-=======
-     * the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect.
-     * To achieve better virtual stereo reverberation, Agora recommends setting the profile
-     * parameter in [`RtcEngine#setAudioProfile`]{@link RtcEngine#setAudioProfile} as [`MusicHighQualityStereo(5)`]{@link AudioProfile.MusicHighQualityStereo}.
-     *
->>>>>>> jira/MS-16519
      */
     VIRTUAL_STEREO = 0x00200001,
 }
@@ -1286,7 +1275,7 @@ export enum ChannelMediaRelayEvent {
      */
     Disconnect = 0,
     /**
-     * 1: The network reconnects.//TODO 为什么是 reconnects?
+     * 1: The network reconnects.
      */
     /** @zh-cn
      * 1: 用户与服务器建立连接。
@@ -1310,7 +1299,7 @@ export enum ChannelMediaRelayEvent {
      * 4: The SDK starts relaying the media stream to the destination channel.
      */
     /** @zh-cn
-     * 4: The SDK stSDK 开始向目标频道发送数据包。
+     * 4: SDK 开始向目标频道发送数据包。
      */
     SentToDestinationChannel = 4,
     /**
@@ -2402,7 +2391,7 @@ export enum InjectStreamStatus {
      * 5: The external video stream stops importing successfully.
      */
     /** @zh-cn
-     * 5: 外部视频流停止输入成功。 // TODO 英文注释改成 The external video stream stops importing successfully.
+     * 5: 外部视频流停止输入成功。
      */
     StopSuccess = 5,
     /**
@@ -2417,7 +2406,6 @@ export enum InjectStreamStatus {
      */
     /** @zh-cn
      * 7: 要停止输入的外部视频流未经授权。
-     * // TODO The external video stream to be stopped importing is unauthorized.
      */
     StopUnauthorized = 7,
     /**
@@ -2425,7 +2413,6 @@ export enum InjectStreamStatus {
      */
     /** @zh-cn
      * 8: 停止输入外部视频流超时。
-     * // TODO Stop importing external video stream timeout. 英文待确认
      */
     StopTimedout = 8,
     /**
@@ -2433,7 +2420,6 @@ export enum InjectStreamStatus {
      */
     /** @zh-cn
      * 9: 停止输入外部视频流失败。
-     * // TODO Stop importing external video stream failed. 英文待确认
      */
     StopFailed = 9,
     /**
@@ -2441,7 +2427,6 @@ export enum InjectStreamStatus {
      */
     /** @zh-cn
      * 10: 输入的外部视频流被中断。
-     * // TODO 是被中断还是 corrupted? The external video stream is corrupted.
      */
     Broken = 10,
 }
@@ -2474,7 +2459,6 @@ export enum LastmileProbeResultState {
      */
     /** @zh-cn
      * 3: 未进行 Last-mile 质量探测。一个可能的原因是网络连接中断。
-     * // TODO 英文首字母大写。
      */
     Unavailable = 3,
 }
@@ -3228,7 +3212,6 @@ export enum UserPriority {
  * 视频 buffer 类型。
  * @enum {number}
  * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
- * //TODO ?
  */
 export enum VideoBufferType {
     /**
@@ -3289,7 +3272,7 @@ export enum VideoCodecProfileType {
  * 屏幕共享的内容类型。
  * @enum {number}
  * TODO MacOS setScreenCaptureContentHint
- * //TODO ?
+ *
  */
 export enum VideoContentHint {
     /**
@@ -3325,24 +3308,17 @@ export enum VideoContentHint {
  */
 export enum VideoFrameRate {
     /**
-<<<<<<< HEAD
-     * -1: The minimum frame rate of the video. // TODO ?
+     * -1: The minimum frame rate of the video.
      */
     /** @zh-cn
-     * -1: 最低视频编码帧率（fps）。 // TODO ?
-=======
-     * -1: The minimum frame rate of the video.
->>>>>>> jira/MS-16519
+     * -1: 最低视频编码帧率（fps）。
      */
     Min = -1,
     /**
      * 1: 1 fps.
-<<<<<<< HEAD
      */
     /** @zh-cn
      * 1: 每秒钟 1 帧。
-=======
->>>>>>> jira/MS-16519
      */
     Fps1 = 1,
     /**
@@ -3559,8 +3535,173 @@ export enum VideoFrameRate {
  * @enum {number}
  */
 /** @zh-cn
- * 视频编码的码率。单位为 Kbps。你可以根据场景需要，参考下面的视频基准码率参考表，手动设置你想要的码率。// TODO 表格在哪里？
- * 若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。 你也可以直接选择如下任意一种模式进行设置：
+ * 视频编码的码率。单位为 Kbps。你可以根据场景需要，参考下面的视频基准码率参考表，手动设置你想要的码率。
+ * 若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。
+ *
+ * **视频码率参考表**
+ * <table>
+ *     <tr>
+ *         <th>分辨率</th>
+ *         <th>帧率 <p> (fps)</th>
+ *         <th>基准码率 <p>（通信场景，Kbps）</th>
+ *         <th>直播码率 <p>（直播场景，Kbps）</th>
+ *     </tr>
+ *     <tr>
+ *         <td>160*120</td>
+ *         <td>15</td>
+ *         <td>65</td>
+ *         <td>130</td>
+ *     </tr>
+ *     <tr>
+ *         <td>120*120</td>
+ *         <td>15</td>
+ *         <td>50</td>
+ *         <td>100</td>
+ *     </tr>
+ *     <tr>
+ *         <td>320*180</td>
+ *         <td>15</td>
+ *         <td>140</td>
+ *         <td>280</td>
+ *     </tr>
+ *     <tr>
+ *         <td>180*180</td>
+ *         <td>15</td>
+ *         <td>100</td>
+ *         <td>200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>240*180</td>
+ *         <td>15</td>
+ *         <td>120</td>
+ *         <td>240</td>
+ *     </tr>
+ *     <tr>
+ *         <td>320*240</td>
+ *         <td>15</td>
+ *         <td>200</td>
+ *         <td>400</td>
+ *     </tr>
+ *     <tr>
+ *         <td>240*240</td>
+ *         <td>15</td>
+ *         <td>140</td>
+ *         <td>280</td>
+ *     </tr>
+ *     <tr>
+ *         <td>424*240</td>
+ *         <td>15</td>
+ *         <td>220</td>
+ *         <td>440</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*360</td>
+ *         <td>15</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>360*360</td>
+ *         <td>15</td>
+ *         <td>260</td>
+ *         <td>520</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*360</td>
+ *         <td>30</td>
+ *         <td>600</td>
+ *         <td>1200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>360*360</td>
+ *         <td>30</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*360</td>
+ *         <td>15</td>
+ *         <td>320</td>
+ *         <td>640</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*360</td>
+ *         <td>30</td>
+ *         <td>490</td>
+ *         <td>980</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>15</td>
+ *         <td>500</td>
+ *         <td>1000</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*480</td>
+ *         <td>15</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>30</td>
+ *         <td>750</td>
+ *         <td>1500</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*480</td>
+ *         <td>30</td>
+ *         <td>600</td>
+ *         <td>1200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>848*480</td>
+ *         <td>15</td>
+ *         <td>610</td>
+ *         <td>1220</td>
+ *     </tr>
+ *     <tr>
+ *         <td>848*480</td>
+ *         <td>30</td>
+ *         <td>930</td>
+ *         <td>1860</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>10</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>1280*720</td>
+ *         <td>15</td>
+ *         <td>1130</td>
+ *         <td>2260</td>
+ *     </tr>
+ *     <tr>
+ *         <td>1280*720</td>
+ *         <td>30</td>
+ *         <td>1710</td>
+ *         <td>3420</td>
+ *     </tr>
+ *     <tr>
+ *         <td>960*720</td>
+ *         <td>15</td>
+ *         <td>910</td>
+ *         <td>1820</td>
+ *     </tr>
+ *     <tr>
+ *         <td>960*720</td>
+ *         <td>30</td>
+ *         <td>1380</td>
+ *         <td>2760</td>
+ *     </tr>
+ * </table>
+ *
+ * @note 该表中的基准码率适用于通信场景。直播场景下通常需要较大码率来提升视频质量。
+ * Agora 推荐通过设置 [`Standard`]{@link VideoEncoderConfiguration.Standard} 来实现。你也可以直接将码率值设为基准码率值 x 2。
+ *
+ * 你也可以直接选择如下任意一种模式进行设置：
  * @enum {number}
  */
 export enum BitRate {
@@ -3679,7 +3820,6 @@ export enum VideoOutputOrientationMode {
  * 视频像素格式。
  * @enum {number}
  * TODO iOS AgoraVideoSinkProtocol
- * //TODO ?
  */
 export enum VideoPixelFormat {
     /**
@@ -3842,7 +3982,7 @@ export enum VideoRemoteStateReason {
      * 4: The local user resumes receiving the remote video stream or disables the video module.
      */
     /** @zh-cn
-     * 4: 本地用户恢复接收远端视频流或本地用户启动视频模块。// TODO 英文注释有误。
+     * 4: 本地用户恢复接收远端视频流或本地用户启动视频模块。
      */
     LocalUnmuted = 4,
     /**
@@ -4048,8 +4188,8 @@ export enum WarningCode {
      */
     /** @zh-cn
      * 105: 查找频道请求被服务器拒绝。服务器可能没有办法处理这个请求或请求是非法的。
-     * 从 v2.4.1 起废弃。请改用 [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} 回调
-     * 中的 [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer}。// TODO 从 v2.4.1 起废弃？
+     * **DEPRECATED** 已废弃。请改用 [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} 回调
+     * 中的 [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer}。
      *
      */
     LookupChannelRejected = 105,
@@ -4135,14 +4275,14 @@ export enum WarningCode {
      * 1020: Audio Device Module: a playback device fails.
      */
     /** @zh-cn
-     * 1020: 音频设备模块：播放频率异常。// TODO 播放设备异常？
+     * 1020: 音频设备模块：播放设备异常。
      */
     AdmPlaybackMalfunction = 1020,
     /**
      * 1021: Audio Device Module: a recording device fails.
      */
     /** @zh-cn
-     * 1021: 音频设备模块：录制频率异常。// TODO 录音设备异常？
+     * 1021: 音频设备模块：录音设备异常。
      */
     AdmRecordMalfunction = 1021,
     /**
@@ -4174,10 +4314,10 @@ export enum WarningCode {
      */
     AdmRecordIsOccupied = 1033,
     /**
-     * 1051: Audio Device Module: howling is detected.
+     * 1051: (Communication profile only) Audio Device Module: howling is detected.
      */
     /** @zh-cn
-     * 1051: （仅通信场景）音频信号处理模块：录制音频时监测到啸叫。// TODO （仅通信场景）?
+     * 1051: （仅通信场景）音频信号处理模块：录制音频时监测到啸叫。
      */
     ApmHowling = 1051,
     /**
@@ -4191,7 +4331,7 @@ export enum WarningCode {
      * 1053: Audio Device Module: the underlying audio settings have changed.
      */
     /** @zh-cn
-     * 1053: 音频信号处理模块：检测到残余回声，该回声可能由系统线程调度不及时或信号溢出导致。// TODO double check
+     * 1053: 音频设备模块：音频底层设置被修改。
      */
     AdmImproperSettings = 1053,
 }
@@ -4201,7 +4341,7 @@ export enum WarningCode {
  * @enum {number}
  */
 /** @zh-cn
- * 直播音频所在声道。// TODO double check
+ * 直播音频所在声道。
  * @enum {number}
  */
 export enum AudioChannel {
@@ -4209,7 +4349,7 @@ export enum AudioChannel {
      * 0: (Default) Supports dual channels. Depends on the upstream of the host.
      */
     /** @zh-cn
-     * 0: 推荐）默认混音设置，最多支持双声道，与主播端上行音频相关。
+     * 0: 默认混音设置，最多支持双声道，与主播端上行音频相关。
      */
     Channel0 = 0,
     /**

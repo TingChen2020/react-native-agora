@@ -83,6 +83,7 @@ export class VideoEncoderConfiguration {
      */
     /** @zh-cn
      * 视频编码的分辨率 (px)，用于衡量编码质量，以长 × 宽表示，默认值为 640 × 360。
+     *
      */
     dimensions?: VideoDimensions
     /**
@@ -90,14 +91,15 @@ export class VideoEncoderConfiguration {
      * We do not recommend setting this to a value greater than 30.
      */
     /** @zh-cn
-     * 视频编码的帧率（fps），默认值为 15。用户可以自行设置帧率，也可以在如下列表中直接选择想要的帧率。建议不要超过 30 帧。// TODO 表格在哪里？
+     * 视频编码的帧率（fps），默认值为 15。用户可以自行设置帧率，也可以在 [`VideoFrameRate`]{@link VideoFrameRate} 直接选择想要的帧率。建议不要超过 30 帧。
+     *
      */
     frameRate?: VideoFrameRate
     /**
      * The minimum video encoder frame rate (fps). The default value is Min(-1) (the SDK uses the lowest encoder frame rate).
      */
     /** @zh-cn
-     * 最低视频编码帧率（fps）。默认值为 DEFAULT_MIN_FRAMERATE(-1)，表示使用系统默认的最低编码帧率。
+     * 最低视频编码帧率（fps）。默认值为 `Min`，表示使用系统默认的最低编码帧率。
      */
     minFrameRate?: VideoFrameRate
     /**
@@ -106,7 +108,181 @@ export class VideoEncoderConfiguration {
      */
     /** @zh-cn
      * 视频编码的码率。单位为 Kbps。你可以根据场景需要，参考下面的视频基准码率参考表，手动设置你想要的码率。
-     * 若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。 // TODO 表格？
+     * 若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。
+     * 你也可以直接选择如下任意一种模式进行设置：
+     * <ul>
+     *     <li>[`Standard`]{@link VideoEncoderConfiguration.Standard}：（推荐）标准码率模式。该模式下，视频在通信和直播场景下的码率有所不同：
+     *          <ul>
+     *              <li>通信场景下，码率与基准码率一致</li>
+     *              <li>直播场景下，码率对照基准码率翻倍</li>
+     *          </ul></li>
+     *     <li>[`Compatible`]{@link VideoEncoderConfiguration.Compatible}：适配码率模式。该模式下，视频在通信和直播场景下的码率均与基准码率一致。直播下如果选择该模式，视频帧率可能会低于设置的值</li>
+     * </ul>
+     * Agora 在通信和直播场景下采用不同的编码方式，以提升不同场景下的用户体验。通信场景保证流畅，而直播场景则更注重画面质量，因此直播场景对码率的需求大于通信场景。所以 Agora 推荐将该参数设置为 {@link VideoEncoderConfiguration#STANDARD_BITRATE STANDARD_BITRATE = 0}。
+     *
+     * **视频码率参考表**
+     * <table>
+     *     <tr>
+     *         <th>分辨率</th>
+     *         <th>帧率 <p> (fps)</th>
+     *         <th>基准码率 <p>（通信场景，Kbps）</th>
+     *         <th>直播码率 <p>（直播场景，Kbps）</th>
+     *     </tr>
+     *     <tr>
+     *         <td>160*120</td>
+     *         <td>15</td>
+     *         <td>65</td>
+     *         <td>130</td>
+     *     </tr>
+     *     <tr>
+     *         <td>120*120</td>
+     *         <td>15</td>
+     *         <td>50</td>
+     *         <td>100</td>
+     *     </tr>
+     *     <tr>
+     *         <td>320*180</td>
+     *         <td>15</td>
+     *         <td>140</td>
+     *         <td>280</td>
+     *     </tr>
+     *     <tr>
+     *         <td>180*180</td>
+     *         <td>15</td>
+     *         <td>100</td>
+     *         <td>200</td>
+     *     </tr>
+     *     <tr>
+     *         <td>240*180</td>
+     *         <td>15</td>
+     *         <td>120</td>
+     *         <td>240</td>
+     *     </tr>
+     *     <tr>
+     *         <td>320*240</td>
+     *         <td>15</td>
+     *         <td>200</td>
+     *         <td>400</td>
+     *     </tr>
+     *     <tr>
+     *         <td>240*240</td>
+     *         <td>15</td>
+     *         <td>140</td>
+     *         <td>280</td>
+     *     </tr>
+     *     <tr>
+     *         <td>424*240</td>
+     *         <td>15</td>
+     *         <td>220</td>
+     *         <td>440</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*360</td>
+     *         <td>15</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>360*360</td>
+     *         <td>15</td>
+     *         <td>260</td>
+     *         <td>520</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*360</td>
+     *         <td>30</td>
+     *         <td>600</td>
+     *         <td>1200</td>
+     *     </tr>
+     *     <tr>
+     *         <td>360*360</td>
+     *         <td>30</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*360</td>
+     *         <td>15</td>
+     *         <td>320</td>
+     *         <td>640</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*360</td>
+     *         <td>30</td>
+     *         <td>490</td>
+     *         <td>980</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*480</td>
+     *         <td>15</td>
+     *         <td>500</td>
+     *         <td>1000</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*480</td>
+     *         <td>15</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*480</td>
+     *         <td>30</td>
+     *         <td>750</td>
+     *         <td>1500</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*480</td>
+     *         <td>30</td>
+     *         <td>600</td>
+     *         <td>1200</td>
+     *     </tr>
+     *     <tr>
+     *         <td>848*480</td>
+     *         <td>15</td>
+     *         <td>610</td>
+     *         <td>1220</td>
+     *     </tr>
+     *     <tr>
+     *         <td>848*480</td>
+     *         <td>30</td>
+     *         <td>930</td>
+     *         <td>1860</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*480</td>
+     *         <td>10</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>1280*720</td>
+     *         <td>15</td>
+     *         <td>1130</td>
+     *         <td>2260</td>
+     *     </tr>
+     *     <tr>
+     *         <td>1280*720</td>
+     *         <td>30</td>
+     *         <td>1710</td>
+     *         <td>3420</td>
+     *     </tr>
+     *     <tr>
+     *         <td>960*720</td>
+     *         <td>15</td>
+     *         <td>910</td>
+     *         <td>1820</td>
+     *     </tr>
+     *     <tr>
+     *         <td>960*720</td>
+     *         <td>30</td>
+     *         <td>1380</td>
+     *         <td>2760</td>
+     *     </tr>
+     * </table>
+     *
+     * @note 该表中的基准码率适用于通信场景。直播场景下通常需要较大码率来提升视频质量。
+     * Agora 推荐通过设置 [`Standard`]{@link VideoEncoderConfiguration.Standard} 来实现。你也可以直接将码率值设为基准码率值 x 2。
+     *
      */
     bitrate?: number
     /**
@@ -173,7 +349,7 @@ export class BeautyOptions {
      * The brightness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.7.
      */
     /** @zh-cn
-     * 亮度，取值范围为 [0.0, 1.0]，其中 0.0 表示原始亮度，默认值为 0.7。可用来实现美白等视觉效果。
+     * 亮度，取值范围为 [0.0,1.0]，其中 0.0 表示原始亮度，默认值为 0.7。可用来实现美白等视觉效果。
      */
     lighteningLevel?: number
     /**
@@ -181,7 +357,7 @@ export class BeautyOptions {
      * The default value is 0.5. This parameter is usually used to remove blemishes.
      */
     /** @zh-cn
-     * 平滑度，取值范围为 [0.0, 1.0]，其中 0.0 表示原始平滑等级，默认值为 0.5。可用来实现祛痘、磨皮等视觉效果。
+     * 平滑度，取值范围为 [0.0,1.0]，其中 0.0 表示原始平滑等级，默认值为 0.5。可用来实现祛痘、磨皮等视觉效果。
      */
     smoothnessLevel?: number
     /**
@@ -189,7 +365,7 @@ export class BeautyOptions {
      * The default value is 0.1. This parameter adjusts the red saturation level.
      */
     /** @zh-cn
-     * 红色度，取值范围为 [0.0, 1.0]，其中 0.0 表示原始红色度，默认值为 0.1。可用来实现红润肤色等视觉效果。
+     * 红色度，取值范围为 [0.0,1.0]，其中 0.0 表示原始红色度，默认值为 0.1。可用来实现红润肤色等视觉效果。
      */
     rednessLevel?: number
 
@@ -376,7 +552,7 @@ export class Color {
  *
  */
 /** @zh-cn
- * A class for managing user-specific CDN live audio/video transcoding settings.
+ * 管理 CDN 直播推流转码的接口
  *
  */
 export class LiveTranscoding {
@@ -405,8 +581,8 @@ export class LiveTranscoding {
      * the SDK automatically adapts it to a value within the range.
      */
     /** @zh-cn
-     * 用于旁路推流的输出视频的码率。 单位为 Kbps。 400 Kbps 为默认值。用户可以根据 Video Profile 参考表中的码率值进行设置；
-     * 如果设置的码率超出合理范围，Agora 服务器会在合理区间内自动调整码率值。 //TODO 表格？
+     * 用于旁路推流的输出视频的码率。 单位为 Kbps。 400 Kbps 为默认值。用户可以根据[码率参考表]{@link VideoEncoderConfiguration.bitrate}参考表中的码率值进行设置；
+     * 如果设置的码率超出合理范围，Agora 服务器会在合理区间内自动调整码率值。
      */
     videoBitrate?: number
     /**
@@ -426,8 +602,8 @@ export class LiveTranscoding {
      */
     /** @zh-cn
      * **Deprecated**
-     * - true: 低延时，不保证画质。
-     * - false:（默认值）高延时，保证画质。
+     * - `true`: 低延时，不保证画质。
+     * - `false`:（默认值）高延时，保证画质。
      */
     lowLatency?: boolean
     /**
@@ -535,7 +711,7 @@ export class LiveTranscoding {
  * The ChannelMediaInfo class.
  */
 /** @zh-cn
- * {@link ChannelMediaInfo} 类
+ * {@link ChannelMediaInfo} 类。
  */
 export class ChannelMediaInfo {
     /**
@@ -606,7 +782,7 @@ export class LastmileProbeConfig {
      * Whether to probe uplink of lastmile. i.e., audience don't need probe uplink bandwidth.
      */
     /** @zh-cn
-     * 是否探测上行网络。有些用户，如直播频道中的普通观众，不需要进行网络探测。// TODO 是否要加上取值 （true false)
+     * 是否探测上行网络。有些用户，如直播频道中的普通观众，不需要进行网络探测。
      */
     probeUplink: boolean
     /**
@@ -699,8 +875,8 @@ export class WatermarkOptions {
      */
     /** @zh-cn
      * 是否将水印设为预览时本地可见：
-     * - true: (默认) 预览时水印本地可见。
-     * - false: 预览时水印本地不可见。
+     * - `true`: (默认) 预览时水印本地可见。
+     * - `false`: 预览时水印本地不可见。
      */
     visibleInPreview?: boolean
     /**
@@ -771,21 +947,21 @@ export class LiveInjectStreamConfig {
      * Audio sample rate of the added stream to the live interactive streaming: AudioSampleRateType. The default value is 44100 Hz.
      */
     /** @zh-cn
-     * 添加进入直播的外部音频采样率。默认值为 44100，详见 {@link AudioSampleRateType}。//TODO 声网建议目前采用默认值，不要自行设置。
+     * 添加进入直播的外部音频采样率。默认值为 44100，详见 {@link AudioSampleRateType}。
      */
     audioSampleRate?: AudioSampleRateType
     /**
      * Audio bitrate of the added stream to the live interactive streaming. The default value is 48.
      */
     /** @zh-cn
-     * 添加进入直播的外部音频码率。单位为 Kbps，默认值为 48。 //TODO 声网建议目前采用默认值，不要自行设置。
+     * 添加进入直播的外部音频码率。单位为 Kbps，默认值为 48。
      */
     audioBitrate?: number
     /**
      * Audio channels to add into the live interactive streaming. The value ranges between `1` and `2`. The default value is `1`.
      */
     /** @zh-cn
-     * 添加进入直播的外部音频频道数。取值范围 [1,2]，默认值为 1。 //TODO 声网建议目前采用默认值，不要自行设置。 。
+     * 添加进入直播的外部音频频道数。取值范围 [1,2]，默认值为 1。
      */
     audioChannels?: AudioChannel
 
@@ -840,9 +1016,9 @@ export class ChannelMediaOptions {
      * Determines whether to subscribe to audio streams when the user joins the channel.
      */
     /** @zh-cn
-     * 设置加入频道时是否自动订阅音频流：// TODO 英文补充取值。
-     * - true: （默认）订阅。
-     * - false: 不订阅。
+     * 设置加入频道时是否自动订阅音频流：
+     * - `true`: （默认）订阅。
+     * - `false`: 不订阅。
      */
     autoSubscribeAudio: boolean
     /**
@@ -850,8 +1026,8 @@ export class ChannelMediaOptions {
      */
     /** @zh-cn
      * 设置加入频道是是否自动订阅视频流：
-     * - true: （默认）订阅。
-     * - false: 不订阅。
+     * - `true`: （默认）订阅。
+     * - `false`: 不订阅。
      *
      */
     autoSubscribeVideo: boolean
@@ -966,7 +1142,7 @@ export interface RtcStats {
      * The number of users in the channel.
      */
     /** @zh-cn
-     * 频道内的人数。// TODO 补充英文注释
+     * 频道内的人数。
      * - 通信场景下，返回当前频道内的人数。
      * - 直播场景下：
      *  - 如果本地用户为观众，则返回频道内的主播数 + 1。
@@ -1082,34 +1258,33 @@ export interface AudioVolumeInfo {
  *
  */
 /** @zh-cn
- * Rect.
+ * 长方形区域。
  *
  */
-// TODO 是否已经废弃？
 export interface Rect {
     /**
      * The x coordinate of the left side of the rectangular area.
      */
     /** @zh-cn
-     * Left.
+     * 长方形区域的左边所对应的横坐标。
      */
     left: number
     /**
      * The y coordinate of the upper side of the rectangular area.
      */
     /** @zh-cn
-     * Top.
+     * 长方形区域的上边所对应的纵坐标。
      */
     top: number
     /**
      * The x coordinate of the right side of the rectangular area.
      */
     /** @zh-cn
-     * Right.
+     * 长方形区域的右边所对应的横坐标。
      */
     right: number
     /**
-     * The y coordinate of the bottom side of the rectangular area.
+     * 长方形区域的底边所对应的纵坐标。
      */
     /** @zh-cn
      * Bottom.
@@ -1396,10 +1571,11 @@ export interface RemoteAudioStats {
      */
     frozenRate: number
     /**
-     * The total time (ms) when the remote user in the `Communication` profile or the remote broadcaster in the `LiveBroadcasting` profile neither stops sending the audio stream nor disables the audio module after joining the channel.
+     * The total time (ms) when the remote user in the `Communication` profile or
+     * the remote broadcaster in the `LiveBroadcasting` profile neither stops sending the audio stream nor disables the audio module after joining the channel.
      */
     /** @zh-cn
-     * 远端用户在音频通话开始到本次回调之间的有效时长（ms）。// TODO 确认英文注释
+     * 远端用户在音频通话开始到本次回调之间的有效时长（ms）。
      *
      * 有效时长是指去除了远端用户进入 mute 状态的总时长。
      */
@@ -1419,12 +1595,9 @@ export interface RemoteVideoStats {
     /**
      * User ID of the user sending the video streams.
      */
-<<<<<<< HEAD
     /** @zh-cn
      * 用户 ID，指定是哪个用户的视频流。
      */
-=======
->>>>>>> jira/MS-16519
     uid: number
     /**
      * **Deprecated**

@@ -920,6 +920,15 @@ export interface RtcEngineEvents {
      *
      * @event UserOffline
      */
+    /** @zh-cn
+     *
+     * 远端用户（通信场景）/主播（直播场景）离开当前频道回调。
+     * 提示有远端用户/主播离开了频道（或掉线）。用户离开频道有两个原因，即正常离开和超时掉线：
+     * 正常离开的时候，远端用户/主播会收到类似“再见”的消息，接收此消息后，判断用户离开频道
+     * 超时掉线的依据是，在一定时间内（约 20 秒），用户没有收到对方的任何数据包，则判定为对方掉线。在网络较差的情况下，
+     * 有可能会误报。Agora 建议使用 Agora 实时消息 SDK 来做可靠的掉线检测。
+     * @event UserOffline
+     */
     UserOffline: UserOfflineCallback
 
     /**
@@ -1241,7 +1250,8 @@ export interface RtcEngineEvents {
      *
      * If you call [`setLocalPublishFallbackOption`]{@link RtcEngine.setLocalPublishFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
      * this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions,
-     * or when the audio stream switches back to the video after the uplink network condition improves. Once the published stream falls back to audio only,
+     * or when the audio stream switches back to the video after the uplink network condition improves.
+     * Once the published stream falls back to audio only,
      * the remote app receives the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback.
      *
      * @event LocalPublishFallbackToAudioOnly
@@ -1252,6 +1262,8 @@ export interface RtcEngineEvents {
      * 如果你调用了设置本地推流回退选项 [`setLocalPublishFallbackOption`]{@link RtcEngine.setLocalPublishFallbackOption} 接口并
      * 将 `option` 设置为 [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly} 时，当上行网络环境不理想、本地发布的媒体流回退为音频流时，
      * 或当上行网络改善、媒体流恢复为音视频流时，会触发该回调。
+     *
+     * 如果本地推流已回退为音频流，远端的 App 上会收到 [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} 的回调。
      *
      * @event LocalPublishFallbackToAudioOnly
      */
@@ -1943,8 +1955,8 @@ export interface RtcEngineEvents {
      * 其他用户开/关视频模块回调。
      *
      * @deprecated 该回调已废弃。请改用 [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} 回调中的如下参数：
-     * - `REMOTE_VIDEO_STATE_STOPPED(0)` 和 `REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5)`。
-     * - `REMOTE_VIDEO_STATE_DECODING(2)` 和 `REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6)`。
+     * - [`Stopped`]{@link VideoRemoteState.stopped} 和 [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}。
+     * - [`Decoding`]{@link VideoRemoteState.Decoding} 和 [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}。
      *
      * 提示有其他用户启用/关闭了视频功能。
      *
@@ -1980,8 +1992,8 @@ export interface RtcEngineEvents {
      * 远端用户开/关本地视频采集回调。
      *
      * @deprecated 该回调已废弃。请改用 [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} 回调中的如下参数：
-     * - `REMOTE_VIDEO_STATE_STOPPED(0)` 和 `REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5)`。
-     * - `REMOTE_VIDEO_STATE_DECODING(2)` 和 `REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6)`。
+     * - [`Stopped`]{@link VideoRemoteState.stopped} 和 [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}。
+     * - [`Decoding`]{@link VideoRemoteState.Decoding} 和 [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}。
      *
      * 提示有其他用户启用/关闭了本地视频功能。
      *
@@ -2512,6 +2524,7 @@ export interface RtcChannelEvents {
      * 如果你调用了设置远端订阅流回退选项 [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} 接口并
      * 将 `option` 设置为 [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly} 时，当下行网络环境不理想、仅接收远端音频流时，
      * 或当下行网络改善、恢复订阅音视频流时，会触发该回调。
+     *
      *
      * @event RemoteSubscribeFallbackToAudioOnly
      */

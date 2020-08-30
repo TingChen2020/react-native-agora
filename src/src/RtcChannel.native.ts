@@ -109,7 +109,6 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     /** @zh-cn
      * 销毁所有的 [`RtcChannel`]{@link RtcChannel} 对象。
      */
-    // TODO 英文加 instance 加 s。
     static destroyAll() {
         channels.forEach(async (value, key) => {
             await value.destroy()
@@ -179,7 +178,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 删除指定的频道事件句柄。
      *
      * 该方法删除指定的回调句柄。对于某些注册的回调句柄，
-     * 如果你在收到相应回调事件后无需再次接收回调消息，可以调用该方法移除回调句柄。// TODO  英文 [`RtcEngineEvents`]{@link RtcEngineEvents} 改成 [`RtcChannelEvents`]{@link RtcChannelEvents}。
+     * 如果你在收到相应回调事件后无需再次接收回调消息，可以调用该方法移除回调句柄。
      *
      * @param event 事件类型。
      * @param listener `RtcChannel` 对象的事件回调。
@@ -197,7 +196,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      */
     /** @zh-cn
      * 删除所有的频道事件句柄。
-     * @param event 事件类型。// TODO 英文注释 将 engine event 改成 channel event。
+     * @param event 事件类型。
      */
     removeAllListeners<EventType extends keyof RtcChannelEvents>(event?: EventType) {
         if (event === undefined) {
@@ -481,8 +480,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
     * @param uid 指定的用户 ID。
     * @param muted 设置是否停止/恢复接收指定音频流：
-    * - true：停止接收指定用户的音频流。
-    * - false：（默认）继续接收指定用户的音频流。
+    * - `true`：停止接收指定用户的音频流。
+    * - `false`：（默认）继续接收指定用户的音频流。
      */
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteRemoteAudioStream(this._channelId, uid, muted)
@@ -499,8 +498,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 设置是否默认接收音频流。
      *
      * @param muted 设置是否默认不接收所有远端音频：
-     * - true：不接收所有远端音频流。
-     * - false：（默认）接收所有远端音频流。
+     * - `true`：不接收所有远端音频流。
+     * - `false`：（默认）接收所有远端音频流。
      */
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteAllRemoteAudioStreams(this._channelId, muted)
@@ -517,8 +516,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 设置是否默认接收音频流。
      *
      * @param muted 设置是否默认不接收所有远端音频：
-     * - true：不接收所有远端音频流。
-     * - false：（默认）接收所有远端音频流。
+     * - `true`：不接收所有远端音频流。
+     * - `false`：（默认）接收所有远端音频流。
      */
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.setDefaultMuteAllRemoteAudioStreams(this._channelId, muted)
@@ -535,8 +534,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 停止/恢复接收所有视频流。
     *
     * @param muted 设置是否停止/恢复接收所有视频流：
-     * - true：停止接收所有远端视频流。
-     * - false：（默认）继续接收所有远端视频流。
+     * - `true`：停止接收所有远端视频流。
+     * - `false`：（默认）继续接收所有远端视频流。
      */
     muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteAllRemoteVideoStreams(this._channelId, muted)
@@ -555,8 +554,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
     * @param uid 指定的用户 ID。
     * @param muted 设置视频停止/恢复接收指定视频流：
-    * - true：停止接收指定用户的视频流。
-    * - false：（默认）继续接收指定用户的视频流。
+    * - `true`：停止接收指定用户的视频流。
+    * - `false`：（默认）继续接收指定用户的视频流。
      */
     muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteRemoteVideoStream(this._channelId, uid, muted)
@@ -573,8 +572,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 设置是否默认接收视频流。
      *
      * @param muted 设置是否默认不接收所有远端视频：
-     * - true：不接收所有远端视频流。
-     * - false：（默认）接收所有远端视频流。
+     * - `true`：不接收所有远端视频流。
+     * - `false`：（默认）接收所有远端视频流。
      */
     setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.setDefaultMuteAllRemoteVideoStreams(this._channelId, muted)
@@ -653,9 +652,9 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @param url CDN 推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。url 不支持中文等特殊字符。
      * @param transcodingEnabled 是否转码。如果设为 `true`，则需要在该方法前
      * 先调用 [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} 方法。
-     * - true：转码。转码是指在旁路推流时对音视频流进行转码处理后，再推送到其他 RTMP 服务器。
+     * - `true`：转码。转码是指在旁路推流时对音视频流进行转码处理后，再推送到其他 RTMP 服务器。
      * 多适用于频道内有多个主播，需要进行混流、合图的场景。
-     * - false：不转码。
+     * - `false`：不转码。
      */
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
         return AgoraRtcChannelModule.addPublishStreamUrl(this._channelId, url, transcodingEnabled);
@@ -793,11 +792,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 一旦停止，主播会退出所有目标频道。
      *
      * 成功调用该方法后，SDK 会触发 [`ChannelMediaRelayStateChanged`]{@link RtcChannelEvents.ChannelMediaRelayStateChanged} 回调。
-     * 如果报告 `RELAY_STATE_IDLE(0)` 和 `RELAY_OK(0)`，则表示已停止转发媒体流。
+     * 如果报告 [`Idle(0)`]{@link ChannelMediaRelayState.Idle} 和 [`None(0)`]{@link ChannelMediaRelayError.None}，则表示已停止转发媒体流。
      *
      * **Note**
      * 如果该方法调用不成功，SDK 会触发 [`ChannelMediaRelayStateChanged`]{@link RtcChannelEvents.ChannelMediaRelayStateChanged} 回调，
-     * 并报告状态码 `RELAY_ERROR_SERVER_NO_RESPONSE(2)` 或 `RELAY_ERROR_SERVER_CONNECTION_LOST(8)`。
+     * 并报告状态码 [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse} 或 [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost}。
      * 你可以调用 [`leaveChannel`]{@link RtcChannel.leaveChannel} 方法离开频道，跨频道媒体流转发会自动停止。
      *
      */
@@ -825,7 +824,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 成功开始跨频道转发媒体流后，如果你希望将流转发到多个目标频道，或退出当前的转发频道，可以调用该方法。
      *
      * 成功调用该方法后，SDK 会触发 [`ChannelMediaRelayEvent`]{@link RtcChannelEvents.ChannelMediaRelayEvent} 回调，
-     * 并在回调中报告状态码 `RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL(7)`。
+     * 并在回调中报告状态码 [`UpdateDestinationChannel(7)`]{@link ChannelMediaRelayEvent.UpdateDestinationChannel}。
      *
      * **Note**
      * - 请在 [`startChannelMediaRelay`]{@link RtcChannel.startChannelMediaRelay} 方法后调用该方法，
@@ -936,7 +935,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * 你需要在该方法中实现一个 `IMetadataObserver` 类，并指定 `Metadata` 的数据类型。
      * 成功调用该方法后，SDK 会触发 [`setMaxMetadataSize`]{@link RtcChannel.setMaxMetadataSize} 回调。
-     * // TODO 是触发 getMaxMetadataSize 回调还是 [`setMaxMetadataSize`]{@link RtcChannel.setMaxMetadataSize} 回调？
+     *
      * 该接口通过在直播的视频帧中同步添加 Metadata，实现发送商品链接、分发优惠券、发送答题等功能，构建更为丰富的直播互动方式。
      *
      * **Note**
@@ -1145,11 +1144,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * 频道内数据通道最多允许数据延迟 5 秒，若超过 5 秒接收方尚未收到数据流，则数据通道会向 App 报错。
      *
      * @param reliable 设置是否保证接收方在 5 秒内收到数据消息：
-     * - true：接收方 5 秒内会收到发送方所发送的数据，否则会收到 [`StreamMessageError`]{@link RtcChannelEvents.StreamMessageError} 回调并获得相应报错信息。
-     * - false：接收方不保证收到，就算数据丢失也不会报错。
+     * - `true`：接收方 5 秒内会收到发送方所发送的数据，否则会收到 [`StreamMessageError`]{@link RtcChannelEvents.StreamMessageError} 回调并获得相应报错信息。
+     * - `false`：接收方不保证收到，就算数据丢失也不会报错。
      * @param ordered 设置接收方是否按发送方发送的顺序接收数据消息：
-     * - true：接收方会按照发送方发送的顺序收到数据包。
-     * - false：接收方不保证按照发送方发送的顺序收到数据包。
+     * - `true`：接收方会按照发送方发送的顺序收到数据包。
+     * - `false`：接收方不保证按照发送方发送的顺序收到数据包。
      *
      * @note
      * 请将 `reliable` 和 `ordered` 同时设置为 `true` 或 `false`，暂不支持交叉设置。

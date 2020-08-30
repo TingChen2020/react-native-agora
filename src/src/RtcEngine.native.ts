@@ -197,11 +197,11 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param listener The [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
      */
     /** @zh-cn
-     * 设置 `RtcEngine` 对象的事件句柄。
+     * 添加 [`RtcEngineEvents`]{@link RtcEngineEvents} 回调事件。
      *
      * 设置后，你可以通过 {@link RtcEngineEvents} 回调监听对应 `RtcEngine` 对象的事件、获取数据。
      * @param event 事件类型。
-     * @param listener `RtcEngine` 对象的事件回调。
+     * @param listener [`RtcEngineEvents`]{@link RtcEngineEvents} 回调事件。
      */
     addListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]): Subscription {
         const callback = (res: any) => {
@@ -233,12 +233,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param listener The [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
      */
     /** @zh-cn
-     * 删除指定的 `RtcEngine` 回调句柄。
+     * 删除指定的 [`RtcEngineEvents`]{@link RtcEngineEvents} 回调句柄。
      *
      * 该方法删除指定的回调句柄。对于某些注册的回调句柄，
      * 如果你在收到相应回调事件后无需再次接收回调消息，可以调用该方法移除回调句柄。
      * @param event 事件类型。
-     * @param listener 回调句柄。
+     * @param listener [`RtcEngineEvents`]{@link RtcEngineEvents} 回调句柄。
      */
     removeListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]) {
         const map = this._listeners.get(event);
@@ -358,14 +358,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 加入频道。
      *
      * 该方法让用户加入通话频道，在同一个频道内的用户可以互相通话，多个用户加入同一个频道，可以群聊。
-     * 使用不同 App ID 的 App 是不能互通的。如果已在通话中，用户必须调用 {@link RtcEngine#leaveChannel() leaveChannel} 退出当前通话，
+     * 使用不同 App ID 的 App 是不能互通的。如果已在通话中，用户必须调用 [`leaveChannel`]{@link RtcEngine.LeaveChannel} 退出当前通话，
      * 才能进入下一个频道。
      *
-     * 成功调用该方加入频道后，本地会触发 {@link IRtcEngineEventHandler#onJoinChannelSuccess onJoinChannelSuccess} 回调；
-     * 通信场景下的用户和直播场景下的主播加入频道后，远端会触发 {@link IRtcEngineEventHandler#onUserJoined onUserJoined} 回调。
+     * 成功调用该方加入频道后，本地会触发 [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} 回调；
+     * 通信场景下的用户和直播场景下的主播加入频道后，远端会触发 [`UserJoined`]{@link RtcEngineEvents.UserJoined} 回调。
      *
      * 在网络状况不理想的情况下，客户端可能会与 Agora 的服务器失去连接；SDK 会自动尝试重连，重连成功后，
-     * 本地会触发 {@link IRtcEngineEventHandler#onRejoinChannelSuccess onRejoinChannelSuccess} 回调。
+     * 本地会触发 [`RejoinChannelSuccess`]{@link RtcEngineEvents.RejoinChannelSuccess} 回调。
      *
      * **Note**
      * - 频道内每个用户的 UID 必须是唯一的。如果将 `uid` 设为 `0`，系统将自动分配一个 UID。
@@ -384,7 +384,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *                    - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ","
      * @param optionalInfo （非必选项）开发者需加入的任何附加信息。一般可设置为空字符串，或频道相关信息。该信息不会传递给频道内的其他用户。
      * @param optionalUid （非必选项）用户 ID，32 位无符号整数。建议设置范围：1 到 (2^32-1)，并保证唯一性。
-     * 如果不指定（即设为 0），SDK 会自动分配一个，并在 {@link IRtcEngineEventHandler#onJoinChannelSuccess(String channel, int uid, int elapsed) onJoinChannelSuccess} 回调方法中返回，App 层必须记住该返回值并维护，SDK 不对该返回值进行维护。uid 在 SDK 内部用 32 位无符号整数表示，由于 Java 不支持无符号整数，uid 被当成 32 位有符号整数处理，对于过大的整数，Java 会表示为负数，如有需要可以用 (uid&0xffffffffL) 转换成 64 位整数。
+     * 如果不指定（即设为 0），SDK 会自动分配一个，并在 [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} 回调方法中返回，App 层必须记住该返回值并维护，SDK 不对该返回值进行维护。uid 在 SDK 内部用 32 位无符号整数表示，由于 Java 不支持无符号整数，uid 被当成 32 位有符号整数处理，对于过大的整数，Java 会表示为负数，如有需要可以用 (uid&0xffffffffL) 转换成 64 位整数。
      */
     joinChannel(token: string | null, channelName: string, optionalInfo: string | null, optionalUid: number): Promise<void> {
         return AgoraRtcEngineModule.joinChannel(token, channelName, optionalInfo, optionalUid)
@@ -417,8 +417,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 当直播频道中的观众想从一个频道切换到另一个频道时，可以调用该方法，实现快速切换。
      *
-     * 成功调用该方切换频道后，本地会先收到离开原频道的回调 {@link IRtcEngineEventHandler#onLeaveChannel onLeaveChannel}，
-     * 再收到成功加入新频道的回调 {@link IRtcEngineEventHandler#onJoinChannelSuccess onJoinChannelSuccess}。
+     * 成功调用该方切换频道后，本地会先收到离开原频道的回调 [`LeaveChannel`]{@link RtcEngineEvents.leaveChannel}，
+     * 再收到成功加入新频道的回调 [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess}。
      *
      * **Note**
      * 该方法仅适用直播频道中的观众用户。
@@ -462,18 +462,18 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 离开频道，即挂断或退出通话。
      *
-     * 调用 {@link joinChannel} 后，必须调用 `leaveChannel` 结束通话，否则无法开始下一次通话。
+     * 调用 [`joinChannel`]{@link RtcEngine.joinChannel} 后，必须调用 [`leaveChannel`]{@link RtcEngine.leaveChannel} 结束通话，否则无法开始下一次通话。
      *
-     * 不管当前是否在通话中，都可以调用 {@link RtcEngine#leaveChannel leaveChannel}，没有副作用。
+     * 不管当前是否在通话中，都可以调用 [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel}，没有副作用。
      *
      * 该方法会把会话相关的所有资源释放掉。该方法是异步操作，调用返回时并没有真正退出频道。
      *
-     * 成功调用该方法离开频道后，本地会触发 {@link IRtcEngineEventHandler#onLeaveChannel onLeaveChannel} 回调；通信场景下的用户和直播场景下的主播离开频道后，远端会触发 {@link IRtcEngineEventHandler#onUserOffline onUserOffline} 回调。
+     * 成功调用该方法离开频道后，本地会触发 [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} 回调；通信场景下的用户和直播场景下的主播离开频道后，远端会触发 {@link RtcEngineEvents.onUserOffline onUserOffline} 回调。
      *
      * **Note**
-     * - 如果你调用了 `leaveChannel` 后立即调用 {@link RtcEngine#destroy() destroy} 方法，SDK 将
-     * 无法触发 {@link IRtcEngineEventHandler#onLeaveChannel onLeaveChannel} 回调。
-     * - 如果你在旁路推流过程中调用了 `leaveChannel` 方法， SDK 将自动调用 {@link RtcEngine#removeInjectStreamUrl(String) removeInjectStreamUrl} 方法。
+     * - 如果你调用了 `leaveChannel` 后立即调用 [`destroy`]{@link RtcEngine.destroy} 方法，SDK 将
+     * 无法触发 [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} 回调。
+     * - 如果你在旁路推流过程中调用了 `leaveChannel` 方法， SDK 将自动调用 [`removeInjectStreamUrl`]{@link RtcEngine.removeInjectStreamUrl} 方法。
      */
     leaveChannel(): Promise<void> {
         return AgoraRtcEngineModule.leaveChannel()
@@ -495,9 +495,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法用于更新 Token。如果启用了 Token 机制，过一段时间后使用的 Token 会失效。以下两种情况下，app 应重新获取 Token，然后
      * 调用 `renewToken` 更新 Token，否则 SDK 无法和服务器建立连接：
-     * - 发生 {@link IRtcEngineEventHandler#onTokenPrivilegeWillExpire(String) onTokenPrivilegeWillExpire} 回调时。
-     * - {@link IRtcEngineEventHandler#onConnectionStateChanged onConnectionStateChanged} 回调
-     * 报告 {@link Constants#CONNECTION_CHANGED_TOKEN_EXPIRED CONNECTION_CHANGED_TOKEN_EXPIRED(9)} 时。
+     * - 发生 [`TokenPrivilegeWillExpire`]{@link RtcEngineEvents.TokenPrivilegeWillExpire} 回调时。
+     * - [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} 回调
+     * 报告 [`TokenExpired(9)`]{@link ConnectionChangedReason.TokenExpired} 时。
      *
      * @param token 新的 Token。
      */
@@ -558,9 +558,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 获取通话 ID。
      *
-     * 获取当前的通话 ID。客户端在每次 {@link RtcEngine#joinChannel(String, String, String, int) joinChannel} 后会生成一个对应的 CallId，
-     * 标识该客户端的此次通话。有些方法如 rate, complain 需要在通话结束后调用，向 SDK 提交反馈，这些方法必须指定 CallId 参数。
-     * 使用这些反馈方法，需要在通话过程中调用 {@link RtcEngine#getCallId() getCallId} 方法获取 CallId，在通话结束后在反馈方法中作为参数传入。
+     * 获取当前的通话 ID。客户端在每次 [`joinChannel`]{@link RtcEngine.joinChannel} 后会生成一个对应的 `CallId`，
+     * 标识该客户端的此次通话。有些方法如 [`rate`]{@link rate}、[`complain`]{@link complain} 需要在通话结束后调用，向 SDK 提交反馈，这些方法必须指定 CallId 参数。
+     * 使用这些反馈方法，需要在通话过程中调用 [`getCallId`]{@link getCallId} 方法获取 `CallId`，在通话结束后在反馈方法中作为参数传入。
      */
     getCallId(): Promise<string> {
         return AgoraRtcEngineModule.getCallId()
@@ -577,9 +577,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zn-cn
      * 给通话评分。
      *
-     * @param callId 通过 {@link RtcEngine#getCallId() getCallId} 函数获取的通话 ID。
+     * @param callId 通过 [`getCallId`]{@link getCallId} 函数获取的通话 ID。
      * @param rating 给通话的评分，最低 1 分，最高 5 分，如超过这个范围，SDK 会
-     * 返回 {@link io.agora.rtc.Constants#ERR_INVALID_ARGUMENT ERR_INVALID_ARGUMENT(-2)} 错误。
+     * 返回 [`InvalidArgument(-2)`]{@link ErrorCode.InvalidArgument} 错误。
      * @param description （非必选项）给通话的描述，可选，长度应小于 800 字节。
      *
      */
@@ -598,7 +598,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法让用户就通话质量进行投诉。一般在通话结束后调用。
      *
-     * @param callId 通话 {@link RtcEngine#getCallId() getCallId} 函数获取的通话 ID。
+     * @param callId 通话 [`getCallId`]{@link getCallId} 函数获取的通话 ID。
      * @param description （非必选项）给通话的描述，可选，长度应小于 800 字节。
      *
      */
@@ -625,7 +625,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 每个文件的默认大小为 1024 KB。日志文件为 UTF-8 编码。最新的日志永远写在 agorasdk.log 中。agorasdk.log 写满后，SDK 会从 1-4 中删除修改时间最早的一个文件，然后将 agorasdk.log 重命名为该文件，并建立新的 agorasdk.log 写入最新的日志。
      *
      * **Note**
-     * 如需调用本方法，请在调用 {@link RtcEngine#create create} 方法初始化 [`RtcEngine`]{@link RtcEngine} 对象后立即调用，否则可能造成输出日志不完整。
+     * 如需调用本方法，请在调用 [`create`]{@link create} 方法初始化 [`RtcEngine`]{@link RtcEngine} 对象后立即调用，否则可能造成输出日志不完整。
      *
      * @param filePath 日志文件的完整路径。默认路径为 `/storage/emulated/0/Android/data/<package name>/files/agorasdk.log`。
      * 请确保指定的目录存在而且可写。你可通过该参数修改日志文件名。
@@ -712,7 +712,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 通过 UID 获取用户信息。
      *
      * 远端用户加入频道后， SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，
-     * 并在本地触发 {@link IRtcEngineEventHandler#onUserInfoUpdated onUserInfoUpdated} 回调。
+     * 并在本地触发 [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated} 回调。
      * 收到这个回调后，你可以调用该方法，通过传入 UID 获取包含了指定用户 User Account 的 UserInfo 对象。
      *
      * @param uid 用户 ID。该参数为必填。
@@ -735,7 +735,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 通过 User Account 获取用户信息。
      *
      * 远端用户加入频道后，SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，
-     * 并在本地触发 {@link IRtcEngineEventHandler#onUserInfoUpdated onUserInfoUpdated} 回调。
+     * 并在本地触发 [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated} 回调。
      * 收到这个回调后，你可以调用该方法，通过传入 User Account 获取包含了指定用户 UID 的 UserInfo 对象。
      *
      * @param userAccount 用户 User Account。该参数为必填。
@@ -780,13 +780,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      *
      * 该方法允许本地用户使用 User Account 加入频道。成功加入频道后，会触发以下回调：
-     * - 本地：{@link IRtcEngineEventHandler#onLocalUserRegistered onLocalUserRegistered}
-     * 和 {@link IRtcEngineEventHandler#onJoinChannelSuccess onJoinChannelSuccess} 回调。
+     * - 本地：[`LocalUserRegistered`]{@link RtcEngineEvents.LocalUserRegistered}
+     * 和 [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} 回调。
      * - 通信场景下的用户和直播场景下的主播加入频道后，远端会依次
-     * 触发 {@link IRtcEngineEventHandler#onUserJoined onUserJoined}
-     * 和 {@link IRtcEngineEventHandler#onUserInfoUpdated onUserInfoUpdated} 回调。
+     * 触发 [`UserJoined`]{@link RtcEngineEvents.UserJoined}
+     * 和 [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated} 回调。
      *
-     * @note 为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。
+     * **Note** 为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。
      * 如果有用户通过 Agora Web SDK 加入频道，请确保 Web 加入的用户也是同样类型。
      *
      * @param token 在服务器端生成的用于鉴权的 Token。
@@ -844,17 +844,17 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法为本地用户注册一个 User Account。注册成功后，该 User Account 即可标识该本地用户的身份，用户可以使用它加入频道。
      *
-     * 成功注册 User Account 后，本地会触发 {@link IRtcEngineEventHandler#onLocalUserRegistered onLocalUserRegistered} 回调，
+     * 成功注册 User Account 后，本地会触发 [`LocalUserRegistered`]{@link RtcEngineEvents.LocalUserRegistered} 回调，
      * 告知本地用户的 UID 和 User Account。
      *
      * 该方法为可选。如果你希望用户使用 User Account 加入频道，可以选用以下两种方式：
-     * - 先调用 {@link RtcEngine#registerLocalUserAccount registerLocalUserAccount} 方法注册 Account，
-     * 再调用 {@link RtcEngine#joinChannelWithUserAccount joinChannelWithUserAccount} 方法加入频道。
-     * - 直接调用 {@link RtcEngine#joinChannelWithUserAccount joinChannelWithUserAccount} 方法加入频道。
+     * - 先调用 [`registerLocalUserAccount`]{@link RtcEngine.registerLocalUserAccount} 方法注册 Account，
+     * 再调用 [`joinChannelWithUserAccount`]{@link RtcEngine.joinChannelWithUserAccount} 方法加入频道。
+     * - 直接调用 [`joinChannelWithUserAccount`]{@link RtcEngine.joinChannelWithUserAccount} 方法加入频道。
      *
-     * 两种方式的区别在于，提前调用 `registerLocalUserAccount`，可以缩短使用 `joinChannelWithUserAccount` 进入频道的时间。
+     * 两种方式的区别在于，提前调用 [`registerLocalUserAccount`]{@link RtcEngine.registerLocalUserAccount}，可以缩短使用 [`joinChannelWithUserAccount`]{@link RtcEngine.joinChannelWithUserAccount} 进入频道的时间。
      *
-     * @note
+     * **Note**
      * - `userAccount` 不能为空，否则该方法不生效。
      * - 请确保在该方法中设置的 userAccount 在频道中的唯一性。
      * - 为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。
@@ -889,12 +889,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 调节本地播放的所有远端用户音量。
      *
-     * @note
+     * **Note**
      * - 该方法调节的是本地播放的所有远端用户混音后的音量。
-     * - 静音本地音频需同时调用该方法和 {@link adjustAudioMixingPlayoutVolume adjustAudioMixingPlayoutVolume} 方法，
-     * 并将 volume 参数设置为 0。
+     * - 静音本地音频需同时调用该方法和 [`adjustAudioMixingVolume`]{@link adjustAudioMixingVolume} 方法，
+     * 并将 `volume` 参数设置为 0。
      *
-     * @param volume 播放音量，取值范围为 [0, 400]：
+     * @param volume 播放音量，取值范围为 [0,400]：
      * - 0：静音。
      * - 100：原始音量。
      * - 400：最大可为原始音量的 4 倍（自带溢出保护）。
@@ -948,7 +948,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 你可以在通话中调用该方法调节指定远端用户在本地播放的音量。如需调节多个用户在本地播放的音量，则需多次调用该方法。
      *
-     * @note
+     * **Note**
      * - 该方法要在加入频道后调用。
      * - 该方法调节的是本地播放的指定远端用户混音后的音量。
      * - 该方法每次只能调整一位远端用户在本地播放的音量。如需调整多位远端用户在本地播放的音量，则需多次调用该方法。
@@ -986,13 +986,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 关闭音频模块。
      *
-     * @note
-     * - 该方法设置的是内部引擎为禁用状态，在频道内和频道外均可调用，且在 {@link RtcEngine#leaveChannel() leaveChannel} 后仍然有效。
+     * **Note**
+     * - 该方法设置的是内部引擎为禁用状态，在频道内和频道外均可调用，且在 [`leaveChannel`]{@link leaveChannel} 后仍然有效。
      * - 该方法重置整个引擎，响应速度较慢，因此 Agora 建议使用如下方法来控制音频模块：
-     *   - {@link RtcEngine#enableLocalAudio(boolean) enableLocalAudio}：是否启动麦克风采集并创建本地音频流。
-     *   - {@link RtcEngine#muteLocalAudioStream(boolean) muteLocalAudioStream}：是否发布本地音频流。
-     *   - {@link RtcEngine#muteRemoteAudioStream(int, boolean) muteRemoteAudioStream}：是否接收并播放远端音频流。
-     *   - {@link RtcEngine#muteAllRemoteAudioStreams(boolean) muteAllRemoteAudioStreams}：是否接收并播放所有远端音频流。
+     *   - [`enableLocalAudio`]{@link enableLocalAudio}：是否启动麦克风采集并创建本地音频流。
+     *   - [`muteLocalAudioStream`]{@link muteLocalAudioStream}：是否发布本地音频流。
+     *   - [`muteRemoteAudioStream`]{@link muteRemoteAudioStream}：是否接收并播放远端音频流。
+     *   - [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams}：是否接收并播放所有远端音频流。
      *
      */
     disableAudio(): Promise<void> {
@@ -1024,13 +1024,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 启用音频模块（默认为开启状态）。
      *
-     * @note
-     * - 该方法设置的是内部引擎为开启状态，在频道内和频道外均可调用，且在 {@link RtcEngine#leaveChannel() leaveChannel} 后仍然有效。
+     * **Note**
+     * - 该方法设置的是内部引擎为开启状态，在频道内和频道外均可调用，且在 [`leaveChannel`]{@link leaveChannel} 后仍然有效。
      * - 该方法重置整个引擎，响应速度较慢，因此我们建议使用如下方法来控制音频模块：
-     *   - {@link RtcEngine#enableLocalAudio(boolean) enableLocalAudio}：是否启动麦克风采集并创建本地音频流。
-     *   - {@link RtcEngine#muteLocalAudioStream(boolean) muteLocalAudioStream}：是否发布本地音频流。
-     *   - {@link RtcEngine#muteRemoteAudioStream(int, boolean) muteRemoteAudioStream}：是否接收并播放远端音频流。
-     *   - {@link RtcEngine#muteAllRemoteAudioStreams(boolean) muteAllRemoteAudioStreams}：是否接收并播放所有远端音频流。
+     *   - [`enableLocalAudio`]{@link enableLocalAudio}：是否启动麦克风采集并创建本地音频流。
+     *   - [`muteLocalAudioStream`]{@link muteLocalAudioStream}：是否发布本地音频流。
+     *   - [`muteRemoteAudioStream`]{@link muteRemoteAudioStream}：是否接收并播放远端音频流。
+     *   - [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams}：是否接收并播放所有远端音频流。
      *
      */
     enableAudio(): Promise<void> {
@@ -1057,18 +1057,18 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 启用说话者音量提示。
      *
      * 该方法允许 SDK 定期向 App 反馈当前谁在说话以及说话者的音量。启用该方法后，无论频道内是否有人说话，
-     * 都会在说话声音音量提示回调 {@link io.agora.rtc.IRtcEngineEventHandler#onAudioVolumeIndication onAudioVolumeIndication} 回调
+     * 都会在说话声音音量提示回调 [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} 回调
      * 中按设置的间隔时间返回音量提示。
      *
      * @param interval 指定音量提示的时间间隔：
      *                 - &le; 0：禁用音量提示功能。
      *                 - &gt; 0：返回音量提示的间隔，单位为毫秒。建议设置到大于 200 毫秒。最小不得少于 10 毫秒，
-     * 否则会收不到 {@link io.agora.rtc.IRtcEngineEventHandler#onAudioVolumeIndication onAudioVolumeIndication} 回调。
+     * 否则会收不到 [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} 回调。
      * @param smooth 平滑系数，指定音量提示的灵敏度。取值范围为 [0, 10]，建议值为 3，数字越大，波动越灵敏；数字越小，波动越平滑。
      * @param report_vad 是否开启人声检测
-     *                   - `true`: 开启本地人声检测功能。开启后，{@link IRtcEngineEventHandler#onAudioVolumeIndication onAudioVolumeIndication} 回调的 `vad` 参数会报告是否在本地检测到人声。
+     *                   - `true`: 开启本地人声检测功能。开启后，[`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} 回调的 `vad` 参数会报告是否在本地检测到人声。
      *                   - `false`: （默认）关闭本地人声检测功能。除引擎自动进行本地人声检测的
-     * 场景外，{@link IRtcEngineEventHandler#onAudioVolumeIndication onAudioVolumeIndication} 回调的 `vad` 参数不会报告是否在本地检测到人声。
+     * 场景外，[`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} 回调的 `vad` 参数不会报告是否在本地检测到人声。
      *
      */
     enableAudioVolumeIndication(interval: number, smooth: number, report_vad: boolean): Promise<void> {
@@ -1106,14 +1106,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法不影响接收或播放远端音频流，`enableLocalAudio(false)` 适用于只听不发的用户场景。
      *
-     * 语音功能关闭或重新开启后，会收到回调 {@link IRtcEngineEventHandler#onLocalAudioStateChanged(int state, int error) onLocalAudioStateChanged} ，
-     * 并报告 `LOCAL_AUDIO_STREAM_STATE_STOPPED(0)` 或 LOCAL_AUDIO_STREAM_STATE_RECORDING(1)`。
+     * 语音功能关闭或重新开启后，会收到回调 [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged}，
+     * 并报告 [`Stopped`]{@link AudioLocalState.Stopped} 或 [`Recording`]{@link AudioLocalState.Recording}。
      *
-     * @note
+     * **Note**
      * - 调用 `enableLocalAudio(false)` 关闭本地采集后，系统会走媒体音量；调用 `enableLocalAudio(true)` 重新打开本地采集后，系统会恢复为通话音量。
-     * - 该方法与 {@link RtcEngine#muteLocalAudioStream(boolean) muteLocalAudioStream} 的区别在于：
-     *   - `enableLocalAudio` 开启或关闭本地语音采集及处理。使用 `enableLocalAudio` 关闭或开启本地采集后，本地听远端播放会有短暂中断。
-     *   - {@link RtcEngine#muteLocalAudioStream(boolean) muteLocalAudioStream} 停止或继续发送本地音频流。
+     * - 该方法与 [`muteLocalAudioStream`]{@link muteLocalAudioStream} 的区别在于：
+     *   - [`enableLocalAudio`]{@link enableLocalAudio} 开启或关闭本地语音采集及处理。使用 `enableLocalAudio` 关闭或开启本地采集后，本地听远端播放会有短暂中断。
+     *   - [`muteLocalAudioStream`]{@link muteLocalAudioStream} 停止或继续发送本地音频流。
      *
      * @param enabled 是否开启本地语音。
      *                - `true`:（默认）重新开启本地语音，即开启本地语音采集。
@@ -1161,12 +1161,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 静音/取消静音。该方法用于允许/禁止往网络发送本地音频流。
      *
-     * 成功调用该方法后，远端会触发 {@link IRtcEngineEventHandler#onUserMuteAudio onUserMuteAudio} 回调。
+     * 成功调用该方法后，远端会触发 [`UserMuteAudio`]{@link RtcEngineEvents.UserMuteAudio} 回调。
      *
-     * @note
+     * **Note**
      * - 该方法不影响录音状态，并没有禁用麦克风。
-     * - 如果你在该方法后调用 `setChannelProfile` 方法，SDK 会根据你设置的频道模式以及用户角色，
-     * 重新设置是否停止发送本地音频。因此我们建议在 `setChannelProfile` 后调用该方法。
+     * - 如果你在该方法后调用 [`setChannelProfile`]{@link setChannelProfile} 方法，SDK 会根据你设置的频道模式以及用户角色，
+     * 重新设置是否停止发送本地音频。因此我们建议在 [`setChannelProfile`]{@link setChannelProfile} 后调用该方法。
      *
      * @param muted 是否停止发送本地音频流。
      *              - `true`: 停止发送本地音频流。
@@ -1196,10 +1196,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * 如果之前有调用过 {@link RtcEngine#muteAllRemoteAudioStreams(boolean) muteAllRemoteAudioStreams} (true) 停止接收
-     * 所有远端音频流，在调用本 API 之前请确保你已调用 {@link RtcEngine#muteAllRemoteAudioStreams muteAllRemoteAudioStreams} (false)。
-     * {@link RtcEngine#muteAllRemoteAudioStreams(boolean) muteAllRemoteAudioStreams} 是全局控制，
-     * {@link RtcEngine#muteRemoteAudioStream(int, boolean) muteRemoteAudioStream} 是精细控制。
+     * 如果之前有调用过 [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams} (true) 停止接收
+     * 所有远端音频流，在调用本 API 之前请确保你已调用 [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams} (false)。
+     * [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams} 是全局控制，
+     * [`muteRemoteAudioStream`]{@link muteRemoteAudioStream} 是精细控制。
      *
      * @param uid 指定的用户 ID。
      * @param muted 是否停止接收指定用户的音频流：
@@ -1218,7 +1218,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
      * - In the [Communication]{@link ChannelProfile.Communication} and [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
-     * - In scenarios requiring high-quality audio, we recommend setting profile as [`ShowRoom(4)`]{@link AudioScenario.ShowRoom} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
+     * - In scenarios requiring high-quality audio, we recommend setting profile as [`MusicHighQuality(4)`]{@link AudioProfile.MusicHighQuality} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
      * For example, for music education scenarios.
      *
      * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels.
@@ -1228,13 +1228,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 设置音频编码配置。
      *
-     * @note
-     * - 该方法需要在 {@link RtcEngine#joinChannel(String, String, String, int) joinChannel} 之前设置好，`joinChannel` 后设置不生效。
+     * **Note**
+     * - 该方法需要在 [`joinChannel`]{@link joinChannel} 之前设置好，[`joinChannel`]{@link joinChannel} 后设置不生效。
      * - 通信和直播场景下，音质（码率）会有网络自适应的调整，通过该方法设置的是一个最高码率。
-     * - 在有高音质需求的场景（例如音乐教学场景）中，建议将 `profile` 设置为 {@link io.agora.rtc.Constants.AudioProfile#MUSIC_HIGH_QUALITY MUSIC_HIGH_QUALITY (4)}，Scenario 设置为 {@link Constants.AudioScenario#GAME_STREAMING GAME_STREAMING (3)}。
+     * - 在有高音质需求的场景（例如音乐教学场景）中，建议将 `profile` 设置为 [`MusicHighQuality(4)`]{@link AudioProfile.MusicHighQuality}，Scenario 设置为 [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}。
      *
-     * @param profile 设置采样率，码率，编码模式和声道数，详见 {@link Constants.AudioProfile AudioProfile}。
-     * @param scenario 设置音频应用场景。不同的音频场景下，设备的系统音量是不同的。详见[如何区分媒体音量和通话音量](https://docs.agora.io/cn/faq/system_volume)。
+     * @param profile 设置采样率，码率，编码模式和声道数。
+     * @param scenario 设置音频应用场景。不同的音频场景下，设备的系统音量是不同的。
      */
     setAudioProfile(profile: AudioProfile, scenario: AudioScenario): Promise<void> {
         return AgoraRtcEngineModule.setAudioProfile(profile, scenario);
@@ -1265,8 +1265,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * 停止接收音频流后，如果想要恢复接收，请调用 `muteRemoteAudioStream`(false)，并指定你想要接收的远端用户的 ID。
-     * 如果想恢复接收多个用户的音频流，则需要多次调用 `muteRemoteAudioStream`。
+     * 停止接收音频流后，如果想要恢复接收，请调用 [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream}，并指定你想要
+     * 接收的远端用户的 ID。
+     * 如果想恢复接收多个用户的音频流，则需要多次调用 [`muteRemoteAudioStream`]{@link muteRemoteAudioStream}。
      * `setDefaultMuteAllRemoteAudioStreams`(false) 只能恢复接收设置后加入频道的用户的音频流。
      *
      * @param muted 是否默认不接收所有远端音频：
@@ -1311,18 +1312,18 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 关闭视频模块。
      *
      * 该方法用于关闭视频。可以在加入频道前或者通话中调用，在加入频道前调用，则自动开启纯音频模式，在通话中调用则由视频模式切换为纯音频频模式。
-     * 调用 {@link RtcEngine#enableVideo() enableVideo} 方法可开启视频模式。
+     * 调用 [`enableVideo`]{@link enableVideo} 方法可开启视频模式。
      *
-     * 成功调用该方法后，远端会触发 {@link IRtcEngineEventHandler#onUserEnableVideo onUserEnableVideo}(false) 回调。
+     * 成功调用该方法后，远端会触发 [`UserEnableVideo(false)`]{@link RtcEngineEvents.UserEnableVideo} 回调。
      *
      * **Note**
-     * - 该方法设置的是内部引擎为禁用状态，在频道内和频道外均可调用，且在 {@link RtcEngine#leaveChannel() leaveChannel} 后仍然有效。
+     * - 该方法设置的是内部引擎为禁用状态，在频道内和频道外均可调用，且在 [`leaveChannel`]{@link leaveChannel} 后仍然有效。
      * - 该方法重置整个引擎，响应速度较慢，因此 Agora 建议使用如下方法来控制视频模块：
      *
-     *     - {@link RtcEngine#enableLocalVideo(boolean) enableLocalVideo}：是否启动摄像头采集并创建本地视频流。
-     *     - {@link RtcEngine#muteLocalVideoStream(boolean) muteLocalVideoStream}：是否发布本地视频流。
-     *     - {@link RtcEngine#muteRemoteVideoStream(int, boolean) muteRemoteVideoStream}：是否接收并播放远端视频流。
-     *     - {@link RtcEngine#muteAllRemoteVideoStreams(boolean) muteAllRemoteVideoStreams}：是否接收并播放所有远端视频流。
+     *     - [`enableLocalVideo`]{@link enableLocalVideo}：是否启动摄像头采集并创建本地视频流。
+     *     - [`muteLocalVideoStream`]{@link muteLocalVideoStream}：是否发布本地视频流。
+     *     - [`muteRemoteVideoStream`]{@link muteRemoteVideoStream}：是否接收并播放远端视频流。
+     *     - [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}：是否接收并播放所有远端视频流。
      *
      */
     disableVideo(): Promise<void> {
@@ -1353,12 +1354,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法禁用或重新启用本地视频采集。不影响接收远端视频。
      *
-     * 调用 {@link RtcEngine#enableVideo() enableVideo} 后，本地视频即默认开启。
-     * 你可以调用 enableLocalVideo(false) 关闭本地视频采集。关闭后如果想重新开启，则可调用 enableLocalVideo(true)。
+     * 调用 [`enableVideo`]{@link enableVideo} 后，本地视频即默认开启。
+     * 你可以调用 `enableLocalVideo(false)` 关闭本地视频采集。关闭后如果想重新开启，则可调用 enableLocalVideo(true)。
      *
-     * 成功禁用或启用本地视频采集后，远端会触发 {@link IRtcEngineEventHandler#onUserEnableLocalVideo onUserEnableLocalVideo} 回调。
+     * 成功禁用或启用本地视频采集后，远端会触发 [`UserEnableLocalVideo`]{@link RtcEngineEvents.UserEnableLocalVideo} 回调。
      *
-     * @note 该方法设置的是内部引擎为启用或禁用状态，在 {@link RtcEngine#leaveChannel() leaveChannel} 后仍然有效。
+     * **Note** 该方法设置的是内部引擎为启用或禁用状态，在 [`leaveChannel`]{@link leaveChannel} 后仍然有效。
      *
      * @param enabled 是否启用本地视频：
      *                - `true`: 开启本地视频采集和渲染（默认）
@@ -1384,7 +1385,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - This method affects the internal engine and can be called after calling the {@link leaveChannel} method. You can call this method either before or after joining a channel.
+     * - This method affects the internal engine and can be called after calling the [`leaveChannel`]{@link leaveChannel} method. You can call this method either before or after joining a channel.
      *
      * - This method resets the internal engine and takes some time to take effect.
      * We recommend using the following API methods to control the video engine modules separately:
@@ -1402,17 +1403,18 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 启用视频模块。
      *
      * 该方法用于打开视频模式。可以在加入频道前或者通话中调用，在加入频道前调用，则自动开启视频模式，
-     * 在通话中调用则由音频模式切换为视频模式。调用 {@link RtcEngine#disableVideo() disableVideo} 方法可关闭视频模式。
+     * 在通话中调用则由音频模式切换为视频模式。调用 [`disableVideo`]{@link disableVideo} 方法可关闭视频模式。
      *
-     * 成功调用该方法后，远端会触发 {@link IRtcEngineEventHandler#onUserEnableVideo onUserEnableVideo}(true) 回调。
+     * 成功调用该方法后，远端会触发 [`UserEnableVideo(true)`]{@link RtcEngineEvents.UserEnableVideo} 回调。
      *
-     * @note
+     * **Note**
      *
-     * - 该方法设置的是内部引擎为开启状态，在频道内和频道外均可调用，且在 {@link RtcEngine#leaveChannel() leaveChannel} 后仍然有效。</li>
+     * - 该方法设置的是内部引擎为开启状态，在频道内和频道外均可调用，且在 [`leaveChannel`]{@link leaveChannel} 后仍然有效。</li>
      * - 该方法重置整个引擎，响应速度较慢，因此 Agora 建议使用如下方法来控制视频模块：
-     *  - {@link RtcEngine#enableLocalVideo(boolean) enableLocalVideo}：是否启动摄像头采集并创建本地视频流。
-     *  - {@link RtcEngine#muteLocalVideoStream(boolean) muteLocalVideoStream}：是否发布本地视频流。
-     *  - {@link RtcEngine#muteRemoteVideoStream(int, boolean) muteRemoteVideoStream}：是否接收并播放远端视频流。
+     *  - [`enableLocalVideo`]{@link enableLocalVideo}：是否启动摄像头采集并创建本地视频流。
+     *  - [`muteLocalVideoStream`]{@link muteLocalVideoStream}：是否发布本地视频流。
+     *  - [`muteRemoteVideoStream`]{@link muteRemoteVideoStream}：是否接收并播放远端视频流。
+     *  - [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}：是否接收并播放所有远端视频流。
      *
      */
     enableVideo(): Promise<void> {
@@ -1457,14 +1459,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 停止/恢复发送本地视频流。
      *
-     * 成功调用该方法后，远端会触发 {@link IRtcEngineEventHandler#onUserMuteVideo onUserMuteVideo} 回调。
+     * 成功调用该方法后，远端会触发 [`UserMuteVideo`]{@link RtcEngineEvents.UserMuteVideo} 回调。
      *
-     * @note
+     * **Note**
      * - 调用该方法时，SDK 不再发送本地视频流，但摄像头仍然处于工作状态。
-     * 相比于 {@link RtcEngine#enableLocalVideo(boolean) enableLocalVideo} (false) 用于控制本地视频流发送的方法，该方法响应速度更快。
+     * 相比于 [`enableLocalVideo(false)`]{@link enableLocalVideo} 用于控制本地视频流发送的方法，该方法响应速度更快。
      * - 该方法不影响本地视频流获取，没有禁用摄像头。
-     * - 如果你在该方法后调用 `setChannelProfile` 方法，SDK 会根据你设置的频道模式以及用户角色，
-     * 重新设置是否停止发送本地视频。因此我们建议在 `setChannelProfile` 后调用该方法。
+     * - 如果你在该方法后调用 [`setChannelProfile`]{@link setChannelProfile} 方法，SDK 会根据你设置的频道模式以及用户角色，
+     * 重新设置是否停止发送本地视频。因此我们建议在 [`setChannelProfile`]{@link setChannelProfile} 后调用该方法。
      *
      * @param muted 是否发送本地视频流:
      *              - `true`: 不发送本地视频流。
@@ -1490,9 +1492,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 停止/恢复接收指定视频流。
      *
-     * @note 如果之前有调用过 {@link RtcEngine#muteAllRemoteVideoStreams(boolean) muteAllRemoteVideoStreams}(true) 停止接收所有远端视频流，
-     * 在调用本 API 之前请确保你已调用 {@link RtcEngine#muteAllRemoteVideoStreams(boolean) muteAllRemoteVideoStreams}(false)。
-     * {@link RtcEngine#muteAllRemoteVideoStreams(boolean) muteAllRemoteVideoStreams} 是全局控制，{@link RtcEngine#muteRemoteVideoStream(int, boolean) muteRemoteVideoStream} 是精细控制。
+     * **Note** 如果之前有调用过 [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}(true) 停止接收所有远端视频流，
+     * 在调用本 API 之前请确保你已调用 [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}(false)。
+     * [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams} 是全局控制，
+     * [`muteRemoteVideoStream`]{@link RtcEngine.muteRemoteVideoStream} 是精细控制。
      *
      * @param uid 指定的用户 ID。
      * @param muted 是否停止接收指定用户的视频流：
@@ -1543,7 +1546,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * If you want to resume receiving video streams, call [`muteRemoteVideoStream(false)`]{@link muteRemoteVideoStream}, and specify the ID of the remote user that you want to subscribe to.
-     * To resume receiving video streams of multiple users, call [`muteRemoteVideoStream`]{@link muteRemoteVideoStream} as many times. Calling `setDefaultMuteAllRemoteVideoStreams(false)` resumes receiving video streams of the subsequent users only.
+     * To resume receiving video streams of multiple users, call [`muteRemoteVideoStream`]{@link muteRemoteVideoStream} as many times.
+     * Calling `setDefaultMuteAllRemoteVideoStreams(false)` resumes receiving video streams of the subsequent users only.
      *
      * @param muted Sets whether to receive/stop receiving all remote video streams by default:
      * - `true`: Stop receiving any remote video stream by default.
@@ -1555,9 +1559,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 该方法在加入频道前后都可调用。如果在加入频道后调用 `setDefaultMuteAllRemoteVideoStreams`(true)，
      * 会接收不到后面加入频道的用户的音频流。
      *
-     * @note
-     * 停止接收视频流后，如果想要恢复接收，请调用 `muteRemoteVideoStream`(false)，并指定你想要接收的远端用户的 ID。
-     * 如果想恢复接收多个用户的视频流，则需要多次调用 `muteRemoteVideoStream`。
+     * **Note**
+     * 停止接收视频流后，如果想要恢复接收，请调用 [`muteRemoteVideoStream(false)`]{@link muteRemoteVideoStream}，并指定你想要接收的远端用户的 ID。
+     * 如果想恢复接收多个用户的视频流，则需要多次调用 [`muteRemoteVideoStream`]{@link muteRemoteVideoStream}。
      * `setDefaultMuteAllRemoteVideoStreams`(false) 只能恢复接收设置后加入频道的用户的视频流。
      *
      * @param muted 是否默认不接收所有远端视频流：
@@ -1584,7 +1588,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法设置视频编码属性。每个属性对应一套视频参数，如分辨率、帧率、码率、视频方向等。 所有设置的参数均为理想情况下的最大值。当视频引擎因网络环境等原因无法达到设置的分辨率、帧率或码率的最大值时，会取最接近最大值的那个值。
      *
-     * 如果用户加入频道后不需要重新设置视频编码属性，则 Agora 建议在 {@link RtcEngine#enableVideo() enableVideo} 前调用该方法，可以加快首帧出图的时间。
+     * 如果用户加入频道后不需要重新设置视频编码属性，则 Agora 建议在 [`enableVideo`]{@link enableVideo} 前调用该方法，可以加快首帧出图的时间。
      *
      * @param config 视频编码属性。
      */
@@ -1607,12 +1611,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 开启视频预览。
      *
-     * 该方法用于在进入频道前启动本地视频预览。调用该 API 前，必须调用 {@link RtcEngine#enableVideo() enableVideo} 开启视频功能。
+     * 该方法用于在进入频道前启动本地视频预览。调用该 API 前，必须调用 [`enableVideo`]{@link enableVideo} 开启视频功能。
      *
-     * @note
+     * **Note**
      * - 本地预览默认开启镜像功能。
-     * - 使用该方法启用了本地视频预览后，如果直接调用 {@link RtcEngine#leaveChannel() leaveChannel} 退出频道，
-     * 并不会关闭预览。如需关闭预览，请调用 {@link RtcEngine#stopPreview() stopPreview}。
+     * - 使用该方法启用了本地视频预览后，如果直接调用 [`leaveChannel`]{@link leaveChannel} 退出频道，
+     * 并不会关闭预览。如需关闭预览，请调用 [`stopPreview`]{@link stopPreview}。
      *
      */
     startPreview(): Promise<void> {
@@ -1664,7 +1668,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      * 该方法调节混音里音乐文件在远端播放的音量大小。请在频道内调用该方法。
      *
-     * @param volume 伴奏音量范围为 0~100。默认 100 为原始文件音量。
+     * @param volume 伴奏音量范围为 [0,100]。默认 100 为原始文件音量。
      *
      */
     adjustAudioMixingPublishVolume(volume: number): Promise<void> {
@@ -1804,7 +1808,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * 该方法需在 {@link RtcEngine#startAudioMixing startAudioMixing} 后调用。
+     * 该方法需在 [`startAudioMixing`]{@link startAudioMixing} 后调用。
      *
      * @param pitch 按半音音阶调整本地播放的音乐文件的音调，默认值为 0，即不调整音调。
      * 取值范围为 [-12,12]，每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
@@ -1875,17 +1879,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法指定本地或在线音频文件来和麦克风采集的音频流进行混音或替换。替换是指用音频文件替换麦克风采集的音频流。
      * 该方法可以选择是否让对方听到本地播放的音频，并指定循环播放的次数。
-     * 成功调用该方法后，本地会触发 {@link IRtcEngineEventHandler#onAudioMixingStateChanged onAudioMixingStateChanged}(MEDIA_ENGINE_AUDIO_EVENT_MIXING_PLAY) 回调。
-     * 播放结束后，会收到 {@link IRtcEngineEventHandler#onAudioMixingStateChanged onAudioMixingStateChanged}(MEDIA_ENGINE_AUDIO_EVENT_MIXING_STOPPED) 回调。
+     * 成功调用该方法后，本地会触发 [`AudioMixingStateChanged(Playing)`]{@link RtcEngineEvents.AudioMixingStateChanged} 回调。
+     * 播放结束后，会收到 [`AudioMixingStateChanged(Stopped)`]{@link RtcEngineEvents.AudioMixingStateChanged} 回调。
      *
      * **Note**
      * - 如需调用该方法，请确保使用 Android 4.2 或以上设备，且 API Level &ge; 16。
      * - 请在频道内调用该方法，如果在频道外调用该方法可能会出现问题。
-     * - 如果播放的是在线音乐文件，请确保重复调用该 API 的间隔超过 100 ms，否则 SDK 会返回 AUDIO_FILE_OPEN_TOO_FREQUENT = 702 警告码，
+     * - 如果播放的是在线音乐文件，请确保重复调用该 API 的间隔超过 100 ms，否则 SDK 会返回 [`TooFrequentCall = 702`]{@link AudioMixingErrorCode.TooFrequentCall} 警告码，
      * 表示音乐文件打开过于频繁。
      * - 如果播放的是在线音乐文件，Agora 建议不要使用重定向地址。重定向地址在某些机型上可能会出现无法打开的情况。
-     * - 如果本地音乐文件不存在、文件格式不支持、无法访问在线音乐文件 URL 都会返回。
-     * 警告码 {@link io.agora.rtc.Constants#WARN_AUDIO_MIXING_OPEN_ERROR WARN_AUDIO_MIXING_OPEN_ERROR(701)}
+     * - 如果本地音乐文件不存在、文件格式不支持、无法访问在线音乐文件 URL 都会返回警告码 [`CanNotOpen = 701`]{@link AudioMixingErrorCode.CanNotOpen}。
      * - 如果在模拟器上使用该 API，暂时只支持存放在 /sdcard/ 中的 mp3 文件。
      *
      * @param filePath 指定需要混音的本地或在线音频文件的绝对路径（包含文件名后缀），如 `/sdcard/emulated/0/audio.mp4`。支持的音频格式包括：mp3、mp4、m4a、aac、3gp、mkv 及 wav。
@@ -1992,7 +1995,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法仅能播放一个音效文件。如果你需要播放多个音效文件，请多次调用该方法。
      *
-     * @note
+     * **Note**
      * - Agora 建议你同时播放的音效文件不要超过 3 个。
      * - 请确保本方法中设置的音效文件 ID 和音效文件路径与 [`preloadEffect`]{@link preloadEffect} 中设置的一致。
      *
@@ -2040,7 +2043,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 支持音频格式为 mp3、mp4、m4a、aac、3gp、mkv 和 wav。
      *
-     * @note
+     * **Note**
      * - 该方法不支持预加载在线音效文件。
      * - 为保证通话流畅度，请注意控制音效文件的大小。Agora 推荐你在加入频道前调用该方法。
      *
@@ -2093,7 +2096,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 设置指定音效文件的播放音量。
      * @param soundId 指定音效的 ID。每个音效均有唯一的 ID。
-     * @param volume 指定音效文件的播放音量，取值范围为 [0.0, 100.0]。 100.0 为默认值。
+     * @param volume 指定音效文件的播放音量，取值范围为 [0.0,100.0]。 100.0 为默认值。
      */
     setVolumeOfEffect(soundId: number, volume: number): Promise<void> {
         return AgoraRtcEngineModule.setVolumeOfEffect(soundId, volume);
@@ -2162,7 +2165,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * 该方法不能与 {@link RtcEngine#setLocalVoiceReverbPreset setLocalVoiceReverbPreset} 方法一同使用，否
+     * 该方法不能与 [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset} 方法一同使用，否
      * 则先调的方法会不生效。
      *
      * @param voiceChanger 本地语音的变声、美音或语聊美声效果选项。
@@ -2224,7 +2227,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * Agora SDK 提供更为简便的接口 {@link RtcEngine#setLocalVoiceReverbPreset setLocalVoiceReverbPreset}，
+     * Agora SDK 提供更为简便的接口 [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset}，
      * 该方法通过一系列内置参数的调整，直接实现流行、R&B、摇滚、嘻哈等预置的混响效果。
      * @param reverbKey 混响音效 Key。
      * @param value 各混响音效 Key 所对应的值。
@@ -2252,7 +2255,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      * - 该方法不能与 [`setLocalVoiceReverb`]{@link setLocalVoiceReverb} 方法一同使用。
-     * - 该方法不能与 {@link RtcEngine#setLocalVoiceChanger setLocalVoiceChanger} 方法一同使用，否则先调的方法会不生效。
+     * - 该方法不能与 [`setLocalVoiceChanger`]{@link setLocalVoiceChanger} 方法一同使用，否则先调的方法会不生效。
      *
      * @param preset 本地语音混响选项。
      */
@@ -2273,8 +2276,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 开启/关闭远端用户的语音立体声。
      *
-     * <如果想调用 {@link RtcEngine#setRemoteVoicePosition setRemoteVoicePosition} 实现听声辨位的功能，
-     * 请确保在调用 {@link RtcEngine#joinChannel joinChannel} 方法前调用该方法。
+     * <如果想调用 [`setRemoteVoicePosition`]{@link setRemoteVoicePosition} 实现听声辨位的功能，
+     * 请确保在调用 [`joinChannel`]{@link joinChannel} 方法前调用该方法。
      *
      * @param enabled 是否开启远端用户语音立体声：
      * - `true`: 开启。
@@ -2314,7 +2317,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。
      *
      * **Note**
-     * - 使用该方法需要在加入频道前调用 {@link RtcEngine#enableSoundPositionIndication enableSoundPositionIndication} 开启
+     * - 使用该方法需要在加入频道前调用 [`enableSoundPositionIndication`]{@link enableSoundPositionIndication} 开启
      * 远端用户的语音立体声。
      * - 为获得最佳听觉体验，我们建议用户佩戴耳机。
      *
@@ -2351,17 +2354,17 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 增加旁路推流地址。
      *
-     * 调用该方法后，SDK 会在本地触发 {@link IRtcEngineEventHandler#onRtmpStreamingStateChanged onRtmpStreamingStateChanged} 回调，
+     * 调用该方法后，SDK 会在本地触发 [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} 回调，
      * 报告增加旁路推流地址的状态。
      *
-     * @note
+     * **Note**
      * - 调用该方法前，请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
      * - 该方法仅适用直播场景。
      * - 请确保在成功加入频道后才能调用该接口。
      * - 该方法每次只能增加一路旁路推流地址。如需推送多路流，则需多次调用该方法。
      *
      * @param url CDN 推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。url 不支持中文等特殊字符。
-     * @param transcodingEnabled 是否转码。如果设为 `true`，则需要在该方法前先调用 {@link RtcEngine#setLiveTranscoding(LiveTranscoding) setLiveTranscoding} 方法。
+     * @param transcodingEnabled 是否转码。如果设为 `true`，则需要在该方法前先调用 [`setLiveTranscoding`]{@link setLiveTranscoding} 方法。
      * - `true`：转码。[转码](https://docs.agora.io/cn/Agora%20Platform/terms?platform=All%20Platforms#转码)是指在旁路推流时对
      * 音视频流进行转码处理后，再推送到其他 RTMP 服务器。多适用于频道内有多个主播，需要进行混流、合图的场景。
      * - `false`：不转码。
@@ -2387,7 +2390,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 删除旁路推流地址。
      *
-     * 调用该方法后，SDK 会在本地触发 {@link IRtcEngineEventHandler#onRtmpStreamingStateChanged onRtmpStreamingStateChanged} 回调，
+     * 调用该方法后，SDK 会在本地触发 [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} 回调，
      * 报告删除旁路推流地址的状态。
      *
      * **Note**
@@ -2422,13 +2425,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 设置直播转码。
      *
      * 该方法用于旁路推流的视图布局及音频设置等。调用该方法更新转码参数 `LiveTranscoding` 时，SDK 会
-     * 触发 {@link IRtcEngineEventHandler#onTranscodingUpdated onTranscodingUpdated} 回调。
+     * 触发 [`TranscodingUpdated`]{@link RtcEngineEvents.TranscodingUpdated} 回调。
      * 首次调用该方法设置转码参数时，不会触发 `onTranscodingUpdated` 回调。
      *
-     * @note
+     * **Note**
      * - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
      * - 该方法仅适用于直播场景下的主播用户。
-     * - 请确保先调用过该方法，再调用 {@link RtcEngine#addPublishStreamUrl(String, boolean) addPublishStreamUrl}。
+     * - 请确保先调用过该方法，再调用 [`addPublishStreamUrl`]{@link addPublishStreamUrl}。
      *
      * @param transcoding 旁路推流布局相关设置。
      */
@@ -2464,20 +2467,21 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 该方法可用于实现跨频道媒体流转发。
      *
-     * 成功调用该方法后，SDK 会触发 {@link IRtcEngineEventHandler#onChannelMediaRelayStateChanged onChannelMediaRelayStateChanged}
-     * 和 {@link IRtcEngineEventHandler#onChannelMediaRelayEvent onChannelMediaRelayEvent} 回调，
+     * 成功调用该方法后，SDK 会触发 [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged}
+     * 和 [`ChannelMediaRelayEvent`]{@link RtcEngineEvents.ChannelMediaRelayEvent} 回调，
      * 并在回调中报告当前的跨频道媒体流转发状态和事件。
      *
-     * - 如果 `onChannelMediaRelayStateChanged` 回调报告 RELAY_STATE_RUNNING(2) 和 RELAY_OK(0)，且 `onChannelMediaRelayEvent` 回调报告 RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL(4)，
+     * - 如果 [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} 回调报告 [`Running(2)`]{@link ChannelMediaRelayState.Running} 和 [`None(0)`]{@link ChannelMediaRelayError.None}
+     * 且 [`ChannelMediaRelayEvent`]{@link RtcEngineEvents.ChannelMediaRelayEvent} 回调报告 [`SentToDestinationChannel(4)`]{@link ChannelMediaRelayEvent.SentToDestinationChannel}，
      * 则表示 SDK 开始在源频道和目标频道之间转发媒体流。
-     * - 如果 `onChannelMediaRelayStateChanged` 回调报告 RELAY_STATE_FAILURE(3)，则表示跨频道媒体流转发出现异常。
+     * - 如果 [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} 回调报告 [`Failure(3)`]{@link ChannelMediaRelayState.Failure}，则表示跨频道媒体流转发出现异常。
      *
-     * @note
+     * **Note**
      * - 跨频道媒体流转发功能需要联系 sales@agora.io 开通。
      * - 该功能不支持 String 型 UID。
      * - 请在成功加入频道后调用该方法。
      * - 该方法仅适用于直播场景下的主播。
-     * - 成功调用该方法后，若你想再次调用该方法，必须先调用 {@link stopChannelMediaRelay stopChannelMediaRelay} 方法退出当前的转发状态。
+     * - 成功调用该方法后，若你想再次调用该方法，必须先调用 [`stopChannelMediaRelay`]{@link stopChannelMediaRelay} 方法退出当前的转发状态。
      *
      * @param channelMediaRelayConfiguration 跨频道媒体流转发参数配置。
      */
@@ -2504,13 +2508,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 一旦停止，主播会退出所有目标频道。
      *
-     * 成功调用该方法后，SDK 会触发 {@link IRtcEngineEventHandler#onChannelMediaRelayStateChanged onChannelMediaRelayStateChanged} 回调。
-     * 如果报告 RELAY_STATE_IDLE(0) 和 RELAY_OK(0)，则表示已停止转发媒体流。
+     * 成功调用该方法后，SDK 会触发 [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} 回调。
+     * 如果报告 [`Idle(0)`]{@link ChannelMediaRelayState.Idle} 和 [`None(0)`]{@link ChannelMediaRelayError.None}，则表示已停止转发媒体流。
      *
      * **Note**
-     * 如果该方法调用不成功，SDK 会触发 `onChannelMediaRelayStateChanged` 回调，
-     * 并报告状态码 RELAY_ERROR_SERVER_NO_RESPONSE(2) 或 RELAY_ERROR_SERVER_CONNECTION_LOST(8)。
-     * 你可以调用 {@link leaveChannel leaveChannel} 方法离开频道，跨频道媒体流转发会自动停止。
+     * 如果该方法调用不成功，SDK 会触发 [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} 回调，
+     * 并报告状态码 [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse} 或 [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost}。
+     * 你可以调用 [`leaveChannel`]{@link leaveChannel} 方法离开频道，跨频道媒体流转发会自动停止。
      */
     stopChannelMediaRelay(): Promise<void> {
         return AgoraRtcEngineModule.stopChannelMediaRelay();
@@ -2528,7 +2532,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Call this method after the [`startChannelMediaRelay`]{@link startChannelMediaRelay} method to update the destination channel.
      *
-     * - This method supports adding at most four destination channels in the relay. If there are already four destination channels in the relay.
+     * - This method supports adding at most four destination channels in the relay.
+     * If there are already four destination channels in the relay, remove the unnecessary ones with the `destInfos` method in [`channelMediaRelayConfiguration`]{@link channelMediaRelayConfiguration} before calling this method.
      * @param channelMediaRelayConfiguration The media stream relay configuration
      *
      */
@@ -2537,13 +2542,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * 成功开始跨频道转发媒体流后，如果你希望将流转发到多个目标频道，或退出当前的转发频道，可以调用该方法。
      *
-     * 成功调用该方法后，SDK 会触发 {@link IRtcEngineEventHandler#onChannelMediaRelayEvent onChannelMediaRelayEvent} 回调，
-     * 并在回调中报告状态码 RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL(7)。
+     * 成功调用该方法后，SDK 会触发 [`ChannelMediaRelayEvent`]{@link RtcEngineEvents.ChannelMediaRelayEvent} 回调，
+     * 并在回调中报告状态码 [`UpdateDestinationChannel(7)`]{@link ChannelMediaRelayEvent.UpdateDestinationChannel}。
      *
      * **Note**
-     * - 请在 `startChannelMediaRelay` 方法后调用该方法，更新媒体流转发的频道。
-     * - 跨频道媒体流转发最多支持 4 个目标频道。如果直播间里已经有 4 个频道了，你可以在调用该方法之前，调用 `ChannelMediaRelayConfiguration` 类中的
-     * {@link io.agora.rtc.video.ChannelMediaRelayConfiguration#removeDestChannelInfo removeDestChannelInfo} 方法移除不需要的频道。
+     * - 请在 [`startChannelMediaRelay`]{@link startChannelMediaRelay} 方法后调用该方法，更新媒体流转发的频道。
+     * - 跨频道媒体流转发最多支持 4 个目标频道。如果直播间里已经有 4 个频道了，你可以在调用该方法之前，
+     * 调用 [`channelMediaRelayConfiguration`]{@link channelMediaRelayConfiguration} 类中的 `destInfos` 方法移除不需要的频道。
      *
      * @param channelMediaRelayConfiguration 跨频道媒体流转发参数配置。
      */
@@ -2590,12 +2595,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 设置默认的音频播放路由。
      *
      * 该方法设置接收到的语音从听筒或扬声器出声。如果用户不调用本方法，则语音默认从听筒出声。
-     * 如果你想要在加入频道后修改语音路由，可以使用 {@link RtcEngine#setEnableSpeakerphone(boolean) setEnableSpeakerphone}.
+     * 如果你想要在加入频道后修改语音路由，可以使用 [`setEnableSpeakerphone`]{@link setEnableSpeakerphone}.
      *
      * 各场景下默认的语音路由：
      * - 通信场景：
      *   - 语音通话，默认从听筒出声。
-     *   - 视频通话，默认从扬声器出声。如果有用户在频道中使用 `disableVideo` 或 `muteLocalVideoStream` 和 `muteAllRemoteVideoStreams`
+     *   - 视频通话，默认从扬声器出声。如果有用户在频道中使用 [`disableVideo`]{@link disableVideo} 或 [`muteLocalVideoStream`]{@link muteLocalVideoStream} 和 [`muteAllRemoteVideoStreams`] 或 {@link muteAllRemoteVideoStreams}
      * 关闭视频，则语音路由会自动切换回听筒。
      * - 直播场景：扬声器。
      *
@@ -2630,17 +2635,17 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 启用/关闭扬声器播放。
      * 该方法设置是否将语音路由设到扬声器（外放）。
-     * 调用该方法后，SDK 将返回 {@link io.agora.rtc.IRtcEngineEventHandler#onAudioRouteChanged(int) onAudioRouteChanged} 回调提示状态已更改。
+     * 调用该方法后，SDK 将返回 [`AudioRouteChanged`]{@link RtcEngineEvents.AudioRouteChanged} 回调提示状态已更改。
      *
-     * @note
-     * - 请确保在调用此方法前已调用过 {@link RtcEngine#joinChannel(String, String, String, int) joinChannel} 方法。
+     * **Note**
+     * - 请确保在调用此方法前已调用过 [`joinChannel`]{@link joinChannel} 方法。
      * - 直播频道内的观众调用该 API 无效。
      *
      * @param enabled 是否将音频路由到外放：
      *                - `true`: 切换到外放。
      *                - `false`: 切换到听筒。如果设备连接了耳机，则语音路由走耳机。
-     * @note
-     * - 请确保在调用此方法前已调用过 {@link RtcEngine#joinChannel(String, String, String, int) joinChannel} 方法。
+     * **Note**
+     * - 请确保在调用此方法前已调用过 [`joinChannel`]{@link joinChannel} 方法。
      * - 直播频道内的观众调用该 API 无效。
      * - 在初始化 [`RtcEngine`]{@link RtcEngine}、用户角色改变、重启音频引擎 ADM 时，SDK 会沿用之前的音频路由。
      * 如果路由是扬声器，则无需调用 `setEnableSpeakerphone(true)` 重复启用。
@@ -2741,7 +2746,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 设置订阅的视频流类型。
      *
-     * 在网络条件受限的情况下，如果发送端没有调用 `enableDualStreamMode(false)` 关闭双流模式，
+     * 在网络条件受限的情况下，如果发送端没有调用 [`enableDualStreamMode(false)`]{@link RtcEngine.enableDualStreamMode} 关闭双流模式，
      * 接收端可以选择接收大流还是小流。其中，大流可以接为高分辨率高码率的视频流，
      * 小流则是低分辨率低码率的视频流。
      *
@@ -2751,7 +2756,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 视频小流默认的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。
      *
      * 调用本方法的执行结果将
-     * 在 {@link io.agora.rtc.IRtcEngineEventHandler#onApiCallExecuted(int error, String api, String result) onApiCallExecuted} 中返回。
+     * 在 [`ApiCallExecuted`]{@link RtcEngineEvents.ApiCallExecuted} 中返回。
      *
      * @param uid 用户 ID
      * @param streamType 视频流类型。
@@ -2782,10 +2787,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 设置弱网条件下发布的音视频流回退选项。
      *
      * 网络不理想的环境下，直播音视频的质量都会下降。使用该接口并将 option 设置
-     * 为 {@link io.agora.rtc.Constants#STREAM_FALLBACK_OPTION_AUDIO_ONLY STREAM_FALLBACK_OPTION_AUDIO_ONLY(2)} 后，
+     * 为 [`AudioOnly(2)`]{@link StreamFallbackOptions.AudioOnly} 后，
      * SDK 会在上行弱网且音视频质量严重受影响时，自动关断视频流，从而保证或提高音频质量。
      * 同时 SDK 会持续监控网络质量，并在网络质量改善时恢复音视频流。当本地推流回退为音频流时，或由音频流恢复为音视频流时，
-     * SDK 会触发本地发布的媒体流已回退为音频流 {@link IRtcEngineEventHandler#onLocalPublishFallbackToAudioOnly(boolean) onLocalPublishFallbackToAudioOnly} 回调。
+     * SDK 会触发本地发布的媒体流已回退为音频流 [`LocalPublishFallbackToAudioOnly`]{@link RtcEngineEvents.LocalPublishFallbackToAudioOnly} 回调。
      *
      * **Note**
      *
@@ -2814,13 +2819,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 设置弱网条件下订阅的音视频流回退选项。
      *
-     * 网络不理想的环境下，直播音视频的质量都会下降。使用该接口并将 option 设置
-     * 为 {@link io.agora.rtc.Constants#STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW(1)}
-     * 或者 {@link io.agora.rtc.Constants#STREAM_FALLBACK_OPTION_AUDIO_ONLY STREAM_FALLBACK_OPTION_AUDIO_ONLY(2)} 后，
+     * 网络不理想的环境下，直播音视频的质量都会下降。使用该接口并将 `option` 设置
+     * 为 [`VideoStreamLow(1)`]{@link StreamFallbackOptions.VideoStreamLow}
+     * 或者 [`AudioOnly(2)`]{@link StreamFallbackOptions.AudioOnly} 后，
      * SDK 会在下行弱网且音视频质量严重受影响时，
      * 将视频流切换为小流，或关断视频流，从而保证或提高音频质量。同时 SDK 会持续监控网络质量，并在网络质量改善时恢复音视频流。
      * 当远端订阅流回退为音频流时，或由音频流恢复为音视频流时，SDK 会触发 远端订阅流已回退为
-     * 音频流 {@link IRtcEngineEventHandler#onRemoteSubscribeFallbackToAudioOnly(int, boolean) onRemoteSubscribeFallbackToAudioOnly} 回调。
+     * 音频流 [`RemoteSubscribeFallbackToAudioOnly`]{@link RtcEngineEvents.RemoteSubscribeFallbackToAudioOnly} 回调。
      *
      * @param option 远端订阅流回退处理选项。
      */
@@ -2846,17 +2851,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 设置用户媒体流优先级。
      *
      * 如果将某个用户的优先级设为高，那么发给这个用户的音视频流的优先级就会高于其他用户。
-     * 该方法可以与 {@link RtcEngine#setRemoteSubscribeFallbackOption setRemoteSubscribeFallbackOption} 搭配使用。如果开启了订阅流回退选项，弱网下 SDK 会优先保证高优先级用户收到的流的质量。
+     * 该方法可以与 [`setRemoteSubscribeFallbackOption`]{@link setRemoteSubscribeFallbackOption} 搭配使用。如果开启了订阅流回退选项，弱网下 SDK 会优先保证高优先级用户收到的流的质量。
      *
-     * @note 目前 Agora SDK 仅允许将一名远端用户设为高优先级。
+     * **Note**
      *
-     * @param uid 远端用户的 ID
-     * @param userPriority 远端用户的优先级：
-     *                     - {@link Constants#USER_PRIORITY_HIGH USER_PRIORITY_HIGH(50)}：用户优先级为高。
-     *                     - {@link Constants#USER_PRIORITY_NORMAL USER_PRIORITY_NORMAL(100)}：（默认）用户优先级为正常。
-     * @return
-     * - 0: 方法调用成功。
-     * - < 0: 方法调用失败。
+     * 目前 Agora SDK 仅允许将一名远端用户设为高优先级。
+     *
+     * @param uid 远端用户的 ID。
+     * @param userPriority 远端用户的优先级。
      */
     setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
         return AgoraRtcEngineModule.setRemoteUserPriority(uid, userPriority);
@@ -2899,13 +2901,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 该方法启用网络连接质量测试，用于检测用户网络接入质量。默认该功能为关闭状态。该方法主要用于以下两种场景：
      * - 用户加入频道前，可以调用该方法判断和预测目前的上行网络质量是否足够好。
      * - 直播场景下，当用户角色想由观众切换为主播时，可以调用该方法判断和预测目前的上行网络质量是否足够好。
-     * 无论哪种场景，启用该方法会消耗一定的网络流量，影响通话质量。在收到 [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} 回调后须调用 {@link RtcEngine#disableLastmileTest() disableLastmileTest} 停止测试，再加入频道或切换用户角色。
+     * 无论哪种场景，启用该方法会消耗一定的网络流量，影响通话质量。在收到 [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} 回调后
+     * 须调用 [`disableLastmileTest`]{@link disableLastmileTest} 停止测试，再加入频道或切换用户角色。
      *
-     * @note
-     * - 该方法请勿与 {@link RtcEngine#startLastmileProbeTest startLastmileProbeTest} 同时使用。
-     *   - 调用该方法后，在收到 {@link IRtcEngineEventHandler#onLastmileQuality(int) onLastmileQuality} 回调之前请不要调用其他方法，否则可能会由于 API 操作过于频繁导致此回调无法执行。
+     * **Note**
+     * - 该方法请勿与 [`startLastmileProbeTest`]{@link startLastmileProbeTest} 同时使用。
+     *   - 调用该方法后，在收到 [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} 回调之前请不要调用其他方法，
+     * 否则可能会由于 API 操作过于频繁导致此回调无法执行。
      *   - 直播场景下，主播在加入频道后，请勿调用该方法。
-     *   - 加入频道前调用该方法检测网络质量后，SDK 会占用一路视频的带宽，码率与 {@link RtcEngine#setVideoEncoderConfiguration setVideoEncoderConfiguration} 中设置的码率相同。加入频道后，无论是否调用了 {@link RtcEngine#disableLastmileTest disableLastmileTest}，SDK 均会自动停止带宽占用。
+     *   - 加入频道前调用该方法检测网络质量后，SDK 会占用一路视频的带宽，码率
+     * 与 [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration} 中设置的码率相同。加入频道后，无论是否调用了 [`disableLastmileTest`]{@link disableLastmileTest}，SDK 均会自动停止带宽占用。
      *
      */
     enableLastmileTest(): Promise<void> {
@@ -2937,11 +2942,11 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      * - 请在加入频道前调用该方法。
-     * - 调用 {@link RtcEngine#startEchoTest startEchoTest} 后必须调用 {@link RtcEngine#stopEchoTest stopEchoTest} 以结束测试，否则不能进行下一次回声测试，也无法调用 {@link RtcEngine#joinChannel joinchannel} 加入频道。
+     * - 调用 [`startEchoTest`]{@link RtcEngine.startEchoTest} 后必须调用 [`stopEchoTest`]{@link stopEchoTest} 以结束测试，
+     * 否则不能进行下一次回声测试，也无法调用 [`joinChannel`]{@link joinChannel} 加入频道。
      * - 直播场景下，该方法仅能由用户角色为主播的用户调用。
      *
-     * @param intervalInSeconds 设置返回语音通话回路测试结果的时间间隔，取值范围为 [2, 10]，单位为秒，默认为 10 秒。
-     * //为什么中午呢有取值范围，英文没有?
+     * @param intervalInSeconds 设置返回语音通话回路测试结果的时间间隔，取值范围为 [2,10]，单位为秒，默认为 10 秒。
      */
     startEchoTest(intervalInSeconds: number): Promise<void> {
         return AgoraRtcEngineModule.startEchoTest(intervalInSeconds);
@@ -2974,9 +2979,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      *
      * 启用该方法后，SDK 会依次返回如下 2 个回调：
-     * - {@link IRtcEngineEventHandler#onLastmileQuality onLastmileQuality}：视网络情况约 2 秒内返回。
+     * - [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality}：视网络情况约 2 秒内返回。
      * 该回调通过打分反馈上下行网络质量，更贴近用户的主观感受。
-     * - {@link IRtcEngineEventHandler#onLastmileProbeResult onLastmileProbeResult}：视网络情况约 30 秒内返回。
+     * - [`LastmileProbeResult`]{@link RtcEngineEvents.LastmileProbeResult}：视网络情况约 30 秒内返回。
      * 该回调通过客观数据反馈上下行网络质量，因此更客观。
      *
      * 该方法主要用于以下两种场景：
@@ -2985,9 +2990,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      * - 该方法会消耗一定的网络流量，影响通话质量，因此我们建议不要同时使用
-     * 该方法和 {@link RtcEngine#enableLastmileTest enableLastmileTest}。
-     * - 调用该方法后，在收到 {@link IRtcEngineEventHandler#onLastmileQuality onLastmileQuality}
-     * 和 {@link IRtcEngineEventHandler#onLastmileProbeResult onLastmileProbeResult} 回调之前请不用调用其他方法，
+     * 该方法和 [`enableLastmileTest`]{@link RtcEngine.enableLastmileTest}。
+     * - 调用该方法后，在收到 [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality}
+     * 和 [`LastmileProbeResult`]{@link RtcEngineEvents.LastmileProbeResult} 回调之前请不用调用其他方法，
      * 否则可能会由于 API 操作过于频繁导致此方法无法执行。
      * - 直播场景下，如果本地用户为主播，请勿在加入频道后调用该方法。
      *
@@ -3124,19 +3129,19 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 该方法将一张 PNG 图片作为水印添加到本地发布的直播视频流上，同一直播频道中的观众、旁路直播观众和录制设备都能看到或采集到该水印图片。
      * Agora 当前只支持在直播视频流中添加一个水印，后添加的水印会替换掉之前添加的水印。
      *
-     * 水印坐标和 {@link RtcEngine#setVideoEncoderConfiguration(VideoEncoderConfiguration) setVideoEncoderConfiguration} 方法中的设置
+     * 水印坐标和 [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration} 方法中的设置
      * 有依赖关系：
      * - 如果视频编码方向/ORIENTATION_MODE 固定为横屏或自适应模式下的横屏，那么水印使用横屏坐标。
      * - 如果视频编码方向/ORIENTATION_MODE 固定为竖屏或自适应模式下的竖屏，那么水印使用竖屏坐标。
-     * - 设置水印坐标时，水印的图像区域不能超出 `setVideoEncoderConfiguration` 方法中设置的视频尺寸，否则超出部分将被裁剪。
+     * - 设置水印坐标时，水印的图像区域不能超出 [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration} 方法中设置的视频尺寸，否则超出部分将被裁剪。
      *
      * **Note**
-     * - 你需要在调用 {@link RtcEngine#enableVideo() enableVideo} 方法之后再调用本方法。
+     * - 你需要在调用 [`enableVideo`]{@link RtcEngine.enableVideo} 方法之后再调用本方法。
      * - 如果你只是在旁路直播（推流到CDN）中添加水印，你可以使用本方法
-     * 或 {@link RtcEngine#setLiveTranscoding(LiveTranscoding) setLiveTranscoding} 方法设置水印。
+     * 或 [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} 方法设置水印。
      * - 待添加图片必须是 PNG 格式。本方法支持所有像素格式的 PNG 图片：RGBA、RGB、Palette、Gray 和 Alpha_gray。
      * - 如果待添加的 PNG 图片的尺寸与你在本方法中设置的尺寸不一致，SDK 会对 PNG 图片进行缩放或裁剪，以与设置相符。
-     * - 如果你已经使用 {@link RtcEngine#startPreview() startPreview} 方法开启本地视频预览，那么本方法的 visibleInPreview 可
+     * - 如果你已经使用 [`startPreview`]{@link startPreview} 方法开启本地视频预览，那么本方法的 `visibleInPreview` 可
      * 设置水印在预览时是否可见。
      * - 如果你已设置本地视频为镜像模式，那么此处的本地水印也为镜像。为避免本地用户看本地视频时的水印也被镜像，
      * Agora 建议你不要对本地视频同时使用镜像和水印功能，请在应用层实现本地水印功能。
@@ -3210,7 +3215,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 启用内置加密，并设置数据加密密码。
      *
-     * 如果需要启用加密，请在加入频道前调用 {@link RtcEngine#setEncryptionSecret(String) setEncryptionSecret} 启用
+     * 如果需要启用加密，请在加入频道前调用 [`setEncryptionSecret`]{@link setEncryptionSecret} 启用
      * 内置加密功能，并设置加密密码。同一频道内的所有用户应设置相同的密码。
      * 当用户离开频道时，该频道的密码会自动清除。如果未指定密码或将密码设置为空，则无法激活加密功能。
      *
@@ -3237,7 +3242,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Ensure that the directory to save the recording file exists and is writable.
      * - This method is usually called after calling [`joinChannel`]{@link joinChannel}. The recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
-     * - For better recording effects, set quality as [`AUDIO_RECORDING_QUALITY_MEDIUM`]{@link AudioRecordingQuality.Medium} or [`AUDIO_RECORDING_QUALITY_HIGH`]{@link AudioRecordingQuality.High} when sampleRate is 44.1 kHz or 48 kHz.
+     * - For better recording effects, set quality as [`Medium`]{@link AudioRecordingQuality.Medium} or [`High`]{@link AudioRecordingQuality.High} when sampleRate is 44.1 kHz or 48 kHz.
      *
      * @param filePath Absolute file path (including the suffixes of the filename) of the recording file. The string of the file name is in UTF-8. For example, `/sdcard/emulated/0/audio/aac`.
      * @param sampleRate Sample rate (Hz) of the recording file.
@@ -3254,10 +3259,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      * - 请确保你在该方法中指定的路径存在并且可写。
-     * - 该接口需要在 {@link RtcEngine#joinChannel(String, String, String, int) joinChannel} 之后调用。
-     * 如果调用 {@link RtcEngine#leaveChannel() leaveChannel} 时还在录音，录音会自动停止。
+     * - 该接口需要在 [`joinChannel`]{@link joinChannel} 之后调用。
+     * 如果调用 [`leaveChannel`]{@link leaveChannel} 时还在录音，录音会自动停止。
      * - 为保证录音效果，当 `sampleRate` 设为 44.1 kHz 或 48 kHz 时，建议将 `quality` 设
-     * 为 AUDIO_RECORDING_QUALITY_MEDIUM 或 AUDIO_RECORDING_QUALITY_HIGH。
+     * 为 [`Medium`]{@link AudioRecordingQuality.Medium} 或 [`High`]{@link AudioRecordingQuality.High}。
      *
      * @param filePath 录音文件在本地保存的绝对路径，由用户自行制定，需精确到文件名及格式，例如：`/dir1/dir2/dir3/audio.aac`。
      * @param sampleRate 录音采样率 (Hz)。
@@ -3279,8 +3284,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 停止客户端录音。
      *
-     * 该方法停止录音。该接口需要在 {@link RtcEngine#leaveChannel() leaveChannel} 之前调用，
-     * 不然会在调用  {@link RtcEngine#leaveChannel() leaveChannel} 时自动停止。
+     * 该方法停止录音。该接口需要在 [`leaveChannel`]{@link leaveChannel} 之前调用，
+     * 不然会在调用 [`leaveChannel`]{@link leaveChannel} 时自动停止。
      */
     stopAudioRecording(): Promise<void> {
         return AgoraRtcEngineModule.stopAudioRecording();
@@ -3317,9 +3322,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 输入在线媒体流。
      * 该方法通过在服务端拉取视频流并发送到频道中，将正在播出的视频输入到正在进行的直播中。可主要应用于赛事直播、多人看视频互动等直播场景。
      *
-     * 调用该方法后，SDK 会在本地触发 {@link IRtcEngineEventHandler#onStreamInjectedStatus onStreamInjectedStatus} 回调，
+     * 调用该方法后，SDK 会在本地触发 [`StreamInjectedStatus`]{@link RtcEngineEvents.StreamInjectedStatus} 回调，
      * 报告输入在线媒体流的状态；
-     * 成功输入媒体流后，该音视频流会出现在频道中，频道内所有用户都会收到 {@link IRtcEngineEventHandler#onUserJoined onUserJoined} 回调，
+     * 成功输入媒体流后，该音视频流会出现在频道中，频道内所有用户都会收到 [`UserJoined`]{@link RtcEngineEvents.UserJoined} 回调，
      * 其中 uid 为 666。
      *
      * **Note**
@@ -3490,18 +3495,18 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 一般的视频通话或直播中，默认由 SDK 自动控制摄像头的输出参数。在如下特殊场景中，默认的参数通常无法满足需求，
      * 或可能引起设备性能问题，我们推荐调用该接口设置摄像头的采集偏好：
      *
-     * - 使用裸数据自采集接口时，如果 SDK 输出的分辨率和帧率高于 {@link RtcEngine#setVideoEncoderConfiguration setVideoEncoderConfiguration}
+     * - 使用裸数据自采集接口时，如果 SDK 输出的分辨率和帧率高于 [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration}
      * 中指定的参数，在后续处理视频帧的时候，比如美颜功能时，
-     * 会需要更高的 CPU 及内存，容易导致性能问题。在这种情况下，我们推荐将摄像头采集偏好设置为 CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE(1)，
+     * 会需要更高的 CPU 及内存，容易导致性能问题。在这种情况下，我们推荐将摄像头采集偏好设置为 [`Performance(1)`]{@link CameraCaptureOutputPreference.Performance}，
      * 避免性能问题。
-     * - 如果没有本地预览功能或者对预览质量没有要求，我们推荐将采集偏好设置为 CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE(1)，以优化 CPU 和
+     * - 如果没有本地预览功能或者对预览质量没有要求，我们推荐将采集偏好设置为 [`Performance(1)`]{@link CameraCaptureOutputPreference.Performance}，以优化 CPU 和
      * 内存的资源分配。
-     * - 如果用户希望本地预览视频比实际编码发送的视频清晰，可以将采集偏好设置为 CAPTURER_OUTPUT_PREFERENCE_PREVIEW(2)。
+     * - 如果用户希望本地预览视频比实际编码发送的视频清晰，可以将采集偏好设置为 [`Preview(2)`]{@link CameraCaptureOutputPreference.Preview}。
      *
      * **Note**
      *
-     * 请在启动摄像头之前调用该方法，如 {@link RtcEngine#joinChannel joinChannel}，{@link RtcEngine#enableVideo enableVideo}
-     * 或者 {@link RtcEngine#enableLocalVideo enableLocalVideo}。
+     * 请在启动摄像头之前调用该方法，如 [`joinChannel`]{@link joinChannel}，[`enableVideo`]{@link enableVideo}
+     * 或者 [`enableLocalVideo`]{@link enableLocalVideo}。
      *
      * @param config 摄像头采集偏好。
      */
@@ -3540,7 +3545,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /** @zh-cn
      * 设置手动对焦位置，并触发对焦。
      *
-     * 成功调用该方法后，本地会触发 {@link IRtcEngineEventHandler#onCameraFocusAreaChanged onCameraFocusAreaChanged} 回调。
+     * 成功调用该方法后，本地会触发 [`CameraFocusAreaChanged`]{@link RtcEngineEvents.CameraFocusAreaChanged} 回调。
      * @param positionX 触摸点相对于视图的横坐标。
      * @param positionY 触摸点相对于视图的纵坐标。
      */
@@ -3613,7 +3618,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * @param reliable 是否可靠。
      *                 - `true`: 接收方 5 秒内会收到发送方所发送的数据，
-     * 否则会收到 {@link IRtcEngineEventHandler#onStreamMessageError(int, int, int, int, int) onStreamMessageError} 回调并获得相应报错信息。
+     * 否则会收到 [`StreamMessageError`]{@link RtcEngineEvents.StreamMessageError} 回调并获得相应报错信息。
      *                 - `false`: 接收方不保证收到，就算数据丢失也不会报错。
      * @param ordered 是否有序。
      *                - `true`: 接收方会按照发送方发送的顺序收到数据包。
@@ -3650,15 +3655,15 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * 该方法发送数据流消息到频道内所有用户。SDK 对该方法的实现进行了如下限制：
      * 频道内每秒最多能发送 30 个包，且每个包最大为 1 KB。 每个客户端每秒最多能发送 6 KB 数据。频道内每人最多能同时有 5 个数据通道。
      *
-     * 成功调用该方法后，远端会触发 {@link IRtcEngineEventHandler#onStreamMessage onStreamMessage} 回调，
+     * 成功调用该方法后，远端会触发 [`StreamMessage`]{@link RtcEngineEvents.StreamMessage} 回调，
      * 远端用户可以在该回调中获取接收到的流消息；若调用失败，
-     * 远端会触发 {@link IRtcEngineEventHandler#onStreamMessageError onStreamMessageError} 回调。
+     * 远端会触发 [`StreamMessageError`]{@link RtcEngineEvents.StreamMessageError} 回调。
      *
      * **Note**
-     * - 请确保在调用该方法前，已调用 `createDataStream` 创建了数据通道。
+     * - 请确保在调用该方法前，已调用 [`createDataStream`]{@link createDataStream} 创建了数据通道。
      * - 该方法仅适用于通信场景以及直播场景下的主播用户。
      *
-     * @param streamId 数据流 ID，{@link RtcEngine#createDataStream(boolean reliable, boolean ordered) createDataStream} 的返回值。
+     * @param streamId 数据流 ID，[`createDataStream`]{@link createDataStream} 的返回值。
      * @param message 待发送的数据。
      */
     sendStreamMessage(streamId: number, message: string): Promise<void> {

@@ -12,55 +12,37 @@ import {VideoMirrorMode, VideoRenderMode} from "./Enums";
 export interface RtcUidProps {
     /** User ID. */
     /** @zh-cn
-     * 用户 ID.
+     * 用户 ID。
      */
     uid: number;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-export interface RtcSurfaceViewProps {
-=======
-<<<<<<< HEAD
-export interface RtcSurfaceViewProps extends ViewProps {
->>>>>>> jira/MS-16519
-    /**
-     * Controls whether the surface view's surface is placed on top of another regular surface
-     * view in the window (but still behind the window itself).
-     */
-<<<<<<< HEAD
-    /** @zh-cn
-     * 是否将 Surface 视图的表面置于窗口中另一个常规视图的上层 (但依然位于窗口本身的下层)。//TODO 待确认
-     */
-=======
-=======
-=======
->>>>>>> jira/MS-16519
 /**
  * Properties of the SurfaceView.
  */
+/** @zh-cn
+ * SurfaceView 的属性。
+ */
 export interface RtcSurfaceViewProps {
-<<<<<<< HEAD
->>>>>>> rc/3.0.1
->>>>>>> jira/MS-16519
-=======
     /**
      * Controls whether the SurfaceView's surface is placed on top of another
      * regular surface view in the window (but still behind the window itself).
      */
->>>>>>> jira/MS-16519
+    /** @zh-cn
+     * 是否将 SurfaceView 视图的表层置于窗口中另一个 SurfaceView 的上层 (但依然位于窗口的下层)。
+     */
     zOrderMediaOverlay?: boolean;
     /**
      * Controls whether the SurfaceView's surface is placed on top of its window.
      */
     /** @zh-cn
-     * 是否将 Surface 视图的表面置于窗口上层。
+     * 是否将 SurfaceView 视图的表层置于窗口上层。
      */
     zOrderOnTop?: boolean;
     /**
      * The rendering mode of the video view.
      */
-    /**
+    /** @zh-cn
      * 视频视图的渲染模式。
      */
     renderMode?: VideoRenderMode;
@@ -86,12 +68,10 @@ export interface RtcSurfaceViewProps {
      *                    - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ","
      *
      * **Note**
-     *  - 该参数的默认值为空字符 ""。如果调用 `RtcChannel` 类的 [`joinChannel`]{@link RtcChannel.joinChannel} 方法加入频道，则使用默认值。
-     *  - // TODO 待确认。
+     *  - 该参数的默认值为空字符 ""。如果用户是通过 [`RtcEngine`]{@link RtcEngine} 类的 [`joinChannel`]{@link RtcEngine.joinChannel} 方法加入频道的，
+     * 则将参数设为默认值，表示该用户在频道内的渲染视图。
+     *  - 如果用户是通过 [`RtcChannel`]{@link RtcChannel} 类的 [`joinChannel`]{@link RtcChannel.joinChannel} 方法加入频道的，则将该参数设为该 [`RtcChannel`]{@link RtcChannel} 类对应的 `channelId`，表示该用户在该 `channelId` 对应频道内的渲染视图。
      *
-     * **Note**
-     * - The default value is the empty string "". Use the default value if the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the `RtcEngine` class.
-     * - If the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the `RtcChannel` class, set this parameter as the `channelId` of the `RtcChannel object.
      */
     channelId?: string;
     /** The video mirror mode. */
@@ -104,19 +84,10 @@ export interface RtcSurfaceViewProps {
 /**
  * Properties of the TextureView.
  */
-<<<<<<< HEAD
-<<<<<<< HEAD
 /** @zh-cn
  * TextureView 的属性。
  */
 export interface RtcTextureViewProps {
-=======
-<<<<<<< HEAD
-export interface RtcTextureViewProps extends ViewProps {
->>>>>>> jira/MS-16519
-=======
-export interface RtcTextureViewProps {
->>>>>>> jira/MS-16519
     /**
      * The unique channel name for the AgoraRTC session in the string format.
      * The string length must be less than 64 bytes. Supported character scopes are:
@@ -130,8 +101,6 @@ export interface RtcTextureViewProps {
      * - The default value is the empty string "". Use the default value if the user joins the channel using the [`joinChannel`]{@link RtcEngine.joinChannel} method in the `RtcEngine` class.
      * - If the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the `RtcChannel` class, set this parameter as the `channelId` of the `RtcChannel` object.
      */
-<<<<<<< HEAD
-<<<<<<< HEAD
     /** @zh-cn
      * 标识通话的频道名称，长度在 64 字节以内的字符串。以下为支持的字符集范围（共 89 个字符）：
      *                    - 26 个小写英文字母 a-z
@@ -141,23 +110,16 @@ export interface RtcTextureViewProps {
      *                    - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ","
      *
      * **Note**
-     *  - 该参数的默认值为空字符 ""。如果调用 `RtcChannel` 类的 [`joinChannel`]{@link RtcChannel.joinChannel} 方法加入频道，则使用默认值。
-     *  - // TODO 待确认。
+     * - 该参数的默认值为空字符 ""。如果用户是通过 [`RtcEngine`]{@link RtcEngine} 类的 [`joinChannel`]{@link RtcEngine.joinChannel} 方法加入频道的，
+     * 则将参数设为默认值，表示该用户在频道内的渲染视图。
+     * - 如果用户是通过 [`RtcChannel`]{@link RtcChannel} 类的 [`joinChannel`]{@link RtcChannel.joinChannel} 方法加入频道的，则将该参数设为该 [`RtcChannel`]{@link RtcChannel} 类对应的 `channelId`，表示该用户在该 `channelId` 对应频道内的渲染视图。
+     *
      */
-=======
-=======
-export interface RtcTextureViewProps {
->>>>>>> rc/3.0.1
->>>>>>> jira/MS-16519
     channelId?: string;
-    /** The video mirror. */
+    /** The video mirror mode. */
     /** @zh-cn
      * 视频的镜像模式。
      */
-=======
-    channelId?: string;
-    /** The video mirror mode. */
->>>>>>> jira/MS-16519
     mirror?: boolean;
 }
 
