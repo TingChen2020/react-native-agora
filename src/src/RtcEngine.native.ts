@@ -89,7 +89,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param appId The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
      * Only users in apps with the same App ID can join the same channel and communicate with each other.
      * Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance. To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance, and after [`destroy`]{@link destroy} returns `0`,
-     * call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
+     * call `create` to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      */
     /** @zh-cn
      * 创建 [`RtcEngine`]{@link RtcEngine} 实例。
@@ -125,6 +125,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance and after [`destroy`]{@link destroy} returns `0`, call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      * @param areaCode The area of connection. This advanced feature applies to scenarios that have regional restrictions.
      * You can use the bitwise OR operator (|) to specify multiple areas. For details, see {@link IPAreaCode}.
+     *
      * After specifying the region, the app that integrates the Agora SDK connects to the Agora servers within that region.
      */
     /** @zh-cn
@@ -271,7 +272,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Sets the channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
      *
      * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
-     * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+     * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for live interactive video streaming.
      * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
      *
      */
@@ -292,7 +293,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * This method sets the role of a user, such as a host or an audience (default), before joining a channel.
      *
-     * This method can be used to switch the user role after a user joins a channel. In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful [`setClientRole`]{@link setClientRole }method call triggers the following callbacks:
+     * This method can be used to switch the user role after a user joins a channel. In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
      * - The local client: [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged}.
      * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
      *
@@ -333,9 +334,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * A channel does not accept duplicate uids, such as two users with the same `uid`. If you set `uid` as `0`, the system automatically assigns a uid.
      *
-     * **Warning:**
+     * **Warning**
      *
+<<<<<<< HEAD
      * Ensure that the App ID used for creating the token is the same App ID used in the [`create`]{@link create} method for creating an [`RtcEngine`]{@link RtcEngine} object. Otherwise, CDN live streaming may fail.
+=======
+     * Ensure that the App ID used for creating the token is the same App ID used in the `create` method for creating an [`RtcEngine`]{@link RtcEngine} object. Otherwise, CDN live streaming may fail.
+>>>>>>> jira/MS-16519
      *
      * @param token The token for authentication:
      * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
@@ -613,7 +618,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * Ensure that you call this method immediately after calling the [`create`]{@link create} method, otherwise the output log may not be complete.
+     * Ensure that you call this method immediately after calling the `create` method, otherwise the output log may not be complete.
      *
      * @param filePath File path of the log file. The string of the log file is in UTF-8.
      * The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
@@ -1084,7 +1089,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios
      * where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
      *
-     * The SDK triggers the [`MicrophoneEnabled`]{@link RtcEngineEvents.MicrophoneEnabled} callback once the local audio function is disabled or re-enabled.
+    * Once the local audio function is disabled or re-enabled, the SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback, which reports [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording}.
+     * The SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback once the local audio function is disabled or re-enabled.
      *
      * **Note**
      *
@@ -1840,10 +1846,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * You can choose whether the other user can hear the local audio playback and specify the number of playback loops.
      * When the audio mixing file playback finishes after calling this method, the SDK triggers the [`AudioMixingFinished`]{@link RtcEngineEvents.AudioMixingFinished} callback.
      *
-     * A successful call of this method triggers the [`AudioMixingStateChanged(Playing)`]{@link RtcEngineEvents.AudioMixingStateChanged} callback on the local client.
+     * A successful call of this method triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Playing`]{@link AudioMixingStateCode.Playing} on the local client.
      *
      *
-     * When the audio mixing file playback finishes, the SDK triggers the [`AudioMixingStateChanged(Stopped)`]{@link RtcEngineEvents.AudioMixingStateChanged} callback on the local client.
+     * When the audio mixing file playback finishes, the SDK triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Stopped`]{@link AudioMixingStateCode.Stopped} on the local client.
      *
      *
      * **Note**
@@ -2376,7 +2382,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Removes an RTMP stream from the CDN.
      *
-     * This method removes the RTMP URL address (added by {@link addPublishStreamUrl}) from a CDN live stream.
+     * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
      * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
      *
      * **Note**
@@ -2499,7 +2505,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * If the method call fails, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} callback with the [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse}
-     * or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerNoResponse} state code.
+     * or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost} state code.
      * You can leave the channel by calling [`leaveChannel`]{@link leaveChannel}, and the media stream relay automatically stops.
      *
      */

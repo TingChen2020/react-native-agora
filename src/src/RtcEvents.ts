@@ -713,6 +713,7 @@ export interface RtcEngineEvents {
      *
      * For instance, the SDK may report a [`LookupChannelTimeout`]{@link WarningCode.LookupChannelTimeout} warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see [`WarningCode`]{@link WarningCode}.
      *
+<<<<<<< HEAD
      *
      * @event Warning
      */
@@ -723,6 +724,8 @@ export interface RtcEngineEvents {
      * SDK 上报的警告信息 App 可以忽略，SDK 会自动恢复。 例如和服务器失去连接时，SDK 可能会
      * 上报 [`LookupChannelTimeout`]{@link WarningCode.LookupChannelTimeout} 警告，同时自动尝试重连。
      *
+=======
+>>>>>>> jira/MS-16519
      * @event Warning
      */
     Warning: WarningCallback
@@ -872,7 +875,7 @@ export interface RtcEngineEvents {
     /**
      * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) joins the channel.
      * - [`Communication`]{@link ChannelProfile.Communication} profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
-     * - [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel
+     * - [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
      *
      * The SDK triggers this callback under one of the following circumstances:
      * - A remote user/host joins the channel by calling [`joinChannel`]{@link RtcEngine.joinChannel}.
@@ -881,7 +884,7 @@ export interface RtcEngineEvents {
      * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcEngine.addInjectStreamUrl}.
      *
      * **Note**
-     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile:
+     * In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile:
      *  - The host receives the [`UserJoined`]{@link UserJoined} callback when another host joins the channel.
      *  - The audience in the channel receives the [`UserJoined`]{@link UserJoined} callback when a new host joins the channel.
      *  - When a web application joins the channel, the [`UserJoined`]{@link UserJoined} callback is triggered as long as the web application publishes streams.
@@ -967,8 +970,12 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
      *
+<<<<<<< HEAD
      * The SDK triggers this callback when it cannot connect to the server 10 seconds after calling {@link RtcEngine.joinChannel},
      * regardless of whether it is in the channel or not.
+=======
+     * The SDK triggers this callback when it cannot connect to the server 10 seconds after calling [`joinChannel`]{@link RtcEngine.joinChannel}, regardless of whether it is in the channel or not.
+>>>>>>> jira/MS-16519
      *
      * If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops
      * rejoining the channel.
@@ -989,6 +996,7 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the token expires in 30 seconds.
      *
+<<<<<<< HEAD
      * The user becomes offline if the token used when joining the channel expires.
      * This callback is triggered 30 seconds before the token expires to remind the app to get a new token.
      * Upon receiving this callback, you need to generate a new token on the server and call {@link RtcEngine.renewToken} to pass the new token to the SDK.
@@ -1001,6 +1009,9 @@ export interface RtcEngineEvents {
      * 在调用 [`joinChannel`]{@link RtcEngine.joinChannel} 时如果指定了 Token，
      * 由于 Token 具有一定的时效，在通话过程中如果 Token 即将失效，SDK 会提前 30 秒触发该回调，提醒 App 更新 Token。
      * 当收到该回调时，你需要重新在服务端生成新的 Token，然后调用 [`renewToken`]{@link RtcEngine.renewToken} 将新生成的 Token 传给 SDK。
+=======
+     * The user becomes offline if the token used when joining the channel expires. This callback is triggered 30 seconds before the token expires to remind the app to get a new token. Upon receiving this callback, you need to generate a new token on the server and call [`renewToken`]{@link RtcEngine.renewToken} to pass the new token to the SDK.
+>>>>>>> jira/MS-16519
      *
      * @event TokenPrivilegeWillExpire
      */
@@ -1125,6 +1136,7 @@ export interface RtcEngineEvents {
      * Occurs when a remote user stops/resumes sending the video stream.
      *
      * **Deprecated**
+     *
      * This callback is deprecated. Use the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters for the same function:
      * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
      * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
@@ -1544,7 +1556,7 @@ export interface RtcEngineEvents {
      * Occurs when the state of the local user's audio mixing file changes.
      *
      * When you call [`startAudioMixing`]{@link RtcEngine.startAudioMixing} and the state of audio mixing file changes, the Agora SDK triggers this callback.
-     * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns [`710`]{@link AudioMixingStateCode.Playing}, `711`, or `713` in state, and `0` in errorCode.
+     * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns `710`, `711`, or `713` in state, and `0` in errorCode.
      * - When exceptions occur during playback, this callback returns `714` in state and an error in errorCode.
      * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}.
      *
@@ -1605,10 +1617,10 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the publisher's transcoding settings are updated.
      *
-     * When the LiveTranscoding class in the {@link RtcEngine.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
+     * When the `LiveTranscoding` class in the [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
      *
      * **Note**
-     * - If you call {@link RtcEngine.setLiveTranscoding} to set the `LiveTranscoding` class for the first time, the SDK does not trigger this callback.
+     * - If you call [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} to set the `LiveTranscoding` class for the first time, the SDK does not trigger this callback.
      *
      * @event TranscodingUpdated
      */
@@ -2195,7 +2207,7 @@ export interface RtcEngineEvents {
  */
 export interface RtcChannelEvents {
     /**
-     * Reports the warning code of the {@link RtcChannel} instance.
+     * Reports the warning code of the [`RtcChannel`]{@link RtcChannel} instance.
      *
      * @event Warning
      */
@@ -2207,7 +2219,7 @@ export interface RtcChannelEvents {
     Warning: WarningCallback
 
     /**
-     * Reports the error code of the {@link RtcChannel} instance.
+     * Reports the error code of the [`RtcChannel`]{@link RtcChannel} instance.
      *
      * @event Error
      */
@@ -2490,7 +2502,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
      *
-     * If you call {@link RtcEngine.setLocalPublishFallbackOption} and set option as {@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+     * If you call {@link RtcEngine.setLocalPublishFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
      *
      * @event LocalPublishFallbackToAudioOnly
      */
@@ -2531,7 +2543,7 @@ export interface RtcChannelEvents {
     RemoteSubscribeFallbackToAudioOnly: FallbackWithUidCallback
 
     /**
-     * Reports the statistics of the {@link RtcEngine} once every two seconds.
+     * Reports the statistics of the [`RtcEngine`]{@link RtcEngine} once every two seconds.
      *
      * @event RtcStats
      */
@@ -2597,7 +2609,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the state of the RTMP streaming changes.
      *
-     * The SDK triggers this callback to report the result of the local user calling the {@link RtcChannel.addPublishStreamUrl} or {@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is {@link RtmpStreamingState.Failure}, see the errCode parameter for details.
+     * The SDK triggers this callback to report the result of the local user calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
      *
      * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
      *
@@ -2672,7 +2684,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the local user fails to receive a remote data stream.
      *
-     * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the {@link RtcChannel.sendStreamMessage} method.
+     * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the [`sendStreamMessage`]{@link RtcChannel.sendStreamMessage} method.
      *
      * @event StreamMessageError
      */

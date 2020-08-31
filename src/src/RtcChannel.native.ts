@@ -104,7 +104,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Destroys all [`RtcChannel`]{@link RtcChannel} instance.
+     * Destroys all [`RtcChannel`]{@link RtcChannel} instances.
      */
     /** @zh-cn
      * 销毁所有的 [`RtcChannel`]{@link RtcChannel} 对象。
@@ -131,11 +131,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Adds the channel event handler.
+     * Adds the [`RtcChannelEvents`]{@link RtcChannelEvents} handler.
      *
-     * After setting the channel event handler, you can listen for channel events and receive the statistics of the corresponding [`RtcChannel`]{@link RtcChannel} instance.
+     * After setting the [`RtcChannelEvents`]{@link RtcChannelEvents} handler, you can listen for channel events and receive the statistics of the corresponding [`RtcChannel`]{@link RtcChannel} instance.
      * @param event The event type.
-     * @param listener The event handler.
+     * @param listener The [`RtcChannelEvents`]{@link RtcChannelEvents} handler.
      */
     /** @zh-cn
      * 设置频道事件句柄。
@@ -168,11 +168,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Removes the channel event handler.
+     * Removes the [`RtcChannelEvents`]{@link RtcChannelEvents} handler.
      *
      * For callback events that you only want to listen for once, call this method to remove the specific [`RtcEngineEvents`]{@link RtcEngineEvents} objects after you have received them.
      * @param event The event type.
-     * @param listener The event handler.
+     * @param listener The [`RtcChannelEvents`]{@link RtcChannelEvents} handler.
      */
     /** @zh-cn
      * 删除指定的频道事件句柄。
@@ -191,7 +191,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Removes all of the engine event handlers.
+     * Removes all the [`RtcChannelEvents`]{@link RtcChannelEvents} handlers.
      * @param event The event type.
      */
     /** @zh-cn
@@ -251,10 +251,10 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
      *
      * @param token The token generated at your server.
-     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see Get a temporary token.
-     * - In situations requiring high security: Set it as the token generated at your server. For details, see Generate a token.
+     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+     * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
      * @param optionalInfo Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
-     * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the onJoinChannelSuccess callback. The app must maintain this user ID.
+     * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess} callback. The app must maintain this user ID.
      * @param options The channel media options.
      *
      */
@@ -386,7 +386,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     /**
      * Publishes the local stream to the channel.
      * You must keep the following restrictions in mind when calling this method.
-     * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}：
+     * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}:
      * - This method publishes one stream only to the channel corresponding to the current [`RtcChannel`]{@link RtcChannel} instance.
      * - In a Live-Broadcast channel, only a host can call this method. To switch the client role, call [`setClientRole`]{@link RtcChannel.setClientRole} of the current [`RtcChannel`]{@link RtcChannel} instance.
      * - You can publish a stream to only one channel at a time. For details, see the advanced guide Join Multiple Channels.
@@ -997,7 +997,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * **Note**
      * - Do not use this method for CDN streaming.
-     * - Before calling this method, ensure that you have called [`setEncryptionSecret`]{@link RtcEngine.setEncryptionSecret} to enable encryption.
+     * - Before calling this method, ensure that you have called [`setEncryptionSecret`]{@link RtcChannel.setEncryptionSecret} to enable encryption.
      *
      * @param encryptionMode Sets the encryption mode.
      *

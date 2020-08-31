@@ -1111,8 +1111,7 @@ export enum CameraCaptureOutputPreference {
      */
     Auto = 0,
     /**
-     * 1: Prioritizes the system performance. The SDK chooses the dimension and frame rate of the local camera capture closest to those set by setVideoEncoderConfiguration.
-     * [`setVideoEncoderConfiguration`]{@link RtcEngine.setVideoEncoderConfiguration}
+     * 1: Prioritizes the system performance. The SDK chooses the dimension and frame rate of the local camera capture closest to those set by [`setVideoEncoderConfiguration`]{@link RtcEngine.setVideoEncoderConfiguration}.
      */
     /** @zh-cn
      * 1: 优先保证设备性能。SDK 根据用户在 [`setVideoEncoderConfiguration`]{@link RtcEngine.setVideoEncoderConfiguration} 中设置编码器的分辨率和帧率，选择最接近的摄像头输出参数，
@@ -1259,7 +1258,7 @@ export enum ChannelMediaRelayError {
 }
 
 /**
- * The event code in AgoraChannelMediaRelayEvent.
+ * The event code in `ChannelMediaRelayEvent`.
  * @enum {number}
  */
 /** @zh-cn
@@ -1276,9 +1275,12 @@ export enum ChannelMediaRelayEvent {
     Disconnect = 0,
     /**
      * 1: The network reconnects.
+<<<<<<< HEAD
      */
     /** @zh-cn
      * 1: 用户与服务器建立连接。
+=======
+>>>>>>> jira/MS-16519
      */
     Connected = 1,
     /**
@@ -1639,9 +1641,9 @@ export enum ConnectionStateType {
      * 4: The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
      * - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the [`ConnectionLost`]{@link RtcEngineEvents.ConnectionLost} callback, stays in the [`Reconnecting`]{@link ConnectionStateType.Reconnecting} state, and keeps rejoining the channel.
      *
-     * - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback, switches to the Failed state, and stops rejoining the channel.
+     * - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback, switches to the [`Failed`]{@link ConnectionStateType.Failed} state, and stops rejoining the channel.
      * [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}
-     * @see [`Failed`]{@link ConnectionStateType.Failed}
+     *
      */
     /** @zh-cn
      * 4: 重新建立网络连接中。
@@ -4182,7 +4184,9 @@ export enum WarningCode {
     /**
      * 105: The server rejects the request to look up the channel.
      * The server cannot process this request or the request is illegal.
-     * **DEPRECATED** Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
+     * **Deprecated**
+     *
+     * Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
      * of [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
      *
      */
