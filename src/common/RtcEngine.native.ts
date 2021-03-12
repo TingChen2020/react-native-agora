@@ -2548,6 +2548,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Gets the maximum zoom ratio supported by the camera.
    *
+   * This method applies to Android only.
+   *
    * @returns The maximum camera zoom factor.
    */
   getCameraMaxZoomFactor(): Promise<number> {
