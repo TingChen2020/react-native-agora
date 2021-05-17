@@ -272,6 +272,9 @@ export enum AudioRecordingQuality {
   High = 2,
 }
 
+/**
+ * // TODO DOC
+ */
 export enum AudioRecordingPosition {
   /**
    * 0: The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.

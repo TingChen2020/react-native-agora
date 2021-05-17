@@ -1599,6 +1599,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param publish Set whether to publish the specified audio effect to the remote stream:
    * - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
    * - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
+   * @param startPos? // TODO DOC
    */
   playEffect(
     soundId: number,
@@ -1622,6 +1623,12 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * // TODO DOC
+   * @param soundId
+   * @param pos
+   * @returns
+   */
   setEffectPosition(soundId: number, pos: number): Promise<void> {
     return RtcEngine._callMethod('setEffectPosition', {
       soundId,
@@ -1629,10 +1636,20 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * // TODO DOC
+   * @param filePath
+   * @returns
+   */
   getEffectDuration(filePath: string): Promise<number> {
     return RtcEngine._callMethod('getEffectDuration', { filePath });
   }
 
+  /**
+   * // TODO DOC
+   * @param soundId
+   * @returns
+   */
   getEffectCurrentPosition(soundId: number): Promise<number> {
     return RtcEngine._callMethod('getEffectCurrentPosition', {
       soundId,
@@ -2470,6 +2487,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param filePath Absolute file path (including the suffixes of the filename) of the recording file. The string of the file name is in UTF-8. For example, `/sdcard/emulated/0/audio/aac`.
    * @param sampleRate Sample rate (Hz) of the recording file.
    * @param quality The audio recording quality.
+   * @param recordingPosition? // TODO DOC
    */
   startAudioRecording(
     filePath: string,
@@ -2485,6 +2503,13 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * // TODO DOC
+   * @param sound1
+   * @param sound2
+   * @param config
+   * @returns
+   */
   startRhythmPlayer(
     sound1: string,
     sound2: string,
@@ -2497,10 +2522,19 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * // TODO DOC
+   * @returns
+   */
   stopRhythmPlayer(): Promise<void> {
     return RtcEngine._callMethod('stopRhythmPlayer');
   }
 
+  /**
+   * // TODO DOC
+   * @param config
+   * @returns
+   */
   configRhythmPlayer(config: RhythmPlayerConfig): Promise<void> {
     return RtcEngine._callMethod('configRhythmPlayer', config);
   }
@@ -2598,6 +2632,8 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Gets the maximum zoom ratio supported by the camera.
+   *
+   * This method applies to Android only.
    *
    * @returns The maximum camera zoom factor.
    */

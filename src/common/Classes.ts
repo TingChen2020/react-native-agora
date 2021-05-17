@@ -843,6 +843,9 @@ export class LiveInjectStreamConfig {
   }
 }
 
+/**
+ * // TODO DOC
+ */
 export class RhythmPlayerConfig {
   /**
    * Width (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same width as the original stream.
