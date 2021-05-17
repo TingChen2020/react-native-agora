@@ -1374,7 +1374,14 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
    *
-   *  @returns
+   * @param filePath? The absolute path (including the filename extensions) of the local music file.
+   * - On Android: Agora recommends passing the URI address or the path starts with /assets/ of a local file in this parameter.
+   * For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Media Formats Supported by Android](https://developer.android.com/guide/topics/media/media-formats).
+   * - On iOS: For example: "/var/mobile/Containers/Data/audio.mp4". Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
+   * For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+   *
+   * @returns
    * - Returns the audio mixing duration, if the method call is successful.
    * - Error codes: Failure.
    */
@@ -1493,7 +1500,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - If you call this method on an emulator, only the MP3 file format is supported.
    *
-   * @param filePath Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`.
+   * @param filePath // TODO DOC Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`.
    * Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
    * - If the path begins with /assets/, the audio file is in the /assets/ directory.
    * - Otherwise, the audio file is in the absolute path.
@@ -1506,6 +1513,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param cycle Sets the number of playback loops:
    * - Positive integer: Number of playback loops.
    * - -1: Infinite playback loops.
+   * @param startPos? // TODO DOC
    *
    */
   startAudioMixing(
